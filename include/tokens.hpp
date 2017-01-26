@@ -12,6 +12,7 @@ enum TokenType{
     StringLiteral,
     Newline,
     Preprocessor,
+    PreprocessorFile,
     Invalid
 };
 
@@ -29,6 +30,7 @@ struct TokenValue{
 extern TokenValue yylval;
 extern int yylineno;
 extern int yylcolno;
+extern int yylsourcelino;
 extern std::string yylfile;
 // This is the lexer function defined by flex. Each
 // time it is called, a token type value will be

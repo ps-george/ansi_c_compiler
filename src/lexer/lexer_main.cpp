@@ -7,6 +7,7 @@
 TokenValue yylval;
 std::string yylfile;
 int yylcolno = 1;
+int yylsourcelino = 0;
 
 int main() {
   fprintf (stdout, "[\n");
@@ -19,9 +20,8 @@ int main() {
       fprintf (stdout, "{}\n");
       break;
     }
-    fprintf (stdout, "{\"Class\" : \"%s\",  Text: \"%s\", \"StreamLine\" %d:,  \"SourceCol\" : %d,  \"SourceFile\" : %s},\n", yylval.Class.c_str(), yylval.Text.c_str(), yylineno, yylcolno, yylfile.c_str());
-    yylcolno = yylcolno + yylval.Text.length();
-    
+    fprintf (stdout, "{\"Class\" : \"%s\",  Text: \"%s\", \"StreamLine\" %d:,  \"SourceFile\" : %s,  \"SourceLine\" : %d,  \"SourceCol\" : %d},\n", yylval.Class.c_str(), yylval.Text.c_str(), yylineno, yylfile.c_str(), yylsourcelino, yylcolno);
+    yylcolno = yylval.Text.length();
   }
   fprintf (stdout, "]\n");
   return 0;

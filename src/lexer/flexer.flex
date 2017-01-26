@@ -13,7 +13,7 @@
 %}
 
 letter [a-zA-Z]
-alpha [a-zA-Z9-9\-_/]
+alphanum [a-zA-Z0-9\-_/]
 digit [0-9]
 keyword int|unsigned|case|break|void|while|switch|default|if|else|float
 operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"
@@ -21,10 +21,10 @@ operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"
 %%
 [ ] {yylcolno++;}
 [\t] {yylcolno++;}
-[\n] {yylineno = yylineno + 1; yylcolno = 1; return Newline;}
+[\n] {yylineno += 1; yylcolno = 1; yylsourcelino += 1; return Newline;}
 
 %{/* FILENAME  */%}
-^#" "{digit}+" "[\"]{alpha}+[\.]{letter}+[\"] {std::string s(yytext); yylfile = s.substr(s.find("\"")); return StringLiteral;}
+^#" "{digit}+" "[\"]{alphanum}+[\.]{letter}+[\"] {yylsourcelino = 0;std::string s(yytext); yylfile = s.substr(s.find("\"")+1, s.size()-2); yylval.Text = yylfile; yylval.Class = "PreprocessorFile";return PreprocessorFile;}
 
 %{/* KEYWORDS  */%}
 {keyword}	{/*fprintf(stderr, "Keyword\n");*/ yylval.Class = "Keyword"; yylval.Text = std::string(yytext); return Keyword; }
