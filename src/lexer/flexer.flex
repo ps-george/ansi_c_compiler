@@ -7,25 +7,49 @@
 
 /* Bring in our declarations for token types and
    the yylval variable. */
-#include "histogram.hpp"
+#include "tokens.hpp"
 
 /* End the embedded code section. */
 %}
 
+letter [a-zA-Z]
+alpha [a-zA-Z9-9\-_/]
+digit [0-9]
+keyword int|unsigned|case|break|void|while|switch|default|if|else|float
+operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"
 
 %%
+[ ] {yylcolno++;}
+[\t] {yylcolno++;}
+[\n] {yylineno = yylineno + 1; yylcolno = 1; return Newline;}
 
-\"(\\.|[^"])*\" { yylval.wordValue = new std::string(yytext); return Quoted; }
+%{/* FILENAME  */%}
+^#" "{digit}+" "[\"]{alpha}+[\.]{letter}+[\"] {std::string s(yytext); yylfile = s.substr(s.find("\"")); return StringLiteral;}
 
-[+-]?([0-9]+[.]?)[0-9]* { fprintf(stderr, "Number"); yylval.numberValue = std::stod(yytext); return Number; }
+%{/* KEYWORDS  */%}
+{keyword}	{/*fprintf(stderr, "Keyword\n");*/ yylval.Class = "Keyword"; yylval.Text = std::string(yytext); return Keyword; }
 
-[a-zA-Z]+ { yylval.wordValue = new std::string(yytext); return Word; }
+%{/* CONSTANT */%}
+{digit}+(\.)*{digit}* {/*fprintf(stderr, "Constant\n");*/ yylval.Class = "Constant"; yylval.Text = std::string(yytext); return Constant; }
 
-[ \t\n]
+%{/* IDENTIFIER  */%}
+{letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.Class = "Identifier"; yylval.Text = std::string(yytext); return Identifier; }
 
-[^\x00-\x7F]
+%{/* STRING LITERAL */%}
+\".*\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.Class = "StringLiteral"; yylval.Text = std::string(yytext); return StringLiteral; }
 
-.
+%{/* OPERATORS  */%}
+{operator}  {/*fprintf(stderr, "Operator\n");*/ yylval.Class = "Operator"; yylval.Text = std::string(yytext); return Operator; }
+
+%{/* COMMENTS  */%}
+\/\/.* {/* Ignore comments*/;}
+\/\*(.*\n)*.*\*\/ {/* Ignore block comments*/;}
+
+^"#include ".+ {/* Assume includes are correct */;}
+
+^# {yylval.Class = "Preprocessor"; yylval.Text = std::string(yytext);return Preprocessor;}
+
+. {fprintf(stderr, "Invalid\n"); yylval.Class = "Invalid"; yylval.Text = std::string(yytext); return Invalid;}
 
 %%
 

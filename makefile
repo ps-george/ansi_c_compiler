@@ -12,7 +12,7 @@ CPPFLAGS += -MMD $(INC)
 ### BUILD RULES FOR LEXER
 ###
 # List of source files for lexer
-_LSRCS= histogram_main.cpp flexer.yy.cpp
+_LSRCS= lexer_main.cpp flexer.yy.cpp
 LSRCS=$(patsubst %,$(LSDIR)/%,$(_LSRCS))
 
 bin/c_lexer: $(LSRCS:%.cpp=%.o)
@@ -56,5 +56,6 @@ bin/c_compiler : $(CSRCS:%.cpp=%.o)
 
 clean:
 	rm -f bin/*
+	rm -f src/lexer/*.o
 
 .PHONY: clean

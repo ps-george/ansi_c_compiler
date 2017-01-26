@@ -1,18 +1,23 @@
-#ifndef histogram_hpp
-#define histogram_hpp
+#ifndef tokens_hpp
+#define tokens_hpp
 
 #include <string>
 
 enum TokenType{
     None   = 0, // This indicates there are no more tokens
-    Number = 1, // token codes must be positive
-    Word = 2,
-    Quoted  // = 3, implicit from C++ enumeration
+    Keyword = 1, // token codes must be positive
+    Identifier,
+    Operator,
+    Constant,
+    StringLiteral,
+    Newline,
+    Preprocessor,
+    Invalid
 };
 
-union TokenValue{
-    double numberValue;
-    std::string *wordValue;
+struct TokenValue{
+  std::string Class;
+  std::string Text;
 };
 
 // This is a global variable used to move the
@@ -22,7 +27,9 @@ union TokenValue{
 // the name that will be automatially generated
 // by Bison (see next lab).
 extern TokenValue yylval;
-
+extern int yylineno;
+extern int yylcolno;
+extern std::string yylfile;
 // This is the lexer function defined by flex. Each
 // time it is called, a token type value will be
 // returned.
