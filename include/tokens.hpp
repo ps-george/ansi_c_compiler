@@ -17,8 +17,15 @@ enum TokenType{
 };
 
 struct TokenValue{
-  std::string Class;
-  std::string Text;
+    std::string Class;
+    std::string Text;
+    std::string print_text(){
+        std::string s = "\"" + Text + "\"";
+        return s;
+  };
+  std::string print_class(){
+      return "\"" + Class + "\"";
+  };
 };
 
 // This is a global variable used to move the

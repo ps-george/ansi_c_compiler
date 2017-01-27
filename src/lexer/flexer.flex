@@ -9,22 +9,29 @@
    the yylval variable. */
 #include "tokens.hpp"
 
+std::string extract_file(std::string s){
+    unsigned first;
+    unsigned last;
+    first = s.find("\"");
+    last = s.find_last_of("\"") + 1;
+    s = s.substr(first, last - first);
+    return s;
+}
+
 /* End the embedded code section. */
 %}
 
-letter [a-zA-Z]
-alphanum [a-zA-Z0-9\-_/]
+letter [a-zA-Z_]
+alphanum [a-zA-Z0-9]
+filechar [a-zA-Z0-9_/-]
 digit [0-9]
-keyword int|unsigned|case|break|void|while|switch|default|if|else|float
-operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"
-
+keyword auto|break|double|else|enum|extern|float|for|goto|if|case|char|const|continue|default|do|int|long|struct|switch|register|typedef|union|unsigned|void|volatile|while|return|short|signed|sizeof|static
+operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"|"+"|"-"|"*"|"/"|"("|")"|"{"|"}"|"["|"]"|","|"."|"->"|"<<"|">>"|"~"|"!"|"\\"
+filename "[\"]{filechar}+[\.]{letter}+[\"]
 %%
 [ ] {yylcolno++;}
 [\t] {yylcolno++;}
-[\n] {yylineno += 1; yylcolno = 1; yylsourcelino += 1; return Newline;}
-
-%{/* FILENAME  */%}
-^#" "{digit}+" "[\"]{alphanum}+[\.]{letter}+[\"] {yylsourcelino = 0;std::string s(yytext); yylfile = s.substr(s.find("\"")+1, s.size()-2); yylval.Text = yylfile; yylval.Class = "PreprocessorFile";return PreprocessorFile;}
+[\n] {yylineno += 1; yylcolno = 1; return Newline;}
 
 %{/* KEYWORDS  */%}
 {keyword}	{/*fprintf(stderr, "Keyword\n");*/ yylval.Class = "Keyword"; yylval.Text = std::string(yytext); return Keyword; }
@@ -45,17 +52,21 @@ operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"
 \/\/.* {/* Ignore comments*/;}
 \/\*(.*\n)*.*\*\/ {/* Ignore block comments*/;}
 
+
+%{/* PREPROCESSOR  */%}
+
+^#" "{digit}+" "[\"]{filechar}+[\.]{letter}+[\"](" "{digit})* {std::string s(yytext); yylfile = extract_file(s); yylval.Text = s; yylval.Class = "PreprocFile";return PreprocessorFile;}
+
+^#.+ {yylval.Class = "Preprocessor"; yylval.Text = std::string(yytext);return Preprocessor;}
+
 ^"#include ".+ {/* Assume includes are correct */;}
-
-^# {yylval.Class = "Preprocessor"; yylval.Text = std::string(yytext);return Preprocessor;}
-
-. {fprintf(stderr, "Invalid\n"); yylval.Class = "Invalid"; yylval.Text = std::string(yytext); return Invalid;}
+. {fprintf(stderr, "Invalid: %s\n", yytext); yylval.Class = "Invalid"; yylval.Text = std::string(yytext); return Invalid;}
 
 %%
 
 /* Error handler. This will get called if none of the rules match. */
 void yyerror (char const *s)
 {
-  fprintf (stderr, "Flex Error: %s\n", s); /* s is the text that wasn't matched */
-  exit(1);
+    fprintf (stderr, "Flex Error: %s\n", s); /* s is the text that wasn't matched */
+    exit(1);
 }
