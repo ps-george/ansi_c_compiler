@@ -3,29 +3,27 @@
 
 #include <string>
 
-enum TokenType{
-    None   = 0, // This indicates there are no more tokens
-    Keyword = 1, // token codes must be positive
-    Identifier,
-    Operator,
-    Constant,
-    StringLiteral,
-    Newline,
-    Preprocessor,
-    PreprocessorFile,
-    Invalid
+enum TokenType {
+  None = 0,    // This indicates there are no more tokens
+  Keyword = 1, // token codes must be positive
+  Identifier,
+  Operator,
+  Constant,
+  StringLiteral,
+  Newline,
+  Preprocessor,
+  PreprocessorFile,
+  Invalid
 };
 
-struct TokenValue{
-    std::string Class;
-    std::string Text;
-    std::string print_text(){
-        std::string s = "\"" + Text + "\"";
-        return s;
+struct TokenValue {
+  std::string Class;
+  std::string Text;
+  std::string print_text() {
+    std::string s = "\"" + Text + "\"";
+    return s;
   };
-  std::string print_class(){
-      return "\"" + Class + "\"";
-  };
+  std::string print_class() { return "\"" + Class + "\""; };
 };
 
 // This is a global variable used to move the

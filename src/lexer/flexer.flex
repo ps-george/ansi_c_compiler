@@ -10,12 +10,12 @@
 #include "tokens.hpp"
 
 std::string extract_file(std::string s){
-    unsigned first;
-    unsigned last;
-    first = s.find("\"");
-    last = s.find_last_of("\"") + 1;
-    s = s.substr(first, last - first);
-    return s;
+  unsigned first;
+  unsigned last;
+  first = s.find("\"");
+  last = s.find_last_of("\"") + 1;
+  s = s.substr(first, last - first);
+  return s;
 }
 
 /* End the embedded code section. */
