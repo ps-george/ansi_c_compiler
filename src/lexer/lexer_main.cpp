@@ -13,6 +13,21 @@ std::cmatch cm;
 int yylcolno = 1;
 int yylsourcelino = 0;
 
+std::string quote(int i){
+  std::string s = std::to_string(i);
+  return "\"" + s + "\"";
+}
+
+std::string quote(std::string s){
+  // Replace quotes in original string with \"
+  return "\"" + s + "\"";
+}
+
+std::string escape_quotes(std::string s){
+  s = std::regex_replace(s,std::regex("\""), "\\\"");
+  return s;
+}
+
 int main() {
   std::map<std::string, int> sourceline;
   fprintf(stdout, "[\n");
@@ -43,11 +58,14 @@ int main() {
       fprintf(stdout, "{}\n");
       break;
     }
-    fprintf(stdout, "{ \"Class\" : %-14s, Text : %-20s, \"StreamLine\" : %2d, "
-                    "\"SourceFile\" : %-15s, \"SourceLine\" : %d,  "
-                    "\"SourceCol\" : %d },\n",
-            yylval.print_class().c_str(), yylval.print_text().c_str(), yylineno,
-            yylfile.c_str(), yylsourcelino, yylcolno);
+    // Replace 
+    fprintf(stdout, "{ \"Class\" : %-15s, \"Text\" : %-20s, \"StreamLine\" : %7s, \"SourceLine\" : %6s, \"SourceCol\" : %4s, \"SourceFile\" : %s },\n",
+            quote(yylval.print_class()).c_str(),
+            quote(escape_quotes(yylval.print_text())).c_str(),
+            quote(yylineno).c_str(),
+            quote(yylsourcelino).c_str(),
+            quote(yylcolno).c_str(),
+            quote(yylfile).c_str());
     yylcolno += yylval.Text.length();
   }
   fprintf(stdout, "]\n");

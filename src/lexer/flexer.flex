@@ -9,12 +9,13 @@
    the yylval variable. */
 #include "tokens.hpp"
 
-std::string extract_file(std::string s){
+std::string extract_quoted(std::string s){
   unsigned first;
   unsigned last;
-  first = s.find("\"");
-  last = s.find_last_of("\"") + 1;
+  first = s.find("\""); first++;
+  last = s.find_last_of("\"");
   s = s.substr(first, last - first);
+  //fprintf(stderr,"%s\n", s.c_str());
   return s;
 }
 
@@ -43,7 +44,7 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 {letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.Class = "Identifier"; yylval.Text = std::string(yytext); return Identifier; }
 
 %{/* STRING LITERAL */%}
-\".*\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.Class = "StringLiteral"; yylval.Text = std::string(yytext); return StringLiteral; }
+\".*\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.Class = "StringLiteral"; yylval.Text = extract_quoted(std::string(yytext)); return StringLiteral; }
 
 %{/* OPERATORS  */%}
 {operator}  {/*fprintf(stderr, "Operator\n");*/ yylval.Class = "Operator"; yylval.Text = std::string(yytext); return Operator; }
@@ -52,14 +53,13 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 \/\/.* {/* Ignore comments*/;}
 \/\*(.*\n)*.*\*\/ {/* Ignore block comments*/;}
 
+^#include" ".+ {/* Assume includes are correct */;}
 
 %{/* PREPROCESSOR  */%}
 
-^#" "{digit}+" "[\"]{filechar}+[\.]{letter}+[\"](" "{digit})* {std::string s(yytext); yylfile = extract_file(s); yylval.Text = s; yylval.Class = "PreprocFile";return PreprocessorFile;}
-
+^#" "{digit}+" "[\"]{filechar}+[\.]{letter}+[\"](" "{digit})* {std::string s(yytext); yylfile = extract_quoted(s); yylval.Text = s; yylval.Class = "PreprocFile";return PreprocessorFile;}
 ^#.+ {yylval.Class = "Preprocessor"; yylval.Text = std::string(yytext);return Preprocessor;}
 
-^"#include ".+ {/* Assume includes are correct */;}
 . {fprintf(stderr, "Invalid: %s\n", yytext); yylval.Class = "Invalid"; yylval.Text = std::string(yytext); return Invalid;}
 
 %%
