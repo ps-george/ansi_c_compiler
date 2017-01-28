@@ -12,7 +12,8 @@ echo -e "int main(){\n  printf(\"Wib\"); \n}\n" > test/lexer/in/wib.c
 
 # make test results directory
 mkdir -p test/lexer/out
-
+PASSED=0
+CHECKED=0
 # iterate through in directory
 for i in test/lexer/in/*.c; do
   echo "==========================="
@@ -20,4 +21,20 @@ for i in test/lexer/in/*.c; do
   BASENAME=$(basename $i .c);
   # Preprocess the files and pass ouotput into c_lexer
   cpp $i | ./bin/c_lexer > test/lexer/out/$BASENAME.stdout.txt 2> test/lexer/out/$BASENAME.stderr.txt
+  cat test/lexer/out/$BASENAME.stdout.txt | jq . > test/lexer/out/$BASENAME.json.txt
+  if [[ "$?" -ne "0" ]]; then
+      echo -e "\nERROR"
+  else
+      PASSED=$(( ${PASSED}+1 ));
+  fi
+  CHECKED=$(( ${CHECKED}+1 ));
 done
+
+echo ""
+echo "Passed ${PASSED} out of ${CHECKED}".
+
+if [ "${PASSED}" == "${CHECKED}" ]; then
+  exit 0
+else
+  exit 1
+fi

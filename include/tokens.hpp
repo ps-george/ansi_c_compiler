@@ -19,14 +19,10 @@ enum TokenType {
 struct TokenValue {
   std::string Class;
   std::string Text;
-  std::string print_text() {
-    if ((Text.length() > 15) &
-        ((Class == "Preprocessor") | (Class == "PreprocFile"))) {
-      return Text.substr(2, 18);
-    }
+  std::string print_text() const {
     return Text;
   };
-  std::string print_class() { return Class; };
+  std::string print_class() const { return Class; };
 };
 
 // This is a global variable used to move the

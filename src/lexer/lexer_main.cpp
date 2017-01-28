@@ -55,11 +55,11 @@ int main() {
       std::cin >> y;
     }
     if (type == None) {
-      fprintf(stdout, "{}\n");
+      fprintf(stdout, "\t{}\n");
       break;
     }
     // Replace 
-    fprintf(stdout, "{ \"Class\" : %-15s, \"Text\" : %-20s, \"StreamLine\" : %7s, \"SourceLine\" : %6s, \"SourceCol\" : %4s, \"SourceFile\" : %s },\n",
+    fprintf(stdout, "\t{\n\t\t\"Class\": %s,\n\t\t\"Text\": %s,\n\t\t\"StreamLine\": %s,\n\t\t\"SourceLine\": %s,\n\t\t\"SourceCol\": %s,\n\t\t\"SourceFile\": %s\n\t},\n",
             quote(yylval.print_class()).c_str(),
             quote(escape_quotes(yylval.print_text())).c_str(),
             quote(yylineno).c_str(),
