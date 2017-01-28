@@ -4,7 +4,7 @@ The module code deliverables come in three parts:
 -------------------------------|-------------|--------|------------------------------------
 [1-lexer.md](1-lexer.md)       | Tue 7th Feb | 10%    | A C lexer that produces JSON output 
 [2-parser.md](2-parser.md)     | Tue 7th Mar | 10%    | A (restricted) C parser that produces XML output
-[3-compiler.md](3-compiler.md) | Tue 28th Feb | 50%    | The final C compiler
+[3-compiler.md](3-compiler.md) | Tue 28th Mar | 50%    | The final C compiler
 
 You will all get a bare private repository. It is up to you
 if you want to clone the master specification, or to start from

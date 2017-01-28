@@ -46,7 +46,9 @@ token, and the top-level output will be an array of those dictionaries.
 Each dictionary should have the following properties:
 
 - "Text" : The original text of the token, not including any
-  surrounding white-space.
+  surrounding white-space. A special case is made for string literals, where
+  the surrounding '"'s can be omitted, though if they are included (appropriately
+  escaped) it [is fine too](#2).
 
 - "Class" : Describes the class of token, with one of the following classes:
 
@@ -157,6 +159,28 @@ the ordering of `key:value` pairs does not matter. However,
 the ordering of tokens within the toplevel array `[]` _does_
 matter.
 
+There is some [ambiguity](#2) over the string literals, which might
+or might not include the quotes. _Both_ forms will be accepted as
+value, so this:
+Another session for a different lexer could be (preferred):
+````
+$ cat wibble.c
+z="wibble"
+$ cat wibble.c | bin/c_lexer
+[ { "Class" : "Identifier",    "Text": "z" },
+  { "Class" : "Operator",    "Text": "=" },
+  { "Class" : "StringLiteral",    "Text": "z" }
+]
+````
+or
+````
+
+$ cat wibble.c | bin/c_lexer
+[ { "Class" : "Identifier",    "Text": "z" },
+  { "Class" : "Operator",    "Text": "=" },
+  { "Class" : "StringLiteral",    "Text": "\"z\"" }
+]
+````
 
 Pre-Processor
 -------------
