@@ -1,0 +1,15 @@
+*.tab.cpp
+*.tab.hpp
+*.yy.cpp
+*.got.txt
+
+bin
+bin/*
+*.o
+*.output
+*.log
+*.stackdump
+
+*.DS_Store
+
+.vagrant
