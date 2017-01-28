@@ -3,7 +3,7 @@
 
 
 int main() {
-  // Lex the input
+  // Lex the input, output is JSON
   
   
   // Take the output from the lexer and parse it

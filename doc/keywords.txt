@@ -1,32 +1,45 @@
-auto
-break
+# Types
+### Can add a * to any of these
+int
 double
-else
-enum
-extern
 float
+char
+void
+# Type types
+const
+volatile
+### Signed and unsigned can't be combined
+signed
+unsigned
+### Short and long can't be combined
+short
+long
+### Extern, auto, static,register can't be combined, extern can't have initialiser
+extern
+register
+static
+auto
+### Typedef must be before type, declared type cannot be identifier anymore, cannot combine with extern, auto, static, register.
+typedef 
+
+# Control flow
+break
+if
+else  
 for
 goto
-if
-case
-char
-const
-continue
-default
-do
-int
-long
-struct
 switch
-register
-typedef
-union
-unsigned
-void
-volatile
+case
+default
+continue
+do
 while
 return
-short
-signed
+
+# Operator
 sizeof
-static
+
+# Declarators
+enum
+struct
+union
