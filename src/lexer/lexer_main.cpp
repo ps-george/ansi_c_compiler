@@ -19,11 +19,11 @@ std::string quote(int i){
 }
 
 std::string quote(std::string s){
-  // Replace quotes in original string with \"
   return "\"" + s + "\"";
 }
 
 std::string escape_quotes(std::string s){
+  // Replace quotes in original string with \"
   s = std::regex_replace(s,std::regex("\""), "\\\"");
   return s;
 }
