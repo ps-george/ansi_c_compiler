@@ -33,6 +33,9 @@ std::string escape_chars(std::string s){
 }
 
 std::string classname(TokenType t){
+  if (11<t<45){
+    return "Operator";
+  }
   switch(t){
   /* KEYWORDS */
   /*
@@ -54,6 +57,8 @@ std::string classname(TokenType t){
     /* Operators */
     case Operator: return "Operator";
     /* Constants */
+    case FLOAT:
+    case INTEGER:    
     case Constant: return "Constant";
     /* StringLiterals */
     case StringLiteral: return "StringLiteral";
