@@ -8,6 +8,17 @@
 /* Bring in our declarations for token types and
    the yylval variable. */
 #include "tokens.hpp"
+#include  <regex>
+#include <string.h>
+
+
+int extract_lineno(char * yytext){
+  std::cmatch cm;
+  std::regex_search(yytext, cm, std::regex("\\b[0-9]+\\b"),
+                        std::regex_constants::match_default);
+  // return the first match, this is the linenumber
+  return atoi(std::string(cm[0]).c_str());
+}
 
 std::string extract_quoted(std::string s){
   unsigned first;
@@ -18,7 +29,6 @@ std::string extract_quoted(std::string s){
   //fprintf(stderr,"%s\n", s.c_str());
   return s;
 }
-
 /* End the embedded code section. */
 %}
 
@@ -32,35 +42,35 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 %%
 [ ] {yylcolno++;}
 [\t] {yylcolno++;}
-[\n] {yylineno += 1; yylcolno = 1; return Newline;}
+[\n] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
 %{/* KEYWORDS  */%}
-{keyword}	{/*fprintf(stderr, "Keyword\n");*/ yylval.Class = "Keyword"; yylval.Text = std::string(yytext); return Keyword; }
+{keyword}	{/*fprintf(stderr, "Keyword\n");*/ yylval.raw = std::string(yytext); yylval.num = atoi(yytext); return Keyword;}
 
 %{/* CONSTANT */%}
-{digit}+(\.)*{digit}* {/*fprintf(stderr, "Constant\n");*/ yylval.Class = "Constant"; yylval.Text = std::string(yytext); return Constant; }
+{digit}+(\.)*{digit}* {/*fprintf(stderr, "Constant\n");*/ yylval.raw = std::string(yytext); return Constant;}
 
 %{/* IDENTIFIER  */%}
-{letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.Class = "Identifier"; yylval.Text = std::string(yytext); return Identifier; }
+{letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return Identifier; }
 
 %{/* STRING LITERAL */%}
-\".*\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.Class = "StringLiteral"; yylval.Text = extract_quoted(std::string(yytext)); return StringLiteral; }
+\".*\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.raw = extract_quoted(std::string(yytext)); return StringLiteral; }
 
 %{/* OPERATORS  */%}
-{operator}  {/*fprintf(stderr, "Operator\n");*/ yylval.Class = "Operator"; yylval.Text = std::string(yytext); return Operator; }
+{operator}  {/*fprintf(stderr, "Operator\n");*/ yylval.raw = std::string(yytext); return Operator; }
 
 %{/* COMMENTS  */%}
 \/\/.* {/* Ignore comments*/;}
 \/\*(.*\n)*.*\*\/ {/* Ignore block comments*/;}
 
-^#include" ".+ {/* Assume includes are correct */;}
+^#include" ".+ {/* Ignore includes */;}
 
 %{/* PREPROCESSOR  */%}
+%{// Consume the whole line, and then update the referenced values %}
+^#" "{digit}+" "\".*\"([ ]{digit})*\n {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
 
-^#" "{digit}+" "[\"]{filechar}+[\.]{letter}+[\"](" "{digit})* {std::string s(yytext); yylfile = extract_quoted(s); yylval.Text = s; yylval.Class = "PreprocFile";return PreprocessorFile;}
-^#.+ {yylval.Class = "Preprocessor"; yylval.Text = std::string(yytext);return Preprocessor;}
-
-. {fprintf(stderr, "Invalid: %s\n", yytext); yylval.Class = "Invalid"; yylval.Text = std::string(yytext); return Invalid;}
+%{// Anything else, return invalid/error %}
+. {fprintf(stderr, "Invalid: %s\n", yytext); yylval.raw = std::string(yytext); return Invalid;}
 
 %%
 
@@ -70,3 +80,5 @@ void yyerror (char const *s)
     fprintf (stderr, "Flex Error: %s\n", s); /* s is the text that wasn't matched */
     exit(1);
 }
+
+

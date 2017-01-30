@@ -22,51 +22,45 @@ std::string quote(std::string s){
   return "\"" + s + "\"";
 }
 
-std::string escape_quotes(std::string s){
+std::string escape_chars(std::string s){
   // Replace quotes in original string with \"
   s = std::regex_replace(s,std::regex("\""), "\\\"");
   return s;
 }
 
+std::string classname(TokenType t){
+  switch(t){
+    case Keyword: return "Keyword";
+    case Identifier: return "Identifier";
+    case Operator: return "Operator";
+    case Constant: return "Constant";
+    case StringLiteral: return "StringLiteral";
+    case Newline: return "Newline";
+    case Invalid: return "Invalid";
+    default: return "Error";
+  }
+}
 int main() {
-  std::map<std::string, int> sourceline;
   fprintf(stdout, "[\n");
-
+  std::string Class;
   while (1) {
     TokenType type = (TokenType)yylex();
-    if (type == Newline) {
-      if (!((yylval.Class == "Preprocessor") |
-            (yylval.Class == "PreprocFile"))) {
-        yylsourcelino += 1;
-      }
-      continue;
-    }
-    if (type == Preprocessor) {
-      // continue;
-    }
-    if (type == PreprocessorFile) {
-      std::regex_search(yylval.Text.c_str(), cm, std::regex("\\b[0-9]+\\b"),
-                        std::regex_constants::match_default);
-      sourceline[yylfile] = atoi(((std::string)cm[0]).c_str());
-      yylsourcelino = sourceline[yylfile];
-    }
-    if (type == Invalid) {
-      int y;
-      std::cin >> y;
-    }
+    Class = classname(type);
+    
     if (type == None) {
+      // finish
       fprintf(stdout, "\t{}\n");
       break;
     }
     // Replace 
     fprintf(stdout, "\t{\n\t\t\"Class\": %s,\n\t\t\"Text\": %s,\n\t\t\"StreamLine\": %s,\n\t\t\"SourceLine\": %s,\n\t\t\"SourceCol\": %s,\n\t\t\"SourceFile\": %s\n\t},\n",
-            quote(yylval.print_class()).c_str(),
-            quote(escape_quotes(yylval.print_text())).c_str(),
+            quote(Class).c_str(),
+            quote(escape_chars(yylval.raw)).c_str(),
             quote(yylineno).c_str(),
             quote(yylsourcelino).c_str(),
             quote(yylcolno).c_str(),
             quote(yylfile).c_str());
-    yylcolno += yylval.Text.length();
+    yylcolno += yylval.raw.length();
   }
   fprintf(stdout, "]\n");
   return 0;
