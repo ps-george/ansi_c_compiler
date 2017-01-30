@@ -53,8 +53,8 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 %{/* IDENTIFIER  */%}
 {letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return Identifier; }
 
-%{/* STRING LITERAL */%}
-\".*\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.raw = extract_quoted(std::string(yytext)); return StringLiteral; }
+%{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
+\".*[^\\]\"|\".*\\\\\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.raw = extract_quoted(std::string(yytext)); return StringLiteral; }
 
 %{/* OPERATORS  */%}
 {operator}  {/*fprintf(stderr, "Operator\n");*/ yylval.raw = std::string(yytext); return Operator; }

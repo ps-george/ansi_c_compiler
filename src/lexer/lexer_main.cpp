@@ -1,8 +1,6 @@
 #include "tokens.hpp"
 
 #include <iomanip>
-#include <iostream>
-#include <map>
 #include <regex>
 #include <string.h>
 // Define the instance of the variable that is declared in the header
@@ -24,16 +22,40 @@ std::string quote(std::string s){
 
 std::string escape_chars(std::string s){
   // Replace quotes in original string with \"
-  s = std::regex_replace(s,std::regex("\""), "\\\"");
+  // replace backslash with double
+  //s = std::regex_replace(s,std::regex("/\\/"), "\\\\");
+  // replace all backslash with double backslash, unless there is a quote afterward, n, t
+  //s = std::regex_replace(s,std::regex("[(\\)]^([nt\"])"), "\\\\");
+  
+  // replace all quotes with \" unless they are already.
+  s = std::regex_replace(s,std::regex("[^(\\)]\""), "\\\"");
   return s;
 }
 
 std::string classname(TokenType t){
   switch(t){
+  /* KEYWORDS */
+  /*
+    case: CASE
+    case: DEFAULT
+    case: IF 
+    case: ELSE 
+    case: SWITCH 
+    case: WHILE 
+    case: DO 
+    case: FOR 
+    case: GOTO 
+    case: CONTINUE 
+    case: BREAK 
+    case: RETURN */
     case Keyword: return "Keyword";
+    /* Identifiers */
     case Identifier: return "Identifier";
+    /* Operators */
     case Operator: return "Operator";
+    /* Constants */
     case Constant: return "Constant";
+    /* StringLiterals */
     case StringLiteral: return "StringLiteral";
     case Newline: return "Newline";
     case Invalid: return "Invalid";
@@ -49,7 +71,7 @@ int main() {
     
     if (type == None) {
       // finish
-      fprintf(stdout, "\t{}\n");
+      
       break;
     }
     // Replace 
@@ -62,6 +84,6 @@ int main() {
             quote(yylfile).c_str());
     yylcolno += yylval.raw.length();
   }
-  fprintf(stdout, "]\n");
+  fprintf(stdout, "\t{}\n]\n");
   return 0;
 }
