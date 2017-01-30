@@ -6,9 +6,9 @@ make bin/c_lexer
 
 # make test files
 mkdir -p test/lexer/in
-echo -e "#include <stdio.h>\nint main(){\n  printf(\"Wibble\"); \n}\n" > test/lexer/in/tmp.c
-echo -e "#include \"wib.c\"\nint main(){\n  printf(\"Wibble\"); \n}\n" > test/lexer/in/wibble.c
-echo -e "int main(){\n  printf(\"Wib\"); \n}\n" > test/lexer/in/wib.c
+echo -e "#include <stdio.h>\nint main(){\n  printf(\"Wibble\");}" > test/lexer/in/tmp.c
+echo -e "#include \"wib.c\"\nint main(){\n  printf(\"Wibble\");}\n" > test/lexer/in/wibble.c
+echo -e "int main(){\n  printf(\"Wib\"); \n int 3; float 3.2; float 3.24e-5; double 2323E-10 \n}\n}\n" > test/lexer/in/wib.c
 
 # make test results directory
 mkdir -p test/lexer/out

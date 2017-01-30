@@ -29,6 +29,15 @@ std::string extract_quoted(std::string s){
   //fprintf(stderr,"%s\n", s.c_str());
   return s;
 }
+/*
+TokenType get_token(std::string s){
+  if (s == "auto"){
+    return AUTO;
+  }
+}
+*/
+
+
 /* End the embedded code section. */
 %}
 
@@ -36,6 +45,12 @@ letter [a-zA-Z_]
 alphanum [a-zA-Z0-9]
 filechar [a-zA-Z0-9_/-]
 digit [0-9]
+num [1-9]
+decimal {digit}+(\.){digit}+
+hex 0[xX][a-fA-F0-9]+
+oct 0[1-7]+
+float (({decimal})([eE][+-]?{digit}+)?)|{num}+[eE][+-]?{digit}+
+constsuffix u|l|U|L|ul|uL|Ul|UL
 keyword auto|break|double|else|enum|extern|float|for|goto|if|case|char|const|continue|default|do|int|long|struct|switch|register|typedef|union|unsigned|void|volatile|while|return|short|signed|sizeof|static
 operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"|"+"|"-"|"*"|"/"|"("|")"|"{"|"}"|"["|"]"|","|"."|"->"|"<<"|">>"|"~"|"!"|"\\"
 filename "[\"]{filechar}+[\.]{letter}+[\"]
@@ -47,8 +62,10 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 %{/* KEYWORDS  */%}
 {keyword}	{/*fprintf(stderr, "Keyword\n");*/ yylval.raw = std::string(yytext); yylval.num = atoi(yytext); return Keyword;}
 
-%{/* CONSTANT */%}
-{digit}+(\.)*{digit}* {/*fprintf(stderr, "Constant\n");*/ yylval.raw = std::string(yytext); return Constant;}
+%{/* CONSTANTS */%}
+{float}{constsuffix}? {fprintf(stderr, "Float\n"); yylval.raw = std::string(yytext); /*return float*/ return Constant;}
+
+{num}+|{hex}|{oct} {fprintf(stderr, "Integer\n"); yylval.raw = std::string(yytext); /*return Integer*/ return Constant;}
 
 %{/* IDENTIFIER  */%}
 {letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return Identifier; }
