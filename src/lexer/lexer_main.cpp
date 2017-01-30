@@ -11,7 +11,7 @@ std::string yylfile;
 std::string t;
 std::cmatch cm;
 int yylcolno = 1;
-int yylsourcelino = 0;
+int yylsourcelino = 1;
 
 std::string quote(int i){
   std::string s = std::to_string(i);
@@ -31,20 +31,45 @@ std::string escape_quotes(std::string s){
 int main() {
   std::map<std::string, int> sourceline;
   fprintf(stdout, "[\n");
-
+  int p = 0;
   while (1) {
     TokenType type = (TokenType)yylex();
     if (type == Newline) {
-      if (!((yylval.Class == "Preprocessor") |
-            (yylval.Class == "PreprocFile"))) {
+      // if newline after preprocessor, no longer interpreting as preprocessor and don't increment sourcelino
+      if (p){
+        p = 0;
+      }
+      else {
         yylsourcelino += 1;
       }
       continue;
     }
+    // if we come across a # at the beginning of a line, we are intepreting as preprocessor
+
+    if (p){
+      if (p==1){
+        // source line number, if it's an integer, otherwise... not sure. Should always be integer!
+        if (type == Constant){
+           yylsourcelino = atoi(yylval.print_text().c_str());
+        }
+        // if it's not an integer then it is just a #include (except that should be caught by #include!)
+      }
+      if ((p==2) & (type==StringLiteral)){
+        // file name
+        yylfile = yylval.print_text();
+      }
+      else {
+        
+      }
+      p++;
+    }
     if (type == Preprocessor) {
+      p=1;
+      // We don't know the correct file for this line yet
+      yylfile = "";      
       // continue;
     }
-    if (type == PreprocessorFile) {
+    if (type == PreprocessorFile) {	
       std::regex_search(yylval.Text.c_str(), cm, std::regex("\\b[0-9]+\\b"),
                         std::regex_constants::match_default);
       sourceline[yylfile] = atoi(((std::string)cm[0]).c_str());

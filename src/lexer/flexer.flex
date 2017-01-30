@@ -53,13 +53,14 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 \/\/.* {/* Ignore comments*/;}
 \/\*(.*\n)*.*\*\/ {/* Ignore block comments*/;}
 
-^#include" ".+ {/* Assume includes are correct */;}
+^#include" ".+ {/* Ignore includes */;}
 
 %{/* PREPROCESSOR  */%}
-
+^# {yylval.Text = std::string(yytext); yylval.Class = "Operator"; return Preprocessor; }
+%{/*
 ^#" "{digit}+" "[\"]{filechar}+[\.]{letter}+[\"](" "{digit})* {std::string s(yytext); yylfile = extract_quoted(s); yylval.Text = s; yylval.Class = "PreprocFile";return PreprocessorFile;}
 ^#.+ {yylval.Class = "Preprocessor"; yylval.Text = std::string(yytext);return Preprocessor;}
-
+*/%}
 . {fprintf(stderr, "Invalid: %s\n", yytext); yylval.Class = "Invalid"; yylval.Text = std::string(yytext); return Invalid;}
 
 %%
