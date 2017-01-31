@@ -53,7 +53,7 @@ hex 0[xX][a-fA-F0-9]+
 oct 0[1-7]+
 float (({decimal})([eE][+-]?{digit}+)?)|{num}+[eE][+-]?{digit}+
 constsuffix u|l|U|L|ul|uL|Ul|UL
-keyword auto|break|double|else|enum|extern|float|for|goto|if|case|char|const|continue|default|do|int|long|struct|switch|register|typedef|union|unsigned|void|volatile|while|return|short|signed|sizeof|static
+
 operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"|"+"|"-"|"*"|"/"|"("|")"|"{"|"}"|"["|"]"|","|"."|"->"|"<<"|">>"|"~"|"!"|"\\"
 filename "[\"]{filechar}+[\.]{letter}+[\"]
 %%
@@ -62,43 +62,43 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 [\n] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
 %{/* KEYWORDS  */%}
-auto yylval.raw = std::string(yytext); return Keyword;
-break yylval.raw = std::string(yytext); return Keyword;
-double yylval.raw = std::string(yytext); return Keyword;
-else yylval.raw = std::string(yytext); return Keyword;
-enum yylval.raw = std::string(yytext); return Keyword;
-extern yylval.raw = std::string(yytext); return Keyword;
-float yylval.raw = std::string(yytext); return Keyword;
-for yylval.raw = std::string(yytext); return Keyword;
-goto yylval.raw = std::string(yytext); return Keyword;
-if yylval.raw = std::string(yytext); return Keyword;
-case yylval.raw = std::string(yytext); return Keyword;
-char yylval.raw = std::string(yytext); return Keyword;
-const yylval.raw = std::string(yytext); return Keyword;
-continue yylval.raw = std::string(yytext); return Keyword;
-default yylval.raw = std::string(yytext); return Keyword;
-do yylval.raw = std::string(yytext); return Keyword;
-int yylval.raw = std::string(yytext); return Keyword;
-long yylval.raw = std::string(yytext); return Keyword;
-struct yylval.raw = std::string(yytext); return Keyword;
-switch yylval.raw = std::string(yytext); return Keyword;
-register yylval.raw = std::string(yytext); return Keyword;
-typedef yylval.raw = std::string(yytext); return Keyword;
-union yylval.raw = std::string(yytext); return Keyword;
-unsigned yylval.raw = std::string(yytext); return Keyword;
-void yylval.raw = std::string(yytext); return Keyword;
-volatile yylval.raw = std::string(yytext); return Keyword;
-while yylval.raw = std::string(yytext); return Keyword;
-return yylval.raw = std::string(yytext); return Keyword;
-short yylval.raw = std::string(yytext); return Keyword;
-signed yylval.raw = std::string(yytext); return Keyword;
-sizeof yylval.raw = std::string(yytext); return Keyword;
-static yylval.raw = std::string(yytext); return Keyword;
+auto yylval.raw = std::string(yytext); return AUTO;
+break yylval.raw = std::string(yytext); return BREAK;
+double yylval.raw = std::string(yytext); return DOUBLE;
+else yylval.raw = std::string(yytext); return ELSE;
+enum yylval.raw = std::string(yytext); return ENUM;
+extern yylval.raw = std::string(yytext); return EXTERN;
+float yylval.raw = std::string(yytext); return FLOAT;
+for yylval.raw = std::string(yytext); return FOR;
+goto yylval.raw = std::string(yytext); return GOTO;
+if yylval.raw = std::string(yytext); return IF;
+case yylval.raw = std::string(yytext); return CASE;
+char yylval.raw = std::string(yytext); return CHAR;
+const yylval.raw = std::string(yytext); return CONST;
+continue yylval.raw = std::string(yytext); return CONTINUE;
+default yylval.raw = std::string(yytext); return DEFAULT;
+do yylval.raw = std::string(yytext); return DO;
+int yylval.raw = std::string(yytext); return INT;
+long yylval.raw = std::string(yytext); return LONG;
+struct yylval.raw = std::string(yytext); return STRUCT;
+switch yylval.raw = std::string(yytext); return SWITCH;
+register yylval.raw = std::string(yytext); return REGISTER;
+typedef yylval.raw = std::string(yytext); return TYPEDEF;
+union yylval.raw = std::string(yytext); return UNION;
+unsigned yylval.raw = std::string(yytext); return UNSIGNED;
+void yylval.raw = std::string(yytext); return VOID;
+volatile yylval.raw = std::string(yytext); return VOLATILE;
+while yylval.raw = std::string(yytext); return WHILE;
+return yylval.raw = std::string(yytext); return RETURN;
+short yylval.raw = std::string(yytext); return SHORT;
+signed yylval.raw = std::string(yytext); return SIGNED;
+sizeof yylval.raw = std::string(yytext); return SIZEOF;
+static yylval.raw = std::string(yytext); return STATIC;
 
 %{/* CONSTANTS */%}
-{float}{constsuffix}? {fprintf(stderr, "Float\n"); yylval.raw = std::string(yytext); return FLOAT;}
+{float}{constsuffix}? { yylval.raw = std::string(yytext); return FLOAT;}
 
-{num}+|{hex}|{oct}{constsuffix}? {fprintf(stderr, "Integer\n"); yylval.raw = std::string(yytext); /*return Integer*/ return INTEGER;}
+{num}+|{hex}|{oct}{constsuffix}? { yylval.raw = std::string(yytext); return INT; }
 
 %{/* IDENTIFIERS  */%}
 {letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return Identifier; }
@@ -136,7 +136,7 @@ static yylval.raw = std::string(yytext); return Keyword;
 "<<" yylval.raw = std::string(yytext); return LL;
 ">>" yylval.raw = std::string(yytext); return RR;
 "~" yylval.raw = std::string(yytext); return BNOT;
-"!" yylval.raw = std::string(yytext); return  NOT;
+"!" yylval.raw = std::string(yytext); return NOT;
 "\\" yylval.raw = std::string(yytext); return BSLASH;
 
 %{/* COMMENTS  */%}

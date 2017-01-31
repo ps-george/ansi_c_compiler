@@ -59,7 +59,7 @@ std::string classname(yytokentype t){
     case Operator: return "Operator";
     /* Constants */
     case FLOAT:
-    case INTEGER:    
+    case INT:    
     case Constant: return "Constant";
     /* StringLiterals */
     case StringLiteral: return "StringLiteral";
