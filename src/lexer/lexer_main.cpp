@@ -33,7 +33,7 @@ std::string escape_chars(std::string s){
 }
 
 std::string classname(TokenType t){
-  if (11<t<45){
+  if (t>11 && t<45){
     return "Operator";
   }
   switch(t){

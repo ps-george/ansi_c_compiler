@@ -96,7 +96,7 @@ static yylval.raw = std::string(yytext); return Keyword;
 %{/* CONSTANTS */%}
 {float}{constsuffix}? {fprintf(stderr, "Float\n"); yylval.raw = std::string(yytext); return FLOAT;}
 
-{num}+|{hex}|{oct} {fprintf(stderr, "Integer\n"); yylval.raw = std::string(yytext); /*return Integer*/ return INTEGER;}
+{num}+|{hex}|{oct}{constsuffix}? {fprintf(stderr, "Integer\n"); yylval.raw = std::string(yytext); /*return Integer*/ return INTEGER;}
 
 %{/* IDENTIFIERS  */%}
 {letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return Identifier; }
