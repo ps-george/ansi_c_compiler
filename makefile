@@ -15,13 +15,18 @@ CPPFLAGS += -MMD $(INC)
 _LSRCS= lexer_main.cpp flexer.yy.cpp
 LSRCS=$(patsubst %,$(LSDIR)/%,$(_LSRCS))
 
-bin/c_lexer: $(LSRCS:%.cpp=%.o)
+bin/c_lexer: include/c_parser.tab.h $(LSRCS:%.cpp=%.o) 
 	mkdir -p bin
-	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $^
+	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $(LSRCS:%.cpp=%.o)
+
+include/c_parser.tab.h: src/parser/c_parser.y
+	bison -d -o include/c_parser.tab.c -d $^
+	mv include/c_parser.tab.c src/parser/
 
 # Need to generate flexer.yy.cpp from .flex first
-%/flexer.yy.cpp: %/flexer.flex
+%/flexer.yy.cpp: %/flexer.flex include/c_parser.tab.h
 	flex -o $@ $^ 
+
 
 # Need to build flexer.yy.o next
 %/flexer.yy.o: flexer.yy.cpp
@@ -57,5 +62,6 @@ bin/c_compiler : $(CSRCS:%.cpp=%.o)
 clean:
 	rm -f bin/*
 	rm -f src/lexer/*.o
+	rm -f include/*.tab.*
 
 .PHONY: clean

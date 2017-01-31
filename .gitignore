@@ -1,5 +1,7 @@
 *.tab.cpp
 *.tab.hpp
+*.tab.h
+*.tab.c
 *.yy.cpp
 *.got.txt
 

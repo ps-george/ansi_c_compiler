@@ -8,6 +8,8 @@
 /* Bring in our declarations for token types and
    the yylval variable. */
 #include "tokens.hpp"
+#include "c_parser.tab.h"
+
 #include  <regex>
 #include <string.h>
 

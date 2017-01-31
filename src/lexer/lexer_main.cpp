@@ -1,10 +1,11 @@
 #include "tokens.hpp"
+#include "c_parser.tab.h"
 
 #include <iomanip>
 #include <regex>
 #include <string.h>
 // Define the instance of the variable that is declared in the header
-TokenValue yylval;
+YYSTYPE yylval;
 std::string yylfile;
 std::string t;
 std::cmatch cm;
@@ -32,7 +33,7 @@ std::string escape_chars(std::string s){
   return s;
 }
 
-std::string classname(TokenType t){
+std::string classname(yytokentype t){
   if (t>11 && t<45){
     return "Operator";
   }
@@ -71,7 +72,7 @@ int main() {
   fprintf(stdout, "[\n");
   std::string Class;
   while (1) {
-    TokenType type = (TokenType)yylex();
+    yytokentype type = (yytokentype)yylex();
     Class = classname(type);
     
     if (type == None) {

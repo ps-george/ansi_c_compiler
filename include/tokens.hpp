@@ -3,54 +3,7 @@
 
 #include <string>
 
-enum TokenType {
-  None = 0,    // This indicates there are no more tokens
-  Keyword = 1, // token codes must be positive
-  Identifier,
-  Operator,
-  Constant,
-  StringLiteral,
-  Newline,
-  Preprocessor,
-  PreprocessorFile,
-  Invalid,
-  FLOAT,
-  INTEGER,
-  BNOT,
-  BOR,
-  BAND,
-  NOT,
-  LOR,
-  LAND,
-  LT,
-  LE,
-  GT,
-  GE,
-  NE,
-  EQ,
-  PLUS,
-  MINUS,
-  TIMES,
-  MOD,
-  DIV,
-  BXOR,
-  ASGN,
-  SEMI,
-  COMMA,
-  BSLASH,
-  PLEFT,
-  PRIGHT,
-  CPLEFT,
-  CPRIGHT,
-  SPLEFT,
-  SPRIGHT,
-  ARROW,
-  DOT,
-  LL,
-  RR
-};
-
-struct TokenValue {
+struct YYSTYPE {
   int num;
   std::string raw;
 };
@@ -61,7 +14,7 @@ struct TokenValue {
 // By convention it is called yylval, as that is
 // the name that will be automatially generated
 // by Bison (see next lab).
-extern TokenValue yylval;
+extern YYSTYPE yylval;
 extern int yylineno;
 extern int yylcolno;
 extern int yylsourcelino;
