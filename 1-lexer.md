@@ -161,15 +161,14 @@ matter.
 
 There is some [ambiguity](#2) over the string literals, which might
 or might not include the quotes. _Both_ forms will be accepted as
-value, so this:
-Another session for a different lexer could be (preferred):
+value, so another session for a different lexer could be (preferred):
 ````
 $ cat wibble.c
 z="wibble"
 $ cat wibble.c | bin/c_lexer
 [ { "Class" : "Identifier",    "Text": "z" },
   { "Class" : "Operator",    "Text": "=" },
-  { "Class" : "StringLiteral",    "Text": "z" }
+  { "Class" : "StringLiteral",    "Text": "wibble" }
 ]
 ````
 or
@@ -178,7 +177,7 @@ or
 $ cat wibble.c | bin/c_lexer
 [ { "Class" : "Identifier",    "Text": "z" },
   { "Class" : "Operator",    "Text": "=" },
-  { "Class" : "StringLiteral",    "Text": "\"z\"" }
+  { "Class" : "StringLiteral",    "Text": "\"wibble\"" }
 ]
 ````
 
