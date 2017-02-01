@@ -85,8 +85,8 @@ sizeof    { col_inc(); store(yytext); return SIZEOF; }
 static    { col_inc(); store(yytext); return STATIC; }
 
 %{/* CONSTANTS */%}
-{float}{constsuffix}? { col_inc(); store(yytext); return FLOATC; }
-0|{num}+|{hex}|{oct}{constsuffix}? { col_inc(); store(yytext); return INTC; }
+{float}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
+0|{num}+|{hex}|{oct}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
 
 %{/* IDENTIFIERS  */%}
 {letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ col_inc(); store(yytext); return ID; }

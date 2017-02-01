@@ -108,8 +108,7 @@ std::string classname(yytokentype t){
     case ELLIP:
     case BSLASH: return "Operator";
     /* Constants */
-    case FLOATC:
-    case INTC: return "Constant";
+    case CONSTANT: return "Constant";
     /* StringLiterals */
     case STRING: return "StringLiteral";
     //  Unncessary
