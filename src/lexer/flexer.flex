@@ -31,14 +31,6 @@ std::string extract_quoted(std::string s){
   //fprintf(stderr,"%s\n", s.c_str());
   return s;
 }
-/*
-TokenType get_token(std::string s){
-  if (s == "auto"){
-    return AUTO;
-  }
-}
-*/
-
 
 /* End the embedded code section. */
 %}
@@ -160,5 +152,3 @@ void yyerror (char const *s)
     fprintf (stderr, "Flex Error: %s\n", s); /* s is the text that wasn't matched */
     exit(1);
 }
-
-

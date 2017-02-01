@@ -34,28 +34,58 @@ std::string escape_chars(std::string s){
 }
 
 std::string classname(yytokentype t){
-  if (t>11 && t<45){
+  if (t>297 && t<329){
     return "Operator";
   }
   switch(t){
   /* KEYWORDS */
-  /*
-    case: CASE
-    case: DEFAULT
-    case: IF 
-    case: ELSE 
-    case: SWITCH 
-    case: WHILE 
-    case: DO 
-    case: FOR 
-    case: GOTO 
-    case: CONTINUE 
-    case: BREAK 
-    case: RETURN */
+    case CASE:
+    case DEFAULT:
+    case IF:
+    case ELSE:
+    case SWITCH:
+    case WHILE:
+    case DO:
+    case FOR:
+    case GOTO:
+    case CONTINUE: 
+    case BREAK: 
+    case RETURN:
     case Keyword: return "Keyword";
     /* Identifiers */
     case Identifier: return "Identifier";
-    /* Operators */
+     /* Operators */
+    case ASGN:
+    case LE:
+    case GE:
+    case EQ:
+    case NE:
+    case GT:
+    case LT:
+    case LOR:
+    case LAND:
+    case BOR:
+    case BAND:
+    case BXOR:
+    case PLUS:
+    case MINUS:
+    case TIMES:
+    case DIV:
+    case PLEFT:
+    case PRIGHT:
+    case CPLEFT:
+    case CPRIGHT:
+    case SPLEFT:
+    case SPRIGHT:
+    case SEMI:
+    case COMMA:
+    case DOT:
+    case ARROW:
+    case LL:
+    case RR:
+    case BNOT:
+    case NOT:
+    case BSLASH:
     case Operator: return "Operator";
     /* Constants */
     case FLOAT:
@@ -65,7 +95,7 @@ std::string classname(yytokentype t){
     case StringLiteral: return "StringLiteral";
     case Newline: return "Newline";
     case Invalid: return "Invalid";
-    default: return "Error";
+    default: return "None";
   }
 }
 int main() {
@@ -75,9 +105,8 @@ int main() {
     yytokentype type = (yytokentype)yylex();
     Class = classname(type);
     
-    if (type == None) {
+    if (!type) {
       // finish
-      
       break;
     }
     // Replace 
