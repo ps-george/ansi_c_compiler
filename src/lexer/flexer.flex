@@ -87,6 +87,7 @@ static    { col_inc(); store(yytext); return STATIC; }
 %{/* CONSTANTS */%}
 {float}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
 0|{num}+|{hex}|{oct}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
+L?'(\\.|[^\\'])+' { col_inc(); store(yytext); return CONSTANT; }
 
 %{/* IDENTIFIERS  */%}
 {letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ col_inc(); store(yytext); return ID; }
