@@ -98,7 +98,6 @@ std::string classname(yytokentype t){
     case ARROW:
     case LL:
     case RR:
-    case BSLASH:
     case ELLIP:
     case INCR:
     case DECR:
