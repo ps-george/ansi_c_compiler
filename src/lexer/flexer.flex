@@ -1,23 +1,16 @@
 %option noyywrap
 
 %{
-/* Now in a section of C that will be embedded
-   into the auto-generated code. Flex will not
-   try to interpret code surrounded by %{ ... %} */
-
 /* Bring in our declarations for token types and
    the yylval variable. */
 #include "tokens.hpp"
 #include "c_parser.tab.h"
-
-#include  <regex>
+#include <regex>
 #include <string.h>
-
 
 int extract_lineno(char * yytext){
   std::cmatch cm;
-  std::regex_search(yytext, cm, std::regex("\\b[0-9]+\\b"),
-                        std::regex_constants::match_default);
+  std::regex_search(yytext, cm, std::regex("\\b[0-9]+\\b"), std::regex_constants::match_default);
   // return the first match, this is the linenumber
   return atoi(std::string(cm[0]).c_str());
 }
@@ -31,13 +24,10 @@ std::string extract_quoted(std::string s){
   //fprintf(stderr,"%s\n", s.c_str());
   return s;
 }
-
-/* End the embedded code section. */
 %}
 
 letter [a-zA-Z_]
 alphanum [a-zA-Z0-9]
-filechar [a-zA-Z0-9_/-]
 digit [0-9]
 num [1-9]
 decimal {digit}+(\.){digit}+
@@ -88,14 +78,14 @@ sizeof yylval.raw = std::string(yytext);    return SIZEOF;
 static yylval.raw = std::string(yytext);    return STATIC;
 
 %{/* CONSTANTS */%}
-{float}{constsuffix}? { yylval.raw = std::string(yytext); return FLOATC;}
+{float}{constsuffix}? { yylval.raw = std::string(yytext); return FLOATC; }
 0|{num}+|{hex}|{oct}{constsuffix}? { yylval.raw = std::string(yytext); return INTC; }
 
 %{/* IDENTIFIERS  */%}
-{letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return ID; }
+{letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return ID; }
 
 %{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
-\".*[^\\]\"|\".*\\\\\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
+\"\"|\".*[^\\]\"|\".*\\\\\" { yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
 
 %{/* OPERATORS  */%}
 "=" yylval.raw = std::string(yytext);   return ASGN;
@@ -130,9 +120,9 @@ static yylval.raw = std::string(yytext);    return STATIC;
 "!" yylval.raw = std::string(yytext);   return NOT;
 "\\" yylval.raw = std::string(yytext);  return BSLASH;
 
-%{/* COMMENTS  */%}
-\/\/.* {/* Ignore comments*/;}
-\/\*(.*\n)*.*\*\/ {/* Ignore block comments*/;}
+%{/* COMMENTS - Ignore them  */%}
+\/\/.* {;}
+\/\*(.*\n)*.*\*\/ {;}
 
 ^#include" ".+ {/* Ignore includes */;}
 
@@ -141,7 +131,7 @@ static yylval.raw = std::string(yytext);    return STATIC;
 ^#" "{digit}+" "\".*\"([ ]{digit})*\n {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
 
 %{// Anything else, return invalid/error %}
-. {/*fprintf(stderr, "Invalid: %s\n", yytext);*/ yylval.raw = std::string(yytext); return Invalid;}
+. {yylval.raw = std::string(yytext); return Invalid;}
 
 %%
 
