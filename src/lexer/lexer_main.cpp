@@ -66,6 +66,42 @@ std::string classname(yytokentype t){
     case ID: return "Identifier";
      /* Operators */
     case ASGN:
+    case LE:
+    case GE:
+    case EQ:
+    case NE:
+    case GT:
+    case LT:
+    case LOR:
+    case LAND:
+    case Q:
+    case NOT:
+    case BNOT:
+    case BOR:
+    case BAND:
+    case BXOR:
+    case PLUS:
+    case SUB:
+    case TIMES:
+    case DIV:
+    case MOD:
+    case PLEFT:
+    case PRIGHT:
+    case CPLEFT:
+    case CPRIGHT:
+    case SPLEFT:
+    case SPRIGHT:
+    case SEMI:
+    case COLON:
+    case COMMA:
+    case DOT:
+    case ARROW:
+    case LL:
+    case RR:
+    case BSLASH:
+    case ELLIP:
+    case INCR:
+    case DECR:
     case RRASS:
     case LLASS:
     case ADDASS:
@@ -75,38 +111,7 @@ std::string classname(yytokentype t){
     case MODASS:
     case ANDASS:
     case XORASS:
-    case ORASS:
-    case LE:
-    case GE:
-    case EQ:
-    case NE:
-    case GT:
-    case LT:
-    case LOR:
-    case LAND:
-    case BOR:
-    case BAND:
-    case BXOR:
-    case PLUS:
-    case SUB:
-    case TIMES:
-    case DIV:
-    case PLEFT:
-    case PRIGHT:
-    case CPLEFT:
-    case CPRIGHT:
-    case SPLEFT:
-    case SPRIGHT:
-    case SEMI:
-    case COMMA:
-    case DOT:
-    case ARROW:
-    case LL:
-    case RR:
-    case BNOT:
-    case NOT:
-    case ELLIP:
-    case BSLASH: return "Operator";
+    case ORASS: return "Operator";
     /* Constants */
     case CONSTANT: return "Constant";
     /* StringLiterals */

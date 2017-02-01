@@ -50,7 +50,7 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 [\t] {yylcolno++;}
 [\n] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
-%{/* KEYWORDS  */%}
+%{/* KEYWORDS - 32 of them  */%}
 auto      { col_inc(); store(yytext); return AUTO; }
 break     { col_inc(); store(yytext); return BREAK; }
 double    { col_inc(); store(yytext); return DOUBLE; }
@@ -94,7 +94,7 @@ static    { col_inc(); store(yytext); return STATIC; }
 %{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
 L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
 
-%{/* OPERATORS  */%}
+%{/* OPERATORS - 47 of them. Is backslash an operator?  */%}
 "="   { col_inc(); store(yytext); return ASGN; }
 "<="  { col_inc(); store(yytext); return LE; }
 ">="  { col_inc(); store(yytext); return GE; }
@@ -104,6 +104,9 @@ L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)
 "<"   { col_inc(); store(yytext); return LT; }
 "||"  { col_inc(); store(yytext); return LOR; }
 "&&"  { col_inc(); store(yytext); return LAND; }
+"?"   { col_inc(); store(yytext); return Q; }
+"!"   { col_inc(); store(yytext); return NOT; }
+"~"   { col_inc(); store(yytext); return BNOT; }
 "|"   { col_inc(); store(yytext); return BOR; }
 "&"   { col_inc(); store(yytext); return BAND; }
 "^"   { col_inc(); store(yytext); return BXOR; }
@@ -111,6 +114,7 @@ L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)
 "-"   { col_inc(); store(yytext); return SUB; }
 "*"   { col_inc(); store(yytext); return TIMES; }
 "/"   { col_inc(); store(yytext); return DIV; }
+"%"   { col_inc(); store(yytext); return MOD; }
 "("   { col_inc(); store(yytext); return PLEFT; }
 ")"   { col_inc(); store(yytext); return PRIGHT; }
 "{"   { col_inc(); store(yytext); return CPLEFT; }
@@ -118,13 +122,12 @@ L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)
 "["   { col_inc(); store(yytext); return SPLEFT; }
 "]"   { col_inc(); store(yytext); return SPRIGHT; }
 ";"   { col_inc(); store(yytext); return SEMI; }
+":"   { col_inc(); store(yytext); return COLON; }
 ","   { col_inc(); store(yytext); return COMMA; }
 "."   { col_inc(); store(yytext); return DOT; }
 "->"  { col_inc(); store(yytext); return ARROW; }
 "<<"  { col_inc(); store(yytext); return LL; }
 ">>"  { col_inc(); store(yytext); return RR; }
-"~"   { col_inc(); store(yytext); return BNOT; }
-"!"   { col_inc(); store(yytext); return NOT; }
 "\\"  { col_inc(); store(yytext); return BSLASH; }
 "..." { col_inc();store(yytext);  return ELLIP; }
 "++"  { col_inc(); store(yytext); return INCR; }
