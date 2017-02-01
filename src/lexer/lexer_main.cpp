@@ -39,21 +39,40 @@ std::string classname(yytokentype t){
   }
   switch(t){
   /* KEYWORDS */
-    case CASE:
-    case DEFAULT:
-    case IF:
+    case AUTO:
+    case BREAK:
+    case DOUBLE:
     case ELSE:
-    case SWITCH:
-    case WHILE:
-    case DO:
+    case ENUM:
+    case EXTERN:
+    case FLOAT:
     case FOR:
     case GOTO:
-    case CONTINUE: 
-    case BREAK: 
+    case IF:
+    case CASE:
+    case CHAR:
+    case CONST:
+    case CONTINUE:
+    case DEFAULT:
+    case DO:
+    case INT:
+    case LONG:
+    case STRUCT:
+    case SWITCH:
+    case REGISTER:
+    case TYPEDEF:
+    case UNION:
+    case UNSIGNED:
+    case VOID:
+    case VOLATILE:
+    case WHILE:
     case RETURN:
-    case Keyword: return "Keyword";
+    case SHORT:
+    case SIGNED:
+    case SIZEOF:
+    case STATIC: return "Keyword";
     /* Identifiers */
-    case Identifier: return "Identifier";
+    case ID: return "Identifier";
      /* Operators */
     case ASGN:
     case LE:
@@ -85,17 +104,15 @@ std::string classname(yytokentype t){
     case RR:
     case BNOT:
     case NOT:
-    case BSLASH:
-    case Operator: return "Operator";
+    case BSLASH: return "Operator";
     /* Constants */
-    case FLOAT:
-    case INT:    
-    case Constant: return "Constant";
+    case FLOATC:
+    case INTC: return "Constant";
     /* StringLiterals */
-    case StringLiteral: return "StringLiteral";
-    case Newline: return "Newline";
-    case Invalid: return "Invalid";
-    default: return "None";
+    case STRING: return "StringLiteral";
+    //  Unncessary
+    // case NEWLINE: return "Newline";
+    default: fprintf(stderr, "Invalid: %s, StreamLine: %s, ColNum: %s\n", yylval.raw.c_str(), quote(yylineno).c_str(), quote(yylcolno).c_str() ); return "Invalid";
   }
 }
 int main() {
@@ -103,12 +120,10 @@ int main() {
   std::string Class;
   while (1) {
     yytokentype type = (yytokentype)yylex();
-    Class = classname(type);
-    
     if (!type) {
-      // finish
       break;
     }
+    Class = classname(type);
     // Replace 
     fprintf(stdout, "\t{\n\t\t\"Class\": %s,\n\t\t\"Text\": %s,\n\t\t\"StreamLine\": %s,\n\t\t\"SourceLine\": %s,\n\t\t\"SourceCol\": %s,\n\t\t\"SourceFile\": %s\n\t},\n",
             quote(Class).c_str(),

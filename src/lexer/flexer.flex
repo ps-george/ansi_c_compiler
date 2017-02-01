@@ -54,82 +54,81 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 [\n] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
 %{/* KEYWORDS  */%}
-auto yylval.raw = std::string(yytext); return AUTO;
-break yylval.raw = std::string(yytext); return BREAK;
-double yylval.raw = std::string(yytext); return DOUBLE;
-else yylval.raw = std::string(yytext); return ELSE;
-enum yylval.raw = std::string(yytext); return ENUM;
-extern yylval.raw = std::string(yytext); return EXTERN;
-float yylval.raw = std::string(yytext); return FLOAT;
-for yylval.raw = std::string(yytext); return FOR;
-goto yylval.raw = std::string(yytext); return GOTO;
-if yylval.raw = std::string(yytext); return IF;
-case yylval.raw = std::string(yytext); return CASE;
-char yylval.raw = std::string(yytext); return CHAR;
-const yylval.raw = std::string(yytext); return CONST;
-continue yylval.raw = std::string(yytext); return CONTINUE;
-default yylval.raw = std::string(yytext); return DEFAULT;
-do yylval.raw = std::string(yytext); return DO;
-int yylval.raw = std::string(yytext); return INT;
-long yylval.raw = std::string(yytext); return LONG;
-struct yylval.raw = std::string(yytext); return STRUCT;
-switch yylval.raw = std::string(yytext); return SWITCH;
-register yylval.raw = std::string(yytext); return REGISTER;
-typedef yylval.raw = std::string(yytext); return TYPEDEF;
-union yylval.raw = std::string(yytext); return UNION;
-unsigned yylval.raw = std::string(yytext); return UNSIGNED;
-void yylval.raw = std::string(yytext); return VOID;
-volatile yylval.raw = std::string(yytext); return VOLATILE;
-while yylval.raw = std::string(yytext); return WHILE;
-return yylval.raw = std::string(yytext); return RETURN;
-short yylval.raw = std::string(yytext); return SHORT;
-signed yylval.raw = std::string(yytext); return SIGNED;
-sizeof yylval.raw = std::string(yytext); return SIZEOF;
-static yylval.raw = std::string(yytext); return STATIC;
+auto yylval.raw = std::string(yytext);      return AUTO;
+break yylval.raw = std::string(yytext);     return BREAK;
+double yylval.raw = std::string(yytext);    return DOUBLE;
+else yylval.raw = std::string(yytext);      return ELSE;
+enum yylval.raw = std::string(yytext);      return ENUM;
+extern yylval.raw = std::string(yytext);    return EXTERN;
+float yylval.raw = std::string(yytext);     return FLOAT;
+for yylval.raw = std::string(yytext);       return FOR;
+goto yylval.raw = std::string(yytext);      return GOTO;
+if yylval.raw = std::string(yytext);        return IF;
+case yylval.raw = std::string(yytext);      return CASE;
+char yylval.raw = std::string(yytext);      return CHAR;
+const yylval.raw = std::string(yytext);     return CONST;
+continue yylval.raw = std::string(yytext);  return CONTINUE;
+default yylval.raw = std::string(yytext);   return DEFAULT;
+do yylval.raw = std::string(yytext);        return DO;
+int yylval.raw = std::string(yytext);       return INT;
+long yylval.raw = std::string(yytext);      return LONG;
+struct yylval.raw = std::string(yytext);    return STRUCT;
+switch yylval.raw = std::string(yytext);    return SWITCH;
+register yylval.raw = std::string(yytext);  return REGISTER;
+typedef yylval.raw = std::string(yytext);   return TYPEDEF;
+union yylval.raw = std::string(yytext);     return UNION;
+unsigned yylval.raw = std::string(yytext);  return UNSIGNED;
+void yylval.raw = std::string(yytext);      return VOID;
+volatile yylval.raw = std::string(yytext);  return VOLATILE;
+while yylval.raw = std::string(yytext);     return WHILE;
+return yylval.raw = std::string(yytext);    return RETURN;
+short yylval.raw = std::string(yytext);     return SHORT;
+signed yylval.raw = std::string(yytext);    return SIGNED;
+sizeof yylval.raw = std::string(yytext);    return SIZEOF;
+static yylval.raw = std::string(yytext);    return STATIC;
 
 %{/* CONSTANTS */%}
-{float}{constsuffix}? { yylval.raw = std::string(yytext); return FLOAT;}
-
-{num}+|{hex}|{oct}{constsuffix}? { yylval.raw = std::string(yytext); return INT; }
+{float}{constsuffix}? { yylval.raw = std::string(yytext); return FLOATC;}
+0|{num}+|{hex}|{oct}{constsuffix}? { yylval.raw = std::string(yytext); return INTC; }
 
 %{/* IDENTIFIERS  */%}
-{letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return Identifier; }
+{letter}({letter}|{digit})* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return ID; }
 
 %{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
-\".*[^\\]\"|\".*\\\\\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.raw = extract_quoted(std::string(yytext)); return StringLiteral; }
+\".*[^\\]\"|\".*\\\\\" {/*fprintf(stderr, StringLiteral"\n");*/ yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
 
 %{/* OPERATORS  */%}
-"=" yylval.raw = std::string(yytext); return ASGN;
-"<=" yylval.raw = std::string(yytext); return LE;
-">=" yylval.raw = std::string(yytext); return GE;
-"==" yylval.raw = std::string(yytext); return EQ;
-"!=" yylval.raw = std::string(yytext); return NE;
-">" yylval.raw = std::string(yytext); return GT;
-"<" yylval.raw = std::string(yytext); return LT;
-"||" yylval.raw = std::string(yytext); return LOR;
-"&&" yylval.raw = std::string(yytext); return LAND;
-"|" yylval.raw = std::string(yytext); return BOR;
-"&" yylval.raw = std::string(yytext); return BAND;
-"^" yylval.raw = std::string(yytext); return BXOR;
-"+" yylval.raw = std::string(yytext); return PLUS;
-"-" yylval.raw = std::string(yytext); return MINUS;
-"*" yylval.raw = std::string(yytext); return TIMES;
-"/" yylval.raw = std::string(yytext); return DIV;
-"(" yylval.raw = std::string(yytext); return PLEFT;
-")" yylval.raw = std::string(yytext); return PRIGHT;
-"{" yylval.raw = std::string(yytext); return CPLEFT;
-"}" yylval.raw = std::string(yytext); return CPRIGHT;
-"[" yylval.raw = std::string(yytext); return SPLEFT;
-"]" yylval.raw = std::string(yytext); return SPRIGHT;
-";" yylval.raw = std::string(yytext); return SEMI;
-"," yylval.raw = std::string(yytext); return COMMA;
-"." yylval.raw = std::string(yytext); return DOT;
-"->" yylval.raw = std::string(yytext); return ARROW;
-"<<" yylval.raw = std::string(yytext); return LL;
-">>" yylval.raw = std::string(yytext); return RR;
-"~" yylval.raw = std::string(yytext); return BNOT;
-"!" yylval.raw = std::string(yytext); return NOT;
-"\\" yylval.raw = std::string(yytext); return BSLASH;
+"=" yylval.raw = std::string(yytext);   return ASGN;
+"<=" yylval.raw = std::string(yytext);  return LE;
+">=" yylval.raw = std::string(yytext);  return GE;
+"==" yylval.raw = std::string(yytext);  return EQ;
+"!=" yylval.raw = std::string(yytext);  return NE;
+">" yylval.raw = std::string(yytext);   return GT;
+"<" yylval.raw = std::string(yytext);   return LT;
+"||" yylval.raw = std::string(yytext);  return LOR;
+"&&" yylval.raw = std::string(yytext);  return LAND;
+"|" yylval.raw = std::string(yytext);   return BOR;
+"&" yylval.raw = std::string(yytext);   return BAND;
+"^" yylval.raw = std::string(yytext);   return BXOR;
+"+" yylval.raw = std::string(yytext);   return PLUS;
+"-" yylval.raw = std::string(yytext);   return MINUS;
+"*" yylval.raw = std::string(yytext);   return TIMES;
+"/" yylval.raw = std::string(yytext);   return DIV;
+"(" yylval.raw = std::string(yytext);   return PLEFT;
+")" yylval.raw = std::string(yytext);   return PRIGHT;
+"{" yylval.raw = std::string(yytext);   return CPLEFT;
+"}" yylval.raw = std::string(yytext);   return CPRIGHT;
+"[" yylval.raw = std::string(yytext);   return SPLEFT;
+"]" yylval.raw = std::string(yytext);   return SPRIGHT;
+";" yylval.raw = std::string(yytext);   return SEMI;
+"," yylval.raw = std::string(yytext);   return COMMA;
+"." yylval.raw = std::string(yytext);   return DOT;
+"->" yylval.raw = std::string(yytext);  return ARROW;
+"<<" yylval.raw = std::string(yytext);  return LL;
+">>" yylval.raw = std::string(yytext);  return RR;
+"~" yylval.raw = std::string(yytext);   return BNOT;
+"!" yylval.raw = std::string(yytext);   return NOT;
+"\\" yylval.raw = std::string(yytext);  return BSLASH;
 
 %{/* COMMENTS  */%}
 \/\/.* {/* Ignore comments*/;}
@@ -142,13 +141,13 @@ static yylval.raw = std::string(yytext); return STATIC;
 ^#" "{digit}+" "\".*\"([ ]{digit})*\n {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
 
 %{// Anything else, return invalid/error %}
-. {fprintf(stderr, "Invalid: %s\n", yytext); yylval.raw = std::string(yytext); return Invalid;}
+. {/*fprintf(stderr, "Invalid: %s\n", yytext);*/ yylval.raw = std::string(yytext); return Invalid;}
 
 %%
 
 /* Error handler. This will get called if none of the rules match. */
 void yyerror (char const *s)
 {
-    fprintf (stderr, "Flex Error: %s\n", s); /* s is the text that wasn't matched */
+    /*fprintf (stderr, "Flex Error: %s\n", s);*/ /* s is the text that wasn't matched */
     exit(1);
 }
