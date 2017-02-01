@@ -2,7 +2,7 @@
 
 %{
 /* Bring in our declarations for token types and
-   the yylval variable. */
+   the col_inc(); yylval variable. */
 #include "tokens.hpp"
 #include "c_parser.tab.h"
 #include <regex>
@@ -24,6 +24,14 @@ std::string extract_quoted(std::string s){
   //fprintf(stderr,"%s\n", s.c_str());
   return s;
 }
+void col_inc(){
+  yylcolno += yylval.raw.length();
+}
+
+void store(char * t){
+  yylval.raw = std::string(t);
+}
+
 %}
 
 letter [a-zA-Z_]
@@ -44,94 +52,107 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 [\n] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
 %{/* KEYWORDS  */%}
-auto yylval.raw = std::string(yytext);      return AUTO;
-break yylval.raw = std::string(yytext);     return BREAK;
-double yylval.raw = std::string(yytext);    return DOUBLE;
-else yylval.raw = std::string(yytext);      return ELSE;
-enum yylval.raw = std::string(yytext);      return ENUM;
-extern yylval.raw = std::string(yytext);    return EXTERN;
-float yylval.raw = std::string(yytext);     return FLOAT;
-for yylval.raw = std::string(yytext);       return FOR;
-goto yylval.raw = std::string(yytext);      return GOTO;
-if yylval.raw = std::string(yytext);        return IF;
-case yylval.raw = std::string(yytext);      return CASE;
-char yylval.raw = std::string(yytext);      return CHAR;
-const yylval.raw = std::string(yytext);     return CONST;
-continue yylval.raw = std::string(yytext);  return CONTINUE;
-default yylval.raw = std::string(yytext);   return DEFAULT;
-do yylval.raw = std::string(yytext);        return DO;
-int yylval.raw = std::string(yytext);       return INT;
-long yylval.raw = std::string(yytext);      return LONG;
-struct yylval.raw = std::string(yytext);    return STRUCT;
-switch yylval.raw = std::string(yytext);    return SWITCH;
-register yylval.raw = std::string(yytext);  return REGISTER;
-typedef yylval.raw = std::string(yytext);   return TYPEDEF;
-union yylval.raw = std::string(yytext);     return UNION;
-unsigned yylval.raw = std::string(yytext);  return UNSIGNED;
-void yylval.raw = std::string(yytext);      return VOID;
-volatile yylval.raw = std::string(yytext);  return VOLATILE;
-while yylval.raw = std::string(yytext);     return WHILE;
-return yylval.raw = std::string(yytext);    return RETURN;
-short yylval.raw = std::string(yytext);     return SHORT;
-signed yylval.raw = std::string(yytext);    return SIGNED;
-sizeof yylval.raw = std::string(yytext);    return SIZEOF;
-static yylval.raw = std::string(yytext);    return STATIC;
+auto col_inc(); store(yytext);      return AUTO;
+break col_inc(); store(yytext);     return BREAK;
+double col_inc(); store(yytext);    return DOUBLE;
+else col_inc(); store(yytext);      return ELSE;
+enum col_inc(); store(yytext);      return ENUM;
+extern col_inc(); store(yytext);    return EXTERN;
+float col_inc(); store(yytext);     return FLOAT;
+for col_inc(); store(yytext);       return FOR;
+goto col_inc(); store(yytext);      return GOTO;
+if col_inc(); store(yytext);        return IF;
+case col_inc(); store(yytext);      return CASE;
+char col_inc(); store(yytext);      return CHAR;
+const col_inc(); store(yytext);     return CONST;
+continue col_inc(); store(yytext);  return CONTINUE;
+default col_inc(); store(yytext);   return DEFAULT;
+do col_inc(); store(yytext);        return DO;
+int col_inc(); store(yytext);       return INT;
+long col_inc(); store(yytext);      return LONG;
+struct col_inc(); store(yytext);    return STRUCT;
+switch col_inc(); store(yytext);    return SWITCH;
+register col_inc(); store(yytext);  return REGISTER;
+typedef col_inc(); store(yytext);   return TYPEDEF;
+union col_inc(); store(yytext);     return UNION;
+unsigned col_inc(); store(yytext);  return UNSIGNED;
+void col_inc(); store(yytext);      return VOID;
+volatile col_inc(); store(yytext);  return VOLATILE;
+while col_inc(); store(yytext);     return WHILE;
+return col_inc(); store(yytext);    return RETURN;
+short col_inc(); store(yytext);     return SHORT;
+signed col_inc(); store(yytext);    return SIGNED;
+sizeof col_inc(); store(yytext);    return SIZEOF;
+static col_inc(); store(yytext);    return STATIC;
 
 %{/* CONSTANTS */%}
-{float}{constsuffix}? { yylval.raw = std::string(yytext); return FLOATC; }
-0|{num}+|{hex}|{oct}{constsuffix}? { yylval.raw = std::string(yytext); return INTC; }
+{float}{constsuffix}? { col_inc(); store(yytext); return FLOATC; }
+0|{num}+|{hex}|{oct}{constsuffix}? { col_inc(); store(yytext); return INTC; }
 
 %{/* IDENTIFIERS  */%}
-{letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ yylval.raw = std::string(yytext); return ID; }
+{letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ col_inc(); store(yytext); return ID; }
 
 %{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
-\"\"|\".*[^\\]\"|\".*\\\\\" { yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
+L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
 
 %{/* OPERATORS  */%}
-"=" yylval.raw = std::string(yytext);   return ASGN;
-"<=" yylval.raw = std::string(yytext);  return LE;
-">=" yylval.raw = std::string(yytext);  return GE;
-"==" yylval.raw = std::string(yytext);  return EQ;
-"!=" yylval.raw = std::string(yytext);  return NE;
-">" yylval.raw = std::string(yytext);   return GT;
-"<" yylval.raw = std::string(yytext);   return LT;
-"||" yylval.raw = std::string(yytext);  return LOR;
-"&&" yylval.raw = std::string(yytext);  return LAND;
-"|" yylval.raw = std::string(yytext);   return BOR;
-"&" yylval.raw = std::string(yytext);   return BAND;
-"^" yylval.raw = std::string(yytext);   return BXOR;
-"+" yylval.raw = std::string(yytext);   return PLUS;
-"-" yylval.raw = std::string(yytext);   return MINUS;
-"*" yylval.raw = std::string(yytext);   return TIMES;
-"/" yylval.raw = std::string(yytext);   return DIV;
-"(" yylval.raw = std::string(yytext);   return PLEFT;
-")" yylval.raw = std::string(yytext);   return PRIGHT;
-"{" yylval.raw = std::string(yytext);   return CPLEFT;
-"}" yylval.raw = std::string(yytext);   return CPRIGHT;
-"[" yylval.raw = std::string(yytext);   return SPLEFT;
-"]" yylval.raw = std::string(yytext);   return SPRIGHT;
-";" yylval.raw = std::string(yytext);   return SEMI;
-"," yylval.raw = std::string(yytext);   return COMMA;
-"." yylval.raw = std::string(yytext);   return DOT;
-"->" yylval.raw = std::string(yytext);  return ARROW;
-"<<" yylval.raw = std::string(yytext);  return LL;
-">>" yylval.raw = std::string(yytext);  return RR;
-"~" yylval.raw = std::string(yytext);   return BNOT;
-"!" yylval.raw = std::string(yytext);   return NOT;
-"\\" yylval.raw = std::string(yytext);  return BSLASH;
+"=" col_inc(); store(yytext);   return ASGN;
+"<=" col_inc(); store(yytext);  return LE;
+">=" col_inc(); store(yytext);  return GE;
+"==" col_inc(); store(yytext);  return EQ;
+"!=" col_inc(); store(yytext);  return NE;
+">"  col_inc(); store(yytext);  return GT;
+"<"  col_inc(); store(yytext);  return LT;
+"||" col_inc(); store(yytext);  return LOR;
+"&&" col_inc(); store(yytext);  return LAND;
+"|" col_inc(); store(yytext);   return BOR;
+"&" col_inc(); store(yytext);   return BAND;
+"^" col_inc(); store(yytext);   return BXOR;
+"+" col_inc(); store(yytext);   return PLUS;
+"-" col_inc(); store(yytext);   return SUB;
+"*" col_inc(); store(yytext);   return TIMES;
+"/" col_inc(); store(yytext);   return DIV;
+"(" col_inc(); store(yytext);   return PLEFT;
+")" col_inc(); store(yytext);   return PRIGHT;
+"{" col_inc(); store(yytext);   return CPLEFT;
+"}" col_inc(); store(yytext);   return CPRIGHT;
+"[" col_inc(); store(yytext);   return SPLEFT;
+"]" col_inc(); store(yytext);   return SPRIGHT;
+";" col_inc(); store(yytext);   return SEMI;
+"," col_inc(); store(yytext);   return COMMA;
+"." col_inc(); store(yytext);   return DOT;
+"->" col_inc(); store(yytext);  return ARROW;
+"<<" col_inc(); store(yytext);  return LL;
+">>" col_inc(); store(yytext);  return RR;
+"~" col_inc(); store(yytext);   return BNOT;
+"!" col_inc(); store(yytext);   return NOT;
+"\\" col_inc(); store(yytext);  return BSLASH;
+"..." col_inc();store(yytext);  return ELLIP;
+"++" col_inc(); store(yytext);  return INCR;
+"--" col_inc(); store(yytext);  return DECR;
+">>=" col_inc(); store(yytext); return RRASS;
+"<<=" col_inc(); store(yytext); return LLASS;
+"+="  col_inc(); store(yytext); return ADDASS;
+"-="  col_inc(); store(yytext); return SUBASS;
+"*="  col_inc(); store(yytext); return MULASS;
+"/="  col_inc(); store(yytext); return DIVASS;
+"%="  col_inc(); store(yytext); return MODASS;
+"&="  col_inc(); store(yytext); return ANDASS;
+"^="  col_inc(); store(yytext); return XORASS;
+"|="  col_inc(); store(yytext); return ORASS;
 
 %{/* COMMENTS - Ignore them  */%}
-\/\/.* {;}
-\/\*(.*\n)*.*\*\/ {;}
+\/\/.* { col_inc(); store(yytext); }
+\/\*(.*\n)*.*\*\/ { col_inc(); store(yytext); }
 
-^#include" ".+ {/* Ignore includes */;}
+^#include" ".+ { col_inc(); store(yytext); }
 
 %{/* PREPROCESSOR  */%}
 %{// Consume the whole line, and then update the referenced values %}
 ^#" "{digit}+" "\".*\"([ ]{digit})*\n {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
 
 %{// Anything else, return invalid/error %}
-. {yylval.raw = std::string(yytext); return Invalid;}
+. {col_inc(); store(yytext); return Invalid;}
 
 %%
 

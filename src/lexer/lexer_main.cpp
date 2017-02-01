@@ -22,21 +22,12 @@ std::string quote(std::string s){
 }
 
 std::string escape_chars(std::string s){
-  // Replace quotes in original string with \"
-  // replace backslash with double
-  //s = std::regex_replace(s,std::regex("/\\/"), "\\\\");
-  // replace all backslash with double backslash, unless there is a quote afterward, n, t
-  //s = std::regex_replace(s,std::regex("[(\\)]^([nt\"])"), "\\\\");
-  
   // replace all quotes with \" unless they are already.
   s = std::regex_replace(s,std::regex("[^(\\)]\""), "\\\"");
   return s;
 }
 
 std::string classname(yytokentype t){
-  if (t>297 && t<329){
-    return "Operator";
-  }
   switch(t){
   /* KEYWORDS */
     case AUTO:
@@ -75,6 +66,16 @@ std::string classname(yytokentype t){
     case ID: return "Identifier";
      /* Operators */
     case ASGN:
+    case RRASS:
+    case LLASS:
+    case ADDASS:
+    case SUBASS:
+    case MULASS:
+    case DIVASS:
+    case MODASS:
+    case ANDASS:
+    case XORASS:
+    case ORASS:
     case LE:
     case GE:
     case EQ:
@@ -87,7 +88,7 @@ std::string classname(yytokentype t){
     case BAND:
     case BXOR:
     case PLUS:
-    case MINUS:
+    case SUB:
     case TIMES:
     case DIV:
     case PLEFT:
@@ -104,6 +105,7 @@ std::string classname(yytokentype t){
     case RR:
     case BNOT:
     case NOT:
+    case ELLIP:
     case BSLASH: return "Operator";
     /* Constants */
     case FLOATC:
@@ -132,7 +134,6 @@ int main() {
             quote(yylsourcelino).c_str(),
             quote(yylcolno).c_str(),
             quote(yylfile).c_str());
-    yylcolno += yylval.raw.length();
   }
   fprintf(stdout, "\t{}\n]\n");
   return 0;
