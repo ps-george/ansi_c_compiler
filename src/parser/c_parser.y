@@ -1,6 +1,8 @@
 %code requires{
+  #include "ast.hpp"
+  extern const Expression *g_root; // A way of getting the AST out
+  
   #include "tokens.hpp"
-  //extern const Expression *g_root; // A way of getting the AST out
 
   //! This is to fix problems when  generating C++
   // We are declaring the functions provided by Flex, so
@@ -44,4 +46,11 @@ PRIMARY_EXPR : ID | CONSTANT | STRING | PLEFT EXPR PRIGHT ;
 
 %%
 
-{}
+const Expression *g_root; // Definition of variable (to match declaration earlier)
+
+const Expression *parseAST()
+{
+  g_root=0;
+  yyparse();
+  return g_root;
+}
