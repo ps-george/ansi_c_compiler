@@ -8,37 +8,15 @@
 
 #include <string.h>
 
-// Extract line number without using regex
-
-int extract_lineno(char * yytext){
-  std::string s(yytext);
-  std::size_t first = s.find(" ");
-  std::size_t second = s.find(" ", first+1);
-  // extract whats inbetween
-  return stoi(s.substr(first, second-first),0);
-}
-
-std::string extract_quoted(std::string s){
-  unsigned first;
-  unsigned last;
-  first = s.find("\""); first++;
-  last = s.find_last_of("\"");
-  s = s.substr(first, last - first);
-  return s;
-}
-void col_inc(){
-  yylcolno += yylval.len;
-}
-
-void store(char * t){
-  yylval.raw = std::string(t);
-  yylval.len = yyleng;
-}
+int extract_lineno(char * yytext);
+std::string extract_quoted(std::string s);
+void col_inc();
+void store(char * t);
 
 %}
 
 letter [a-zA-Z_]
-alphanum [a-zA-Z0-9]
+alphanum [a-zA-Z0-9_]
 digit [0-9]
 num [1-9]
 decimal {digit}+(\.){digit}+
@@ -50,11 +28,8 @@ constsuffix u|l|U|L|ul|uL|Ul|UL
 operator "="|"<="|">="|"=="|"!="|">"|"<"|"||"|"&&"|"|"|"&"|"^"|";"|"+"|"-"|"*"|"/"|"("|")"|"{"|"}"|"["|"]"|","|"."|"->"|"<<"|">>"|"~"|"!"|"\\"
 filename "[\"]{filechar}+[\.]{letter}+[\"]
 %%
-[ ] {yylcolno++;}
-[\t] {yylcolno++;}
-[\n\r] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
-%{/* KEYWORDS - 32 of them  */%}
+
 auto      { col_inc(); store(yytext); return AUTO; }
 break     { col_inc(); store(yytext); return BREAK; }
 double    { col_inc(); store(yytext); return DOUBLE; }
@@ -88,19 +63,14 @@ signed    { col_inc(); store(yytext); return SIGNED; }
 sizeof    { col_inc(); store(yytext); return SIZEOF; }
 static    { col_inc(); store(yytext); return STATIC; }
 
-%{/* CONSTANTS */%}
 {float}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
-0|{num}+|{hex}|{oct}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
+({num}{digit}*|{hex}|{oct}|0){constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
 L?'(\\.|[^\\'])+' { col_inc(); store(yytext); return CONSTANT; }
 
-%{/* IDENTIFIERS  */%}
 {letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ col_inc(); store(yytext); return ID; }
 
-%{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
-L?\"([^\\\"]|\\.)*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
+L?\"([^\\\"]|\\.)*\" { col_inc(); store(&extract_quoted(std::string(yytext))[0]); return STRING; }
 
-
-%{/* OPERATORS - 46 of them. Backslash removed as operator.  */%}
 "="   { col_inc(); store(yytext); return ASGN; }
 "<="  { col_inc(); store(yytext); return LE; }
 ">="  { col_inc(); store(yytext); return GE; }
@@ -134,7 +104,7 @@ L?\"([^\\\"]|\\.)*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext
 "->"  { col_inc(); store(yytext); return ARROW; }
 "<<"  { col_inc(); store(yytext); return LL; }
 ">>"  { col_inc(); store(yytext); return RR; }
-"..." { col_inc(); store(yytext);  return ELLIP; }
+"..." { col_inc(); store(yytext); return ELLIP; }
 "++"  { col_inc(); store(yytext); return INCR; }
 "--"  { col_inc(); store(yytext); return DECR; }
 ">>=" { col_inc(); store(yytext); return RRASS; }
@@ -148,20 +118,45 @@ L?\"([^\\\"]|\\.)*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext
 "^="  { col_inc(); store(yytext); return XORASS; }
 "|="  { col_inc(); store(yytext); return ORASS; }
 
-%{/* COMMENTS - Ignore them  */%}
 \/\/.* { col_inc(); store(yytext); }
 \/\*(.*\n)*.*\*\/ { col_inc(); store(yytext); }
 
 ^#include" ".+ { col_inc(); store(yytext); }
 
-%{/* PREPROCESSOR  */%}
-%{// Consume the whole line, and then update the referenced values %}
-^#[^(\n)]* {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
+^#[^(\n)]* {yylsourcelino = extract_lineno(yytext)-1; yylfile = extract_quoted(std::string(yytext));}
 
-%{// Anything else, return invalid/error %}
+[" "\t\v\f] {yylcolno++;}
+
+[\n\r] {yylval.len = 0; yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
+
 . {col_inc(); store(yytext); return Invalid;}
 
 %%
+
+int extract_lineno(char * yytext){
+  std::string s(yytext);
+  std::size_t first = s.find(" ");
+  std::size_t second = s.find(" ", first+1);
+  // extract whats inbetween
+  return stoi(s.substr(first, second-first),0);
+}
+
+std::string extract_quoted(std::string s){
+  unsigned first;
+  unsigned last;
+  first = s.find("\""); first++;
+  last = s.find_last_of("\"");
+  s = s.substr(first, last - first);
+  return s;
+}
+void col_inc(){
+  yylcolno += yylval.len;
+}
+
+void store(char * t){
+  yylval.raw = std::string(t);
+  yylval.len = yyleng;
+}
 
 /* Error handler. This will get called if none of the rules match. */
 void yyerror (char const *s)

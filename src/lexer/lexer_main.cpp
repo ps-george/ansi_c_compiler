@@ -24,21 +24,34 @@ std::string escape_chars(const std::string &before){
     after.reserve(before.length() + 4);
     for (std::string::size_type i = 0; i < before.length(); ++i) {
         switch (before[i]) {
-            // Replace tab character with \\t
+            // Replace tab character with \t
             case '\t':
-              after += '\\';
               after += '\\';
               after += 't';
               break;
-            // Replace newline character with \\n - not sure if I need this for ANSI C
-            /*
+            // Replace newline character with \n - not sure if I need this for ANSI C
             case '\n':
               after += '\\';
-              after += '\\';
               after += 'n';
-              break; */
+              break;
+            case '\r':
+              after += '\\';
+              after += 'r';
+              break;
+            case '\v':
+              after += '\\';
+              after += 'v';
+              break;
+            case '\f':
+              after += '\\';
+              after += 'f';
+              break;
+            case '\\': // If the next character is an n or t
+              if (i+1 < before.length() && (before[i+1]=='n' || before[i+1]=='t' || before[i+1]=='r' || before[i+1]=='v' || before[i+1]=='f')){
+                after += before[i];
+                break;
+              }
             case '\"':
-            case '\\':
                 after += '\\';
                 // Fall through.
             default:
@@ -138,27 +151,34 @@ std::string classname(yytokentype t){
     case STRING: return "StringLiteral";
     //  Unncessary
     // case NEWLINE: return "Newline";
+    case Invalid: return "Invalid";
     default: fprintf(stderr, "Invalid: %s, StreamLine: %s, ColNum: %s\n", yylval.raw.c_str(), quote(yylineno).c_str(), quote(yylcolno).c_str() ); return "Invalid";
   }
 }
 int main() {
   fprintf(stdout, "[\n");
   std::string Class;
+  int tokens = 0;
   while (1) {
     yytokentype type = (yytokentype)yylex();
     if (!type) {
       break;
     }
+    
     Class = classname(type);
+    if (Class!="Invalid"){
+      tokens++;
+    }
     // Replace 
-    fprintf(stdout, "\t{\n\t\t\"Class\": %s,\n\t\t\"Text\": %s,\n\t\t\"StreamLine\": %s,\n\t\t\"SourceLine\": %s,\n\t\t\"SourceCol\": %s,\n\t\t\"SourceFile\": %s\n\t},\n",
-            quote(Class).c_str(),
+    fprintf(stdout, "\t{\n\t\t\"Text\": %s,\n\t\t\"Class\": %s,\n\t\t\"StreamLine\": %s,\n\t\t\"SourceFile\": %s,\n\t\t\"SourceLine\": %s,\n\t\t\"SourceCol\": %s\n\t},\n",
             quote(escape_chars(yylval.raw)).c_str(),
-            quote(yylineno).c_str(),
-            quote(yylsourcelino).c_str(),
-            quote(yylcolno).c_str(),
-            quote(yylfile).c_str());
+            quote(Class).c_str(),
+            std::to_string(yylineno).c_str(),
+            quote(yylfile).c_str(),
+            std::to_string(yylsourcelino).c_str(),
+            std::to_string(yylcolno).c_str());
   }
   fprintf(stdout, "\t{}\n]\n");
+  fprintf(stderr, "Number of tokens: %d", tokens);
   return 0;
 }
