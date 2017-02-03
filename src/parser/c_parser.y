@@ -1,6 +1,6 @@
 %code requires{
-  #include "ast.hpp"
-  extern const Expression *g_root; // A way of getting the AST out
+  //#include "ast.hpp"
+  //extern const Expression *g_root; // A way of getting the AST out
   
   #include "tokens.hpp"
 

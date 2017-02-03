@@ -8,7 +8,7 @@ make bin/c_lexer
 mkdir -p test/lexer/in
 echo -e "#include <stdio.h>\nint main(){\n  printf(\"Wibble\");}" > test/lexer/in/tmp.c
 echo -e "#include \"wib.c\"\nint main(){\n  printf(\"Wibble\");}\n" > test/lexer/in/wibble.c
-echo -e "int main(){\n  printf(\"Wib\\\\n\\\"\"); \n int 3; float 3.2; float 3.24e-5; double 2323E-10 \n}\n}\n" > test/lexer/in/wib.c
+echo -e "int main(){\n  printf(\"Wib\\\t\\\t\\\\n\\\"\"); \n int 3; float 3.2; float 3.24e-5; double 2323E-10 \n}\n}\n" > test/lexer/in/wib.c
 
 # make test results directory
 mkdir -p test/lexer/out
@@ -20,7 +20,7 @@ for i in test/lexer/in/*.c; do
   echo "Input file : ${i}"
   BASENAME=$(basename $i .c);
   # Preprocess the files and pass ouotput into c_lexer
-  cpp $i | ./bin/c_lexer > test/lexer/out/$BASENAME.stdout.txt 2> test/lexer/out/$BASENAME.stderr.txt
+  cat $i | ./bin/c_lexer > test/lexer/out/$BASENAME.stdout.txt 2> test/lexer/out/$BASENAME.stderr.txt
   cat test/lexer/out/$BASENAME.stdout.txt | jq . > test/lexer/out/$BASENAME.json.txt
   if [[ "$?" -ne "0" ]]; then
       echo -e "\nERROR"

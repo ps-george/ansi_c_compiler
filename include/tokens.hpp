@@ -6,6 +6,7 @@
 struct YYSTYPE {
   int num;
   std::string raw;
+  int len;
 };
 
 // This is a global variable used to move the

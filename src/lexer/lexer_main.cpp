@@ -2,15 +2,13 @@
 #include "c_parser.tab.h"
 
 #include <iomanip>
-#include <regex>
 #include <string.h>
 // Define the instance of the variable that is declared in the header
 YYSTYPE yylval;
 std::string yylfile;
 std::string t;
-std::cmatch cm;
 int yylcolno = 1;
-int yylsourcelino = 0;
+int yylsourcelino = 1;
 
 std::string quote(int i){
   std::string s = std::to_string(i);
@@ -21,10 +19,33 @@ std::string quote(std::string s){
   return "\"" + s + "\"";
 }
 
-std::string escape_chars(std::string s){
-  // replace all quotes with \" unless they are already.
-  s = std::regex_replace(s,std::regex("[^(\\)]\""), "\\\"");
-  return s;
+std::string escape_chars(const std::string &before){
+    std::string after;
+    after.reserve(before.length() + 4);
+    for (std::string::size_type i = 0; i < before.length(); ++i) {
+        switch (before[i]) {
+            // Replace tab character with \\t
+            case '\t':
+              after += '\\';
+              after += '\\';
+              after += 't';
+              break;
+            // Replace newline character with \\n - not sure if I need this for ANSI C
+            /*
+            case '\n':
+              after += '\\';
+              after += '\\';
+              after += 'n';
+              break; */
+            case '\"':
+            case '\\':
+                after += '\\';
+                // Fall through.
+            default:
+                after += before[i];
+        }
+    }
+    return after;
 }
 
 std::string classname(yytokentype t){

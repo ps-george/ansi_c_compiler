@@ -5,14 +5,17 @@
    the col_inc(); yylval variable. */
 #include "tokens.hpp"
 #include "c_parser.tab.h"
-#include <regex>
+
 #include <string.h>
 
+// Extract line number without using regex
+
 int extract_lineno(char * yytext){
-  std::cmatch cm;
-  std::regex_search(yytext, cm, std::regex("\\b[0-9]+\\b"), std::regex_constants::match_default);
-  // return the first match, this is the linenumber
-  return atoi(std::string(cm[0]).c_str());
+  std::string s(yytext);
+  std::size_t first = s.find(" ");
+  std::size_t second = s.find(" ", first+1);
+  // extract whats inbetween
+  return stoi(s.substr(first, second-first),0);
 }
 
 std::string extract_quoted(std::string s){
@@ -24,11 +27,12 @@ std::string extract_quoted(std::string s){
   return s;
 }
 void col_inc(){
-  yylcolno += yylval.raw.length();
+  yylcolno += yylval.len;
 }
 
 void store(char * t){
   yylval.raw = std::string(t);
+  yylval.len = yyleng;
 }
 
 %}
@@ -48,7 +52,7 @@ filename "[\"]{filechar}+[\.]{letter}+[\"]
 %%
 [ ] {yylcolno++;}
 [\t] {yylcolno++;}
-[\n] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
+[\n\r] {yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
 %{/* KEYWORDS - 32 of them  */%}
 auto      { col_inc(); store(yytext); return AUTO; }
@@ -93,7 +97,8 @@ L?'(\\.|[^\\'])+' { col_inc(); store(yytext); return CONSTANT; }
 {letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ col_inc(); store(yytext); return ID; }
 
 %{/* STRING LITERAL - need to correctly find end of string i.e. not \" */%}
-L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
+L?\"([^\\\"]|\\.)*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)); return STRING; }
+
 
 %{/* OPERATORS - 46 of them. Backslash removed as operator.  */%}
 "="   { col_inc(); store(yytext); return ASGN; }
@@ -129,7 +134,7 @@ L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)
 "->"  { col_inc(); store(yytext); return ARROW; }
 "<<"  { col_inc(); store(yytext); return LL; }
 ">>"  { col_inc(); store(yytext); return RR; }
-"..." { col_inc();store(yytext);  return ELLIP; }
+"..." { col_inc(); store(yytext);  return ELLIP; }
 "++"  { col_inc(); store(yytext); return INCR; }
 "--"  { col_inc(); store(yytext); return DECR; }
 ">>=" { col_inc(); store(yytext); return RRASS; }
@@ -151,7 +156,7 @@ L?\"(\\.|[^\\"])*\" { col_inc(); yylval.raw = extract_quoted(std::string(yytext)
 
 %{/* PREPROCESSOR  */%}
 %{// Consume the whole line, and then update the referenced values %}
-^#" "{digit}+" "\".*\"([ ]{digit})*\n {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
+^#[^(\n)]* {yylsourcelino = extract_lineno(yytext); yylfile = extract_quoted(std::string(yytext));}
 
 %{// Anything else, return invalid/error %}
 . {col_inc(); store(yytext); return Invalid;}
