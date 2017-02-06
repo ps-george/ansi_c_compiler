@@ -1,0 +1,88 @@
+Note that each submission has not been looked at manually, they
+have only been randomly sampled to get an idea if the test automation.
+is working for most submission. If the build system appears
+to be broken, please raise an issue (though stability of these
+runs is not a huge priority).
+
+gsp14 : Cloning repo
+Cloning into 'gsp14'...
+gsp14 : Fetching repo
+gsp14 : Checking out branch soft-2017-02-05 if it exists...
+error: pathspec 'soft-2017-02-05' did not match any file(s) known to git.
+gsp14 : Checking out specified hash and creating new branch soft-2017-02-05
+Switched to a new branch 'soft-2017-02-05'
+Already on 'soft-2017-02-05'
+gsp14 : Checking we're on the right hash f3bb244e4cda45fc1b8bb3c7681a37d729593695...
+cd tmp/$U && git rev-parse $RUN
+
+log_msg "########################################################"
+gsp14 : ########################################################
+log_msg "## Building"
+gsp14 : ## Building
+
+log_msg "Cleaning"
+gsp14 : Cleaning
+(cd $REPO && rm bin/c_lexer)
+rm: cannot remove 'bin/c_lexer': No such file or directory
+(cd $REPO && make clean)
+make: Warning: File 'makefile' has modification time 459 s in the future
+rm -f bin/*
+rm -f src/lexer/*.o
+rm -f include/*.tab.*
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+log_msg "Building"
+gsp14 : Building
+(cd $REPO && make bin/c_lexer)
+make: Warning: File 'makefile' has modification time 459 s in the future
+bison -d -o include/c_parser.tab.c -d src/parser/c_parser.y
+mv include/c_parser.tab.c src/parser/
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/lexer/lexer_main.o src/lexer/lexer_main.cpp
+flex -o src/lexer/flexer.yy.cpp src/lexer/flexer.flex include/c_parser.tab.h 
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/lexer/flexer.yy.o src/lexer/flexer.yy.cpp
+src/lexer/flexer.yy.cpp: In function ‘int yy_get_next_buffer()’:
+src/lexer/flexer.yy.cpp:1663:44: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  if ((int) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+                                            ^
+src/lexer/flexer.flex: At global scope:
+src/lexer/flexer.flex:163:27: warning: unused parameter ‘s’ [-Wunused-parameter]
+src/lexer/flexer.yy.cpp:1740:17: warning: ‘void yyunput(int, char*)’ defined but not used [-Wunused-function]
+     static void yyunput (int c, char * yy_bp )
+                 ^
+mkdir -p bin
+g++ -MMD -Iinclude -std=c++11 -W -Wall -g -o bin/c_lexer src/lexer/lexer_main.o src/lexer/flexer.yy.o
+make: warning:  Clock skew detected.  Your build may be incomplete.
+rm src/lexer/flexer.yy.cpp
+
+if [[ ! -f $REPO/bin/c_lexer ]]; then
+    log_msg "No executable build"
+    exit 0;
+fi
+
+log_msg "########################################################"
+gsp14 : ########################################################
+log_msg "## Executing"
+gsp14 : ## Executing
+
+log_msg "Generating input"
+gsp14 : Generating input
+echo -e 'int x;\n# 5 "stdio.h"\nint y;' > $LOGDIR/in.c
+cat $LOGDIR/in.c
+int x;
+# 5 "stdio.h"
+int y;
+
+log_msg "Running lexer"
+gsp14 : Running lexer
+cat $LOGDIR/in.c | (cd $REPO && bin/c_lexer) > $LOGDIR/out.json
+Number of tokens: 6
+log_msg "Checking JSON formatting"
+gsp14 : Checking JSON formatting
+cp scripts/cw1-soft-json.py $LOGDIR/c1-soft-json.py
+cat $LOGDIR/out.json | python $LOGDIR/c1-soft-json.py > $LOGDIR/out-pretty.json
+
+Doing some basic checks.
+List is terminated with empty token (which is fine). Removing empty token.
+
+Finished checks.
+gsp14 : Test Complete
