@@ -62,7 +62,7 @@ std::string escape_chars(const std::string &before){
 }
 
 std::string classname(yytokentype t){
-  switch(t){
+  switch((int)t){
   /* KEYWORDS */
     case AUTO:
     case BREAK:
@@ -99,7 +99,18 @@ std::string classname(yytokentype t){
     /* Identifiers */
     case ID: return "Identifier";
      /* Operators */
-    case ASGN:
+    case '=':
+    case '?':
+    case '!':
+    case '~':
+    case '|':
+    case '&':
+    case '^':
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '%':
     case LE:
     case GE:
     case EQ:
@@ -108,27 +119,10 @@ std::string classname(yytokentype t){
     case LT:
     case LOR:
     case LAND:
-    case Q:
-    case NOT:
-    case BNOT:
-    case BOR:
-    case BAND:
-    case BXOR:
-    case PLUS:
-    case SUB:
-    case TIMES:
-    case DIV:
-    case MOD:
-    case PLEFT:
-    case PRIGHT:
-    case CPLEFT:
-    case CPRIGHT:
-    case SPLEFT:
-    case SPRIGHT:
     case SEMI:
     case COLON:
-    case COMMA:
-    case DOT:
+    case ',':
+    case '.':
     case ARROW:
     case LL:
     case RR:
@@ -144,7 +138,13 @@ std::string classname(yytokentype t){
     case MODASS:
     case ANDASS:
     case XORASS:
-    case ORASS: return "Operator";
+    case ORASS:
+    case '[':
+    case ']':
+    case '(':
+    case ')':
+    case '{':
+    case '}': return "Operator";
     /* Constants */
     case CONSTANT: return "Constant";
     /* StringLiterals */
