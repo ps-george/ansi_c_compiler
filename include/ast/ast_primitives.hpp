@@ -16,26 +16,14 @@ public:
     Number(double _value)
         : value(_value)
     {}
-
+    
     double getValue() const
     { return value; }
-
-    virtual void print_canonical() const override
-    {
-        std::cout<<value;
-    }
     
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
+    virtual void print_xml() const override
     {
-      return this->getValue();
+        std::cout<<"<Number value=\""<< value << "\"/>\n";
     }
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const
-    { 
-    return new Number(0); }    
 };
 
 class Variable
@@ -50,29 +38,11 @@ public:
 
     const std::string getId() const
     { return id; }
-
-    virtual void print_canonical() const override
-    {
-        std::cout<<id;
-    }
     
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
+    virtual void print_xml() const override
     {
-      return bindings.find(this->getId())->second;
+        std::cout<<"<Variable id=\""<< id << "\"/>\n";
     }
-    
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const
-    { 
-    if (variable == this->getId()){
-      return new Number(1);
-    }
-      return new Number(0); 
-    }    
-
 };
 
 

@@ -6,6 +6,7 @@
 
 #include <string>
 #include <iostream>
+#include <cmath>
 
 class Operator
     : public Expression
@@ -33,16 +34,24 @@ public:
 
     const Expression *getRight() const
     { return right; }
-
-    virtual void print_canonical() const override
+    
+    virtual void print_xml() const override
     {
-        std::cout<<"( ";
-        left->print_canonical();
-        std::cout<<" ";
-        std::cout<<getOpcode();
-        std::cout<<" ";
-        right->print_canonical();
-        std::cout<<" )";
+        std::cout<<"<Operator id =\""<<getOpcode()<<"\">\n";
+        this->tab(true);
+        std::cout<<"<Left pid =\""<<getOpcode()<<"\">\n";
+          this->tab(true);
+          left->print_xml();
+          this->tab(false);
+        std::cout<<"</Left>\n";
+        this->tab();
+        std::cout<<"<Right pid =\""<<getOpcode()<<"\">\n";
+          this->tab(true);
+          right->print_xml();
+          this->tab(false);
+        std::cout<<"</Right>\n";
+        this->tab(false);
+        std::cout<<"</Operator>\n";
     }
 };
 
@@ -56,20 +65,6 @@ public:
     AddOperator(const Expression *_left, const Expression *_right)
         : Operator(_left, _right)
     {}
-      
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return getLeft()->evaluate(bindings) + getRight()->evaluate(bindings);
-    }
-
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new AddOperator(this->getLeft()->differentiate(variable),this->getRight()->differentiate(variable));
-    }
 };
 
 class SubOperator
@@ -82,19 +77,6 @@ public:
     SubOperator(const Expression *_left, const Expression *_right)
         : Operator(_left, _right)
     {}
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return this->getLeft()->evaluate(bindings) - this->getRight()->evaluate(bindings);
-    }
-    
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new SubOperator(this->getLeft()->differentiate(variable),this->getRight()->differentiate(variable));
-    }
 };
 
 class MulOperator
@@ -107,25 +89,6 @@ public:
     MulOperator(const Expression *_left, const Expression *_right)
         : Operator(_left, _right)
     {}
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return this->getLeft()->evaluate(bindings) * this->getRight()->evaluate(bindings);
-    }
-    
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new AddOperator(
-          new MulOperator(
-            this->getLeft()->differentiate(variable),
-            this->getRight()),
-          new MulOperator(
-            this->getLeft(),
-            this->getRight()->differentiate(variable)));
-    }   
 };
 
 class DivOperator
@@ -138,34 +101,6 @@ public:
     DivOperator(const Expression *_left, const Expression *_right)
         : Operator(_left, _right)
     {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return this->getLeft()->evaluate(bindings) / this->getRight()->evaluate(bindings);
-    }   
-
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new DivOperator(
-          new SubOperator(
-            new MulOperator(
-              this->getLeft()->differentiate(variable),
-              this->getRight()),
-            new MulOperator(
-              this->getRight()->differentiate(variable),
-              this->getLeft())
-          ),
-          new MulOperator(
-            this->getRight(),
-            this->getRight()
-          )
-        )
-        ;
-    }   
 };
 
 #endif

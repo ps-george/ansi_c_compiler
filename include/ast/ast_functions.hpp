@@ -27,11 +27,13 @@ public:
     const Expression *getArg() const
     { return arg; }
 
-    virtual void print_canonical() const override
+    virtual void print_xml() const override
     {
-        std::cout<<getFunction()<<"( ";
-        arg->print_canonical();
-        std::cout<<" )";
+        std::cout<<"<Function id=\""<<getFunction()<<"\">\n";
+          this->tab(true);
+            arg->print_xml();
+          this->tab(false);
+        std::cout<<"</Function>\n";
     }
 };
 
@@ -45,20 +47,6 @@ public:
 
     virtual const char *getFunction() const override
     { return "log"; }
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return log(this->getArg()->evaluate(bindings));
-    }
-    
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new DivOperator(this->getArg()->differentiate(variable), this->getArg());
-    }
 };
 
 class ExpFunction
@@ -71,20 +59,6 @@ public:
 
     virtual const char *getFunction() const override
     { return "exp"; }
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return exp(this->getArg()->evaluate(bindings));
-    }
-    
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new MulOperator(this->getArg()->differentiate(variable), new ExpFunction(this->getArg()));
-    }
 };
 
 class SqrtFunction
@@ -97,20 +71,6 @@ public:
 
     virtual const char *getFunction() const override
     { return "sqrt"; }
-    
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-      return sqrt(this->getArg()->evaluate(bindings));
-    }
-    
-    virtual const Expression *differentiate(
-        const std::string &variable
-    ) const override
-    { 
-        return new DivOperator(new MulOperator(new Number(0.5),this->getArg()->differentiate(variable)), new SqrtFunction(this->getArg()));
-    }
 };
 
 
