@@ -37,51 +37,108 @@
 %start root
 %%
 
-primary-expression
-	: ID
-	| CONSTANT
-	| STRING
-	| '(' expression ')'
+root : statement
+     | root statement
+
+unary_op : '&'
+	       | '*'
+         | '+'
+         | '-'
+         | '~'
+         | '!'
+
+assign_op : '='
+                    | MULASS
+                    | DIVASS
+                    | MODASS
+                    | ADDASS
+                    | SUBASS
+                    | LLASS
+                    | RRASS
+                    | ANDASS
+                    | XORASS
+                    | ORASS
+                    ;
+
+statement : primary_expr ';'
+         | ';'
+        
+
+primary_expr : ID
+	           | CONSTANT
+             | STRING
+             | '(' expr ')'
+
+expr : assign_expr
+     | expr ',' assign_expr
+
+assign_expr : cond_expr
+            | unary_expr assign_op assign_expr
+
+cond_expr : logical_expr
+          | logical_expr '?' expr ':' cond_expr
+
+logical_expr : bit_expr
+             | logical_expr LOR bit_expr
+             | logical_expr LAND bit_expr
+
+bit_expr : comp_expr
+         | bit_expr '|'  comp_expr
+         | bit_expr '^' comp_expr
+         | bit_expr '&' comp_expr
+
+comp_expr : shift_expr
+          | comp_expr EQ shift_expr
+          | comp_expr NE shift_expr
+          | comp_expr '<' shift_expr
+          | comp_expr '>' shift_expr
+          | comp_expr LE shift_expr
+          | comp_expr GE shift_expr
+
+shift_expr : add_expr
+           | shift_expr LL add_expr
+           | shift_expr RR add_expr
+
+add_expr : mult_expr
+         | add_expr '+' mult_expr
+         | add_expr '-' mult_expr
+
+mult_expr : cast_expr
+          | mult_expr '*' cast_expr
+          | mult_expr '/' cast_expr
+          | mult_expr '%' cast_expr
+
+
+cast_expr : unary_expr
+	        | '(' base_type ')' cast_expr
+
+base_type : VOID
+          | CHAR
+          | SHORT
+          | INT
+          | LONG
+          | FLOAT
+          | DOUBLE
+          | SIGNED
+          | UNSIGNED
 	;
 
-postfix-expression
-	: primary-expression
-	| postfix-expression '[' expression ']'
-	| postfix-expression '(' ')'
-	| postfix-expression '(' argument-expression-list ')'
-	| postfix-expression '.' ID
-	| postfix-expression ARROW ID
-	| postfix-expression INCR
-	| postfix-expression DECR
-	;
+unary_expr : postfix_expr
+	         | INCR unary_expr
+           | DECR unary_expr
+           | unary_op cast_expr
 
-argument-expression-list
-	: assignment-expression
-	| argument-expression-list ',' assignment-expression
-	;
 
-unary-expression
-	: postfix-expression
-	| INCR unary-expression
-	| DECR unary-expression
-	| unary-operator cast-expression
-	| SIZEOF unary-expression
-	| SIZEOF '(' type-name ')'
-	;
+postfix_expr : primary_expr
+             | postfix_expr '[' expr ']'
+             | postfix_expr '(' ')' {/*| postfix_expr '(' argument_expr_list ')'*/  }
+             | postfix_expr '.' ID
+             | postfix_expr ARROW ID
+             | postfix_expr INCR
+             | postfix_expr DECR
+;
 
-unary-operator
-	: '&'
-	| '*'
-	| '+'
-	| '-'
-	| '~'
-	| '!'
-	;
 
-cast-expression
-	: unary-expression
-	| '(' type-name ')' cast-expression
-	;
 
 
 %%
