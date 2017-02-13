@@ -5,6 +5,21 @@ Your program should accept C source code on
 `stdin` and write the tokens out to `stdout`
 in [JSON](http://www.json.org).
 
+Informal compilation runs
+-------------------------
+
+I'll do some compilation-only runs, which simply check that
+your submission compiles and doesn't immediately crash. The
+points at which I'll grab hashes from blackboard is:
+
+- Sunday 5th Feb, 22:00
+
+- Monday 6th Feb, 22:00
+
+These runs will not help you debug your lexer, they are
+only to give you some peace-of-mind that your build
+automation is correct.
+
 Input format
 ------------
 
