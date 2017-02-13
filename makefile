@@ -20,7 +20,7 @@ bin/c_lexer: include/c_parser.tab.h $(LSRCS:%.cpp=%.o)
 	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $(LSRCS:%.cpp=%.o)
 
 include/c_parser.tab.h: src/parser/c_parser.y
-	bison -d -o include/c_parser.tab.c -d $^
+	bison -d -o include/c_parser.tab.c $^
 	mv include/c_parser.tab.c src/parser/
 
 # Need to generate flexer.yy.cpp from .flex first
@@ -33,17 +33,22 @@ include/c_parser.tab.h: src/parser/c_parser.y
 	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $^
 
 -include $(_LSRCS:%.cpp=%.d)
+
 ###
 ### BUILD RULES FOR PARSER
 ###
 # Source files
-_PSRCS=
+_PSRCS=parser_main.cpp flexer.yy.cpp c_parser.tab.c
 PSRCS=$(patsubst %,$(PSDIR)/%,$(_PSRCS))
 
-bin/c_parser: $(PSRCS:%.cpp=%.o)
+bin/c_parser: include/c_parser.tab.h $(PSRCS:%.cpp=%.o) 
 	mkdir -p bin
-	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $^
-	
+	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $(PSRCS:%.cpp=%.o)
+
+%/flexer.yy.cpp: src/lexer/flexer.flex include/c_parser.tab.h
+	flex -o $@ $^
+
+%/c_parser.tab.c: include/c_parser.tab.h
 
 -include $(_PSRCS:%.cpp=%.d)
 
@@ -62,6 +67,10 @@ bin/c_compiler : $(CSRCS:%.cpp=%.o)
 clean:
 	rm -f bin/*
 	rm -f src/lexer/*.o
+	rm -f src/lexer/*.d
 	rm -f include/*.tab.*
+	rm -f src/parser/*.o
+	rm -f src/parser/*.d
+	rm -f src/parser/*.tab.*
 
 .PHONY: clean
