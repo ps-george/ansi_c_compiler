@@ -14,10 +14,10 @@ class Branch : public Leaf {
 private:
   //! Contains a vector of pointers to leaf nodes
   //! Called stems because steams represent anythings stemming off from a branch
-  std::vector<const Leaf *> stems;
+  
 
 protected:
-  
+  std::vector<const Leaf *> stems;
 
 public:
   //! Initialise using brace initializer new Branch({arg1, arg2, arg3})
@@ -43,11 +43,11 @@ public:
   
   virtual void print_xml() const override {
     std::cout << "<" << getType() << ">\n";
+    this->tab(true);
     for (auto &it : stems) {
-      this->tab(true);
         it->print_xml();
-      this->tab(false);
     }
+    this->tab(false);
     std::cout << "</" << getType() << ">\n";
   }
 };
@@ -59,9 +59,41 @@ public:
   
   Program(std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s) {
   }
+  
+  virtual std::string getType() const override {
+    return "Program";
+  };
 };
 
 //! A function has ...
-class Function : public Branch {};
+class Function : public Branch {
+private:
+  std::string id;
+public:
+  Function(const std::string &_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(_id) {
+  }
+  
+  Function(const std::string &_id, std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s), id(_id) {
+  }
+  
+  virtual std::string getType() const override {
+    return "Function";
+  };
+  
+  virtual void print_xml() const override {
+    std::cout << "<" << getType() << " id =\"" << id << "\">\n";
+    this->tab(true);
+    if (stems.size()>0){
+        for (auto &it : stems) {
+          it->print_xml();
+        }
+    }
+    else {
+      std::cout << "\n";
+    }
+    this->tab(false);
+    std::cout << "</" << getType() << ">\n";
+  }
+};
 
 #endif

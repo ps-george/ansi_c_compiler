@@ -33,6 +33,9 @@ private:
   std::string id;
 
 public:
+  Parameter(const std::string &_id)
+      : Variable(_id)
+  {}
   virtual std::string getType() const override {
     return "Parameter";
   }

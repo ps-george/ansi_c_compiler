@@ -40,14 +40,17 @@
   std::string *raw;
 }
 
-%type <leaf> declaration root
+//root : declaration { g_root = new Program({$1}); }
+//     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
+
+%type <leaf> declaration root function parameter_list parameter
 %type <raw> STRING ID
 
 %start root
 %%
 
-root : declaration { g_root = new Program({$1}); }
-     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
+root : function { g_root = new Program({$1}); }
+     | root function { g_root = new Program($1->getAllStems(), $2) ; }
 
 
 program : func_or_dec { /*$$ = $1*/ }
@@ -56,13 +59,13 @@ program : func_or_dec { /*$$ = $1*/ }
 func_or_dec : function 
             | declaration
  
-function : INT ID '(' parameter_list ')' scope { /*$$ = new Function({$4})*/ }
-         | INT ID '(' ')' scope
+function : INT ID '(' parameter_list ')' SEMI { $$ = new Function(*$2,$4->getAllStems()); }
+         | INT ID '(' ')' SEMI { $$ = new Function(*$2,{}); }
 
-parameter : INT ID { }
+parameter : INT ID { $$ = new Parameter(*$2); }
 
-parameter_list : parameter {  }
-               | parameter_list ',' parameter { }
+parameter_list : parameter { $$ = $1; }
+               | parameter_list ',' parameter { $$ = new Branch($1->getAllStems(), $3); }
 
 declaration : INT ID SEMI { $$ = new Variable(*$2); }
 
