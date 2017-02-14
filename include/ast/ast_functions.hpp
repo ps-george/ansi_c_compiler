@@ -4,8 +4,6 @@
 #include "ast_expression.hpp"
 #include "ast_operators.hpp"
 
-#include <cmath>
-
 class Function
     : public Expression
 {
@@ -35,42 +33,6 @@ public:
           this->tab(false);
         std::cout<<"</Function>\n";
     }
-};
-
-class LogFunction
-    : public Function
-{
-public:
-    LogFunction(const Expression *_arg)
-        : Function(_arg)
-    {}
-
-    virtual const char *getFunction() const override
-    { return "log"; }
-};
-
-class ExpFunction
-    : public Function
-{
-public:
-    ExpFunction(const Expression *_arg)
-        : Function(_arg)
-    {}
-
-    virtual const char *getFunction() const override
-    { return "exp"; }
-};
-
-class SqrtFunction
-    : public Function
-{
-public:
-    SqrtFunction(const Expression *_arg)
-        : Function(_arg)
-    {}
-
-    virtual const char *getFunction() const override
-    { return "sqrt"; }
 };
 
 

@@ -154,7 +154,7 @@ void col_inc(){
 }
 
 void store(char * t){
-  yylval.raw = std::string(t);
+  yylval.raw = new std::string(t);
   yylval.len = yyleng;
 }
 

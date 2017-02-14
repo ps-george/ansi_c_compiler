@@ -152,7 +152,7 @@ std::string classname(yytokentype t){
     //  Unncessary
     // case NEWLINE: return "Newline";
     case Invalid: return "Invalid";
-    default: fprintf(stderr, "Invalid: %s, StreamLine: %s, ColNum: %s\n", yylval.raw.c_str(), quote(yylineno).c_str(), quote(yylcolno).c_str() ); return "Invalid";
+    default: fprintf(stderr, "Invalid: %s, StreamLine: %s, ColNum: %s\n", yylval.raw->c_str(), quote(yylineno).c_str(), quote(yylcolno).c_str() ); return "Invalid";
   }
 }
 int main() {
@@ -168,7 +168,7 @@ int main() {
     Class = classname(type);
     // Replace 
     fprintf(stdout, "\t{\n\t\t\"Text\": %s,\n\t\t\"Class\": %s,\n\t\t\"StreamLine\": %s,\n\t\t\"SourceFile\": %s,\n\t\t\"SourceLine\": %s,\n\t\t\"SourceCol\": %s\n\t},\n",
-            quote(escape_chars(yylval.raw)).c_str(),
+            quote(escape_chars(*yylval.raw)).c_str(),
             quote(Class).c_str(),
             std::to_string(yylineno).c_str(),
             quote(yylfile).c_str(),

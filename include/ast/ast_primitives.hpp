@@ -4,47 +4,33 @@
 // To satisfy my linter...
 #include "ast/ast_expression.hpp"
 
-#include <string>
 #include <iostream>
+#include <string>
 
-class Number
-    : public Expression
-{
+class Variable : public Leaf {
 private:
-    double value;
+  std::string id;
 public:
-    Number(double _value)
-        : value(_value)
-    {}
-    
-    double getValue() const
-    { return value; }
-    
-    virtual void print_xml() const override
-    {
-        std::cout<<"<Number value=\""<< value << "\"/>\n";
-    }
+  Variable(const std::string &_id)
+      : id(_id)
+  {}
+  std::string getId() const { return id; }
+  
+  virtual std::string getType() const { return "Variable"; }
+  
+  virtual void print_xml() const override {
+    std::cout << "<" << getType() <<"id=\"" << id << "\"/>\n";
+  }
 };
 
-class Variable
-    : public Expression
-{
+class Parameter : public Variable {
 private:
-    std::string id;
+  std::string id;
+
 public:
-    Variable(const std::string &_id)
-        : id(_id)
-    {}
-
-    const std::string getId() const
-    { return id; }
-    
-    virtual void print_xml() const override
-    {
-        std::cout<<"<Variable id=\""<< id << "\"/>\n";
-    }
+  virtual std::string getType() const override {
+    return "Parameter";
+  }
 };
-
-
 
 #endif

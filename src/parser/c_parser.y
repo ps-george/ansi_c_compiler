@@ -1,6 +1,6 @@
 %code requires{
   #include "ast.hpp"
-  extern const Expression *g_root; // A way of getting the AST out
+  extern const Leaf *g_root; // A way of getting the AST out
   
   #include "tokens.hpp"
 
@@ -32,120 +32,49 @@
 
 %token INCLUDE
 
-%type <string> STRING
+// Represents the value associated with any kind of
+// AST node.
+%union{
+  struct {
+    const Leaf *leaf;
+    double num;
+    std::string *raw;
+    int len;
+  };
+}
+
+%type <leaf> declaration
+%type <raw> STRING ID
 
 %start root
 %%
 
-root : statement
-     | root statement
-
-unary_op : '&'
-	       | '*'
-         | '+'
-         | '-'
-         | '~'
-         | '!'
-
-assign_op : '='
-                    | MULASS
-                    | DIVASS
-                    | MODASS
-                    | ADDASS
-                    | SUBASS
-                    | LLASS
-                    | RRASS
-                    | ANDASS
-                    | XORASS
-                    | ORASS
-                    ;
-
-statement : primary_expr ';'
-         | ';'
-        
-
-primary_expr : ID
-	           | CONSTANT
-             | STRING
-             | '(' expr ')'
-
-expr : assign_expr
-     | expr ',' assign_expr
-
-assign_expr : cond_expr
-            | unary_expr assign_op assign_expr
-
-cond_expr : logical_expr
-          | logical_expr '?' expr ':' cond_expr
-
-logical_expr : bit_expr
-             | logical_expr LOR bit_expr
-             | logical_expr LAND bit_expr
-
-bit_expr : comp_expr
-         | bit_expr '|'  comp_expr
-         | bit_expr '^' comp_expr
-         | bit_expr '&' comp_expr
-
-comp_expr : shift_expr
-          | comp_expr EQ shift_expr
-          | comp_expr NE shift_expr
-          | comp_expr '<' shift_expr
-          | comp_expr '>' shift_expr
-          | comp_expr LE shift_expr
-          | comp_expr GE shift_expr
-
-shift_expr : add_expr
-           | shift_expr LL add_expr
-           | shift_expr RR add_expr
-
-add_expr : mult_expr
-         | add_expr '+' mult_expr
-         | add_expr '-' mult_expr
-
-mult_expr : cast_expr
-          | mult_expr '*' cast_expr
-          | mult_expr '/' cast_expr
-          | mult_expr '%' cast_expr
+root : declaration { g_root = $1; }
 
 
-cast_expr : unary_expr
-	        | '(' base_type ')' cast_expr
+program : func_or_dec { /*$$ = $1*/ }
+        | program func_or_dec { }
 
-base_type : VOID
-          | CHAR
-          | SHORT
-          | INT
-          | LONG
-          | FLOAT
-          | DOUBLE
-          | SIGNED
-          | UNSIGNED
-	;
+func_or_dec : function 
+            | declaration
+ 
+function : INT ID '(' parameter_list ')' scope { /*$$ = new Function({$4})*/ }
+         | INT ID '(' ')' scope
 
-unary_expr : postfix_expr
-	         | INCR unary_expr
-           | DECR unary_expr
-           | unary_op cast_expr
+parameter : INT ID { }
 
+parameter_list : parameter {  }
+               | parameter_list ',' parameter { }
 
-postfix_expr : primary_expr
-             | postfix_expr '[' expr ']'
-             | postfix_expr '(' ')' {/*| postfix_expr '(' argument_expr_list ')'*/  }
-             | postfix_expr '.' ID
-             | postfix_expr ARROW ID
-             | postfix_expr INCR
-             | postfix_expr DECR
-;
+declaration : INT ID SEMI { $$ = new Variable(*$2); }
 
-
-
+scope : '{' '}'
 
 %%
 
-const Expression *g_root; // Definition of variable (to match declaration earlier)
+const Leaf *g_root; // Definition of variable (to match declaration earlier)
 
-const Expression *parseAST()
+const Leaf *parseAST()
 {
   g_root=0;
   yyparse();
