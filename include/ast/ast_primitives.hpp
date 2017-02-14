@@ -19,7 +19,7 @@ public:
   virtual std::string getType() const { return "Variable"; }
   
   virtual void print_xml() const override {
-    std::cout << "<" << getType() <<"id=\"" << id << "\"/>\n";
+    std::cout << "<" << getType() <<" id=\"" << id << "\"/>\n";
   }
 };
 

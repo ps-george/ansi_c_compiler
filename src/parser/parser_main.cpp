@@ -21,7 +21,6 @@ int Leaf::tabcount = 0;
 
 int main() {
   const Leaf *ast=parseAST();
-  
   ast->print_xml();
   return 0;
 }
