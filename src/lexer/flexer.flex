@@ -11,7 +11,7 @@
 int extract_lineno(char * yytext);
 std::string extract_quoted(std::string s);
 void col_inc();
-void store(char * t);
+void store(char * yytext);
 
 %}
 
@@ -127,7 +127,7 @@ L?\"([^\\\"]|\\.)*\" { col_inc(); store(&extract_quoted(std::string(yytext))[0])
 
 [" "\t\v\f] {yylcolno++;}
 
-[\n\r] {yylval.len = 0; yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
+[\n\r] {len = 0; yylineno += 1; yylcolno = 1; yylsourcelino +=1;}
 
 . {col_inc(); store(yytext); return Invalid;}
 
@@ -150,12 +150,12 @@ std::string extract_quoted(std::string s){
   return s;
 }
 void col_inc(){
-  yylcolno += yylval.len;
+  yylcolno += len;
 }
 
-void store(char * t){
-  yylval.raw = new std::string(t);
-  yylval.len = yyleng;
+void store(char * yytext){
+  yylval.raw = new std::string(yytext);
+  len = yyleng;
 }
 
 /* Error handler. This will get called if none of the rules match. */

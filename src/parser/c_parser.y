@@ -35,12 +35,9 @@
 // Represents the value associated with any kind of
 // AST node.
 %union{
-  struct {
-    const Leaf *leaf;
-    double num;
-    std::string *raw;
-    int len;
-  };
+  const Leaf *leaf;
+  double num;
+  std::string *raw;
 }
 
 %type <leaf> declaration

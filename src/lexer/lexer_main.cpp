@@ -3,10 +3,11 @@
 
 #include <iomanip>
 #include <string.h>
-// Define the instance of the variable that is declared in the header
+
+// Define the instance of extern variables declared in the header
 YYSTYPE yylval;
+int len;
 std::string yylfile;
-std::string t;
 int yylcolno = 1;
 int yylsourcelino = 1;
 

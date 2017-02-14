@@ -18,6 +18,8 @@ struct YYSTYPE {
 // the name that will be automatially generated
 // by Bison (see next lab).
 //extern YYSTYPE yylval;
+
+extern int len;
 extern int yylineno;
 extern int yylcolno;
 extern int yylsourcelino;

@@ -72,5 +72,6 @@ clean:
 	rm -f src/parser/*.o
 	rm -f src/parser/*.d
 	rm -f src/parser/*.tab.*
+	rm -f src/parser/*.yy.*
 
 .PHONY: clean
