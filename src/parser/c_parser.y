@@ -40,13 +40,14 @@
   std::string *raw;
 }
 
-%type <leaf> declaration
+%type <leaf> declaration root
 %type <raw> STRING ID
 
 %start root
 %%
 
-root : declaration { g_root = $1; }
+root : declaration { g_root = new Program({$1}); }
+     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 
 program : func_or_dec { /*$$ = $1*/ }

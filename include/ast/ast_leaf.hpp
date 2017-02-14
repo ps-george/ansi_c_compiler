@@ -2,7 +2,7 @@
 #define ast_leaf_hpp
 
 #include <iostream>
-#include <map>
+#include <vector>
 #include <string>
 
 class Leaf {
@@ -25,7 +25,11 @@ public:
     // std::cout << tabcount;
     std::cout << std::string(tabcount, '\t');
   }
-
+  
+  virtual std::vector<const Leaf *> getAllStems() const = 0;
+  
+  virtual std::string getType() const { return "Leaf"; }
+  
   /* For fixed point shrink tree algorithm, useful for mathematical Expressions
 
   virtual const Leaf *shrink() const =0;

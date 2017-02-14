@@ -17,10 +17,15 @@ private:
   std::vector<const Leaf *> stems;
 
 protected:
-  //! Initialise using brace initializer new Branch({arg1, arg2, arg3})
-  Branch(std::vector<const Leaf *> _stems) : stems(_stems) {}
+  
 
 public:
+  //! Initialise using brace initializer new Branch({arg1, arg2, arg3})
+  Branch(std::vector<const Leaf *> _stems) : stems(_stems) {}
+  
+  Branch(std::vector<const Leaf *> _stems, const Leaf * s) : stems(_stems) {
+    stems.push_back(s);
+  }
   //! Destructor for branch
   virtual ~Branch() {
     for (auto &it : stems)
@@ -28,25 +33,32 @@ public:
     stems.clear();
   }
 
-  virtual const char *getBranch() const = 0;
-
+  virtual std::string getType() const override {
+    return "Branch";
+  };
+  
   //! Return the stem at a particular index
   const Leaf *getStem(int i) const { return stems.at(i); }
-
+  virtual std::vector<const Leaf *> getAllStems() const override { return stems; }
+  
   virtual void print_xml() const override {
-    std::cout << "<Branch id=\"" << getBranch() << "\">\n";
+    std::cout << "<" << getType() << ">\n";
     for (auto &it : stems) {
       this->tab(true);
         it->print_xml();
       this->tab(false);
     }
-    std::cout << "</Branch>\n";
+    std::cout << "</" << getType() << ">\n";
   }
 };
 
 //! The root of the ast
-class Root : public Branch {
+class Program : public Branch {
 public:
+  Program(std::vector<const Leaf *> _stems) : Branch(_stems) {}
+  
+  Program(std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s) {
+  }
 };
 
 //! A function has ...

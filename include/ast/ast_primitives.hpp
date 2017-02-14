@@ -16,10 +16,15 @@ public:
   {}
   std::string getId() const { return id; }
   
-  virtual std::string getType() const { return "Variable"; }
+  virtual std::string getType() const override { return "Variable"; }
   
   virtual void print_xml() const override {
     std::cout << "<" << getType() <<" id=\"" << id << "\"/>\n";
+  }
+  
+  virtual std::vector<const Leaf *> getAllStems() const override {
+    std::vector<const Leaf *> v {this};
+    return v;
   }
 };
 
