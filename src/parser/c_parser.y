@@ -43,7 +43,7 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <leaf> declaration root function parameter_list parameter func_or_dec variable program
+%type <leaf> root program external-declaration function-definition declaration parameter-list parameter variable 
 %type <raw> STRING ID
 
 %start root
@@ -51,24 +51,31 @@
 
 root : program { g_root = $1; }
 
-// FUNCTION OR DECLARATION
-     
-program : func_or_dec { $$ = new Program({$1}); }
-        | program func_or_dec { $$ = $$->add($2); }
+program 
+  : external-declaration { $$ = new Program({$1}); }
+  | program external-declaration { $$ = $$->add($2); }
 
-// FUNCTION OR DECLARATION
-func_or_dec : function { $$ = $1; }
-            | declaration { $$ = $1; }
- 
+// EXTERNAL DECLARATIONS
+external-declaration
+  : function-definition { $$ = $1; }
+  | declaration { $$ = $1; }
+
 // FUNCTION
 // Snip the stems from the parameter list
-function : INT ID '(' parameter_list ')' SEMI { $$ = new Function($2,$4->getAllStems()); }
-         | INT ID '(' ')' SEMI { $$ = new Function($2,{}); }
+function-definition 
+  : INT ID '(' parameter-list ')' compound-statement { $$ = new Function($2,$4->getAllStems()); }
+  | INT ID '(' ')' compound-statement { $$ = new Function($2,{}); }
 
-parameter : INT ID { $$ = new Parameter(*$2); }
+parameter 
+  : INT ID { $$ = new Parameter(*$2); }
 
-parameter_list : parameter { $$ = new Branch({$1}); }
-               | parameter_list ',' parameter { $$->add($3); }
+parameter-list 
+  : parameter { $$ = new Branch({$1}); }
+  | parameter-list ',' parameter { $$->add($3); }
+               
+// COMPOUND STATEMENT
+compound-statement
+  : SEMI { }
 
 // DECLARATION
 declaration : variable SEMI { $$ = $1; }
