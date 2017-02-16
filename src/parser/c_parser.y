@@ -44,6 +44,7 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <leaf> root program external-declaration function-definition declaration parameter-list parameter variable 
+%type <leaf> statement expression-statement compound-statement statement-list declaration-list
 %type <raw> STRING ID
 
 %start root
@@ -58,31 +59,48 @@ program
 // EXTERNAL DECLARATIONS
 external-declaration
   : function-definition { $$ = $1; }
-  | declaration { $$ = $1; }
+  | declaration-list { $$ = $1; }
 
 // FUNCTION
 // Snip the stems from the parameter list
 function-definition 
-  : INT ID '(' parameter-list ')' compound-statement { $$ = new Function($2,$4->getAllStems()); }
-  | INT ID '(' ')' compound-statement { $$ = new Function($2,{}); }
+  : INT ID '(' parameter-list ')' statement { $$ = new Function($2,{$4->add($6)}); } //$4->getAllStems()
+  | INT ID '(' ')' statement { $$ = new Function($2,{}); }
 
 parameter 
   : INT ID { $$ = new Parameter(*$2); }
 
 parameter-list 
-  : parameter { $$ = new Branch({$1}); }
+  : parameter { $$ = new List({$1}); }
   | parameter-list ',' parameter { $$->add($3); }
                
 // COMPOUND STATEMENT
+statement
+  : expression-statement { $$ = $1; }
+  | compound-statement { $$ = $1  ; }
+
 compound-statement
-  : SEMI { }
+  : '{' '}' { $$ = new List({}); }
+  // | '{' statement-list '}'
+  | '{' declaration-list '}' { $$ = new List({$2}); } 
+  // | '{' declaration-list statement-list '}' // declarations must come before statements
+
+statement-list
+  : statement
+  | statement-list statement
+
+expression-statement
+	: SEMI { $$ = new Branch({}); }
+	//| expression ';'
 
 // DECLARATION
-declaration : variable SEMI { $$ = $1; }
+declaration-list
+  : declaration SEMI { $$ = new List({$1}); }
+  | declaration-list ',' declaration SEMI { $$->add($3); }
+
+declaration : variable { $$ = $1; }
 
 variable : INT ID { $$ = new Variable(*$2); };
-
-scope : '{' '}'
 
 %%
 

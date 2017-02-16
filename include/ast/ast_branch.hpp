@@ -13,9 +13,7 @@
 class Branch : public Leaf {
 private:
   //! Contains a vector of pointers to leaf nodes
-  //! Called stems because steams represent anythings stemming off from a branch
-  
-
+  //! Called stems because stems represent anythings stemming off from a branch
 protected:
   mutable std::vector<const Leaf *> stems;
 
@@ -23,9 +21,6 @@ public:
   //! Initialise using brace initializer new Branch({arg1, arg2, arg3})
   Branch(std::vector<const Leaf *> _stems) : stems(_stems) {}
   
-  Branch(std::vector<const Leaf *> _stems, const Leaf * s) : stems(_stems) {
-    stems.push_back(s);
-  }
   //! Destructor for branch
   virtual ~Branch() {
     for (auto &it : stems)
@@ -50,55 +45,74 @@ public:
   virtual void print_xml() const override {
     std::cout << "<" << getType() << ">\n";
     this->tab_incr();
+    // Print out all stems on the same level -> Using branch to store lots lists of things
     for (auto &it : stems) {
-        this->tab();
         it->print_xml();
     }
+    
     this->tab(false);
     std::cout << "</" << getType() << ">\n";
   }
 };
 
+//! A list is like a branch but everything is on the same level and we don't print out the type name at all
+//! it is just a container
+class List : public Branch {
+public:
+  List(std::vector<const Leaf *> _stems) : Branch(_stems) {}
+  
+  virtual std::string getType() const override {
+    return "List";
+  };
+  
+  virtual void print_xml() const override {
+    //std::cout << "<" << getType() << ">\n";
+    //this->tab_incr();
+    // Print out all stems on the same level -> Using list to store lists of things
+    for (auto &it : stems) {
+        this->tab();
+        it->print_xml();
+    }
+    //this->tab();
+    //std::cout << "</" << getType() << ">\n";
+  }
+};
+
 //! The root of the ast
+//! It is a branch because it can have any number of children
 class Program : public Branch {
 public:
   Program(std::vector<const Leaf *> _stems) : Branch(_stems) {}
-  
-  Program(std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s) {
-  }
   
   virtual std::string getType() const override {
     return "Program";
   };
 };
 
-//! A function has ...
+//! A function has a large number of children (declaration-lists, then a statement)
+//! It also needs to print out it's id
 class Function : public Branch {
 private:
   std::string id;
 public:
-  Function(std::string *_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(*_id) {
-  }
-  
-  Function(std::string *_id, std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s), id(*_id) {
-  }
+  Function(std::string *_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(*_id) {}
   
   virtual std::string getType() const override {
     return "Function";
   };
   
   virtual void print_xml() const override {
+    this->tab();
     std::cout << "<" << getType() << " id =\"" << id << "\">\n";
+    
     this->tab_incr();
+    
     if (stems.size()>0){
         for (auto &it : stems) {
-          this->tab();
           it->print_xml();
         }
     }
-    else {
-      std::cout << "\n";
-    }
+    
     this->tab(false);
     std::cout << "</" << getType() << ">\n";
   }
