@@ -13,7 +13,7 @@ for i in test/parser/in/*.c; do
   echo "==========================="
   echo "Input file : ${i}"
   BASENAME=$(basename $i .c);
-  cat $i | ./bin/c_parser > test/parser/out/$BASENAME.stdout.txt 2> test/parser/out/$BASENAME.stderr.txt
+  cat $i | ./bin/c_parser > test/parser/out/$BASENAME.stdout.txt
   if [[ "$?" -ne "0" ]]; then
       echo -e "\nERROR"
   else

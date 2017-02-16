@@ -59,6 +59,17 @@ public:
   }
 };
 
+//! The root of the ast
+//! It is a branch because it can have any number of children
+class Program : public Branch {
+public:
+  Program(std::vector<const Leaf *> _stems) : Branch(_stems) {}
+  // Print functions
+  virtual std::string getType() const override {
+    return "Program";
+  };
+};
+
 //! A list is like a branch but everything is on the same level and we don't print out the type name at all
 //! it is just a container
 class List : public Branch {
@@ -69,20 +80,6 @@ public:
   virtual void print_xml() const override {
     print_stems();
   }
-  
-};
-
-//! The root of the ast
-//! It is a branch because it can have any number of children
-class Program : public Branch {
-public:
-  Program(std::vector<const Leaf *> _stems) : Branch(_stems) {}
-  
-  // Print functions
-  virtual std::string getType() const override {
-    return "Program";
-  };
-  
 };
 
 //! A function has a large number of children (declaration-lists, then a statement)
@@ -92,7 +89,6 @@ private:
   std::string id;
 public:
   Function(std::string *_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(*_id) {}
-  
   // print functions
   virtual std::string getType() const override {
     return "Function";
@@ -100,7 +96,15 @@ public:
   virtual std::string getHeader() const override {
     return "<" + getType() + " id =\"" + id + "\">";
   }
-  
+};
+
+class Scope : public Branch {
+public:
+  Scope(std::vector<const Leaf *> _stems) : Branch(_stems) {}
+  // Print functions
+  virtual std::string getType() const override {
+    return "Scope";
+  };
 };
 
 #endif

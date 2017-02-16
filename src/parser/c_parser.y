@@ -13,6 +13,8 @@
   // NOTE: Structure of bison file is fairly well specified, but construction of ast is not.
 }
 
+%define parse.error verbose
+
 %token Invalid
 %token ID STRING SIZEOF
 %token CONSTANT
@@ -44,7 +46,9 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <leaf> root program external-declaration function-definition declaration parameter-list parameter variable 
-%type <leaf> statement expression-statement compound-statement statement-list declaration-list
+%type <leaf> statement expression-statement compound-statement statement-list declaration-seq
+%type <leaf> declaration-list simple-declaration 
+
 %type <raw> STRING ID
 
 %start root
@@ -59,7 +63,7 @@ program
 // EXTERNAL DECLARATIONS
 external-declaration
   : function-definition { $$ = $1; }
-  | declaration-list { $$ = $1; }
+  | declaration-seq { $$ = $1; }
 
 // FUNCTION
 // Snip the stems from the parameter list
@@ -80,25 +84,33 @@ statement
   | compound-statement { $$ = $1  ; }
 
 compound-statement
-  : '{' '}' { $$ = new List({}); }
-  // | '{' statement-list '}'
-  | '{' declaration-list '}' { $$ = new List({$2}); } 
-  // | '{' declaration-list statement-list '}' // declarations must come before statements
+  : '{' '}' { $$ = new Scope({}); }
+  | '{' statement-list '}' { $$ = new Scope({$2}); }
+  | '{' declaration-seq '}' { $$ = new Scope({$2}); } 
+  | '{' declaration-seq statement-list '}' { $$ = new Scope({$2}); }   // declarations must come before statements
 
 statement-list
-  : statement
-  | statement-list statement
+  : statement { $$ = new List ({$1}); }
+  | statement-list statement { $$ = $1->add($2); }
 
 expression-statement
-	: SEMI { $$ = new Branch({}); }
+	: '.' { $$ = new Branch({}); }
 	//| expression ';'
 
 // DECLARATION
-declaration-list
-  : declaration SEMI { $$ = new List({$1}); }
-  | declaration-list ',' declaration SEMI { $$->add($3); }
+declaration-seq
+  : declaration-list SEMI { $$ = new List({$1}); }
+  | declaration-seq declaration-list SEMI { $$->add($2); }
 
-declaration : variable { $$ = $1; }
+declaration-list
+  : declaration { $$ = new List({$1}); }
+  | declaration-list ',' declaration { $$->add($3); }
+
+declaration  
+  : simple-declaration { $$ = $1; }
+
+simple-declaration
+  : variable { $$ = $1; }
 
 variable : INT ID { $$ = new Variable(*$2); };
 
@@ -106,8 +118,7 @@ variable : INT ID { $$ = new Variable(*$2); };
 
 const Leaf *g_root; // Definition of variable (to match declaration earlier)
 
-const Leaf *parseAST()
-{
+const Leaf *parseAST() {
   g_root=0;
   yyparse();
   return g_root;
