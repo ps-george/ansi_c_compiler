@@ -26,8 +26,8 @@ public:
     std::cout << std::string(tabcount, '\t');
   }
   
-  void tab_incr() const { tabcount++; }
-  void tab_decr() const { tabcount--; }
+  static void tab_incr() { tabcount++; }
+  static void tab_decr() { tabcount--; }
   
   virtual std::vector<const Leaf *> getAllStems() const = 0;
   virtual const Leaf * add(const Leaf * l) const = 0;
@@ -35,7 +35,7 @@ public:
   
   virtual std::string getType() const { return "Leaf"; }
   
-  void tab() const { std::cout << std::string(tabcount, '\t'); }
+  static void tab() { std::cout << std::string(tabcount, '\t'); }
   
   /* For fixed point shrink tree algorithm, useful for mathematical Expressions
 
