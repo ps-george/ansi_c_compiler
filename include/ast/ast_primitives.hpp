@@ -18,8 +18,11 @@ public:
   
   virtual std::string getType() const override { return "Variable"; }
   
+  virtual std::string getHeader() const override {return "<" + getType() + " id=\"" + id +  "\"/>";}
+  
   virtual void print_xml() const override {
-    std::cout << "<" << getType() <<" id=\"" << id << "\"/>\n";
+    tab(); 
+    std::cout << getHeader() <<  "\n";
   }
   
   virtual std::vector<const Leaf *> getAllStems() const override {

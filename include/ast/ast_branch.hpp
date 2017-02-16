@@ -42,14 +42,18 @@ public:
     return this;
   };
   
+  virtual void print_stems() const { 
+    for (auto &it : stems) {
+      it->print_xml();
+    }
+  }
+  
   virtual void print_xml() const override {
-    std::cout << "<" << getType() << ">\n";
+    this->tab();
+    std::cout << getHeader() << "\n";
     this->tab_incr();
     // Print out all stems on the same level -> Using branch to store lots lists of things
-    for (auto &it : stems) {
-        it->print_xml();
-    }
-    
+    print_stems();
     this->tab(false);
     std::cout << "</" << getType() << ">\n";
   }
@@ -61,21 +65,11 @@ class List : public Branch {
 public:
   List(std::vector<const Leaf *> _stems) : Branch(_stems) {}
   
-  virtual std::string getType() const override {
-    return "List";
-  };
-  
+  // Print out all stems on the same level -> Using list to store lists of things
   virtual void print_xml() const override {
-    //std::cout << "<" << getType() << ">\n";
-    //this->tab_incr();
-    // Print out all stems on the same level -> Using list to store lists of things
-    for (auto &it : stems) {
-        this->tab();
-        it->print_xml();
-    }
-    //this->tab();
-    //std::cout << "</" << getType() << ">\n";
+    print_stems();
   }
+  
 };
 
 //! The root of the ast
@@ -84,9 +78,11 @@ class Program : public Branch {
 public:
   Program(std::vector<const Leaf *> _stems) : Branch(_stems) {}
   
+  // Print functions
   virtual std::string getType() const override {
     return "Program";
   };
+  
 };
 
 //! A function has a large number of children (declaration-lists, then a statement)
@@ -97,25 +93,14 @@ private:
 public:
   Function(std::string *_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(*_id) {}
   
+  // print functions
   virtual std::string getType() const override {
     return "Function";
   };
-  
-  virtual void print_xml() const override {
-    this->tab();
-    std::cout << "<" << getType() << " id =\"" << id << "\">\n";
-    
-    this->tab_incr();
-    
-    if (stems.size()>0){
-        for (auto &it : stems) {
-          it->print_xml();
-        }
-    }
-    
-    this->tab(false);
-    std::cout << "</" << getType() << ">\n";
+  virtual std::string getHeader() const override {
+    return "<" + getType() + " id =\"" + id + "\">";
   }
+  
 };
 
 #endif
