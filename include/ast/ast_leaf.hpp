@@ -26,7 +26,10 @@ public:
     std::cout << std::string(tabcount, '\t');
   }
   
-  // virtual std::vector<const Leaf *> getAllStems() const = 0;
+  void tab_incr() const { tabcount++; }
+  void tab_decr() const { tabcount--; }
+  
+  virtual std::vector<const Leaf *> getAllStems() const = 0;
   virtual const Leaf * add(const Leaf * l) const = 0;
   
   

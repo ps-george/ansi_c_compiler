@@ -39,7 +39,7 @@ public:
   
   //! Return the stem at a particular index
   const Leaf *getStem(int i) const { return stems.at(i); }
-  // virtual std::vector<const Leaf *> getAllStems() const override { return stems; }
+  virtual std::vector<const Leaf *> getAllStems() const override { return stems; }
   
   // Add a stem
   virtual const Leaf * add(const Leaf * l) const override {
@@ -49,8 +49,9 @@ public:
   
   virtual void print_xml() const override {
     std::cout << "<" << getType() << ">\n";
-    this->tab(true);
+    this->tab_incr();
     for (auto &it : stems) {
+        this->tab();
         it->print_xml();
     }
     this->tab(false);
@@ -88,9 +89,10 @@ public:
   
   virtual void print_xml() const override {
     std::cout << "<" << getType() << " id =\"" << id << "\">\n";
-    this->tab(true);
+    this->tab_incr();
     if (stems.size()>0){
         for (auto &it : stems) {
+          this->tab();
           it->print_xml();
         }
     }

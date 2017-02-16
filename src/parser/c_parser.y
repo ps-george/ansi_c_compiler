@@ -43,24 +43,26 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <leaf> declaration root function parameter_list parameter
+%type <leaf> declaration root function parameter_list parameter func_or_dec variable program
 %type <raw> STRING ID
 
 %start root
 %%
 
-root : function { g_root = new Program({$1}); }
-     | root function { $$->add($2); }
+root : program { g_root = $1; }
 
+// FUNCTION OR DECLARATION
+     
+program : func_or_dec { $$ = new Program({$1}); }
+        | program func_or_dec { $$ = $$->add($2); }
 
-program : func_or_dec { /*$$ = $1*/ }
-        | program func_or_dec { }
-
-func_or_dec : function 
-            | declaration
+// FUNCTION OR DECLARATION
+func_or_dec : function { $$ = $1; }
+            | declaration { $$ = $1; }
  
- 
-function : INT ID '(' parameter_list ')' SEMI { $$ = new Function($2,{$4}); }
+// FUNCTION
+// Snip the stems from the parameter list
+function : INT ID '(' parameter_list ')' SEMI { $$ = new Function($2,$4->getAllStems()); }
          | INT ID '(' ')' SEMI { $$ = new Function($2,{}); }
 
 parameter : INT ID { $$ = new Parameter(*$2); }
@@ -68,7 +70,10 @@ parameter : INT ID { $$ = new Parameter(*$2); }
 parameter_list : parameter { $$ = new Branch({$1}); }
                | parameter_list ',' parameter { $$->add($3); }
 
-declaration : INT ID SEMI { $$ = new Variable(*$2); }
+// DECLARATION
+declaration : variable SEMI { $$ = $1; }
+
+variable : INT ID { $$ = new Variable(*$2); };
 
 scope : '{' '}'
 

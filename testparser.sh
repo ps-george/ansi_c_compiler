@@ -5,15 +5,15 @@ make clean
 make bin/c_parser
 
 # make test results directory
-mkdir -p test/lexer/out
+mkdir -p test/parser/out
 PASSED=0
 CHECKED=0
 
-for i in test/lexer/in/*.c; do
+for i in test/parser/in/*.c; do
   echo "==========================="
   echo "Input file : ${i}"
   BASENAME=$(basename $i .c);
-  cat $i | ./bin/c_lexer > test/lexer/out/$BASENAME.stdout.txt 2> test/lexer/out/$BASENAME.stderr.txt
+  cat $i | ./bin/c_parser > test/parser/out/$BASENAME.stdout.txt 2> test/parser/out/$BASENAME.stderr.txt
   if [[ "$?" -ne "0" ]]; then
       echo -e "\nERROR"
   else
