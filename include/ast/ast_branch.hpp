@@ -17,7 +17,7 @@ private:
   
 
 protected:
-  std::vector<const Leaf *> stems;
+  mutable std::vector<const Leaf *> stems;
 
 public:
   //! Initialise using brace initializer new Branch({arg1, arg2, arg3})
@@ -39,7 +39,13 @@ public:
   
   //! Return the stem at a particular index
   const Leaf *getStem(int i) const { return stems.at(i); }
-  virtual std::vector<const Leaf *> getAllStems() const override { return stems; }
+  // virtual std::vector<const Leaf *> getAllStems() const override { return stems; }
+  
+  // Add a stem
+  virtual const Leaf * add(const Leaf * l) const override {
+    stems.push_back(l);
+    return this;
+  };
   
   virtual void print_xml() const override {
     std::cout << "<" << getType() << ">\n";
@@ -70,10 +76,10 @@ class Function : public Branch {
 private:
   std::string id;
 public:
-  Function(const std::string &_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(_id) {
+  Function(std::string *_id, std::vector<const Leaf *> _stems) : Branch(_stems), id(*_id) {
   }
   
-  Function(const std::string &_id, std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s), id(_id) {
+  Function(std::string *_id, std::vector<const Leaf *> _stems, const Leaf * s) : Branch(_stems,s), id(*_id) {
   }
   
   virtual std::string getType() const override {

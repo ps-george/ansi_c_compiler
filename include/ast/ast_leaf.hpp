@@ -26,9 +26,13 @@ public:
     std::cout << std::string(tabcount, '\t');
   }
   
-  virtual std::vector<const Leaf *> getAllStems() const = 0;
+  // virtual std::vector<const Leaf *> getAllStems() const = 0;
+  virtual const Leaf * add(const Leaf * l) const = 0;
+  
   
   virtual std::string getType() const { return "Leaf"; }
+  
+  void tab() const { std::cout << std::string(tabcount, '\t'); }
   
   /* For fixed point shrink tree algorithm, useful for mathematical Expressions
 
@@ -45,7 +49,6 @@ public:
     return changed;
   }
   */
-  void tab() const { std::cout << std::string(tabcount, '\t'); }
 };
 
 #endif

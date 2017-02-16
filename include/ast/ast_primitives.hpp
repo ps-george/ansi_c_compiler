@@ -22,13 +22,18 @@ public:
     std::cout << "<" << getType() <<" id=\"" << id << "\"/>\n";
   }
   
-  virtual std::vector<const Leaf *> getAllStems() const override {
+  /* virtual std::vector<const Leaf *> getAllStems() const override {
     std::vector<const Leaf *> v {this};
     return v;
   }
+  */
+  virtual const Leaf * add(const Leaf * l) const override {
+    return this;
+  }
+  
 };
 
-class Parameter : public Variable {
+class Parameter: public Variable {
 private:
   std::string id;
 
