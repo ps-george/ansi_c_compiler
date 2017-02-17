@@ -120,8 +120,8 @@ std::string classname(yytokentype t){
     case LT:
     case LOR:
     case LAND:
-    case SEMI:
-    case COLON:
+    case ';':
+    case ':':
     case ',':
     case '.':
     case ARROW:

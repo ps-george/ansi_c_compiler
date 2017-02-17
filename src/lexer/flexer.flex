@@ -97,8 +97,8 @@ L?\"([^\\\"]|\\.)*\" { col_inc(); store(&extract_quoted(std::string(yytext))[0])
 "}"   { col_inc(); store(yytext); return '}'; }
 "["   { col_inc(); store(yytext); return '['; }
 "]"   { col_inc(); store(yytext); return ']'; }
-";"   { col_inc(); store(yytext); return SEMI; }
-":"   { col_inc(); store(yytext); return COLON; }
+";"   { col_inc(); store(yytext); return ';'; }
+":"   { col_inc(); store(yytext); return ':'; }
 ","   { col_inc(); store(yytext); return ','; }
 "."   { col_inc(); store(yytext); return '.'; }
 "->"  { col_inc(); store(yytext); return ARROW; }
