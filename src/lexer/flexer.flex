@@ -161,6 +161,6 @@ void store(char * yytext){
 /* Error handler. This will get called if none of the rules match. */
 void yyerror (char const *s)
 {
-    fprintf (stderr, "Error: %s\n", s); /* s is the text that wasn't matched */
+    fprintf (stderr, "Error: %s\n Line no: %d Column: %d\n", s, yylsourcelino, yylcolno); /* s is the text that wasn't matched */
     exit(1);
 }
