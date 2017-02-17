@@ -30,7 +30,7 @@
 %token '=' ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS
 %token INCR DECR
 %token LE GE EQ NE GT LT LOR LAND
-%token '(' ')' '{' '}' '[' ']' SEMI COLON ',' '.' ARROW LL RR
+%token '(' ')' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
 
 %token INCLUDE
 
@@ -46,10 +46,11 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <leaf> root program external-declaration function-definition declaration parameter-list parameter variable 
-%type <leaf> statement expression-statement compound-statement statement-list declaration-seq
-%type <leaf> declaration-list simple-declaration 
+%type <leaf> statement expression-statement compound-statement statement-list iteration-statement
+%type <leaf> declaration-seq declaration-list simple-declaration
+%type <leaf> expression primary-expression
 
-%type <raw> STRING ID
+%type <raw> STRING ID CONSTANT
 
 %start root
 %%
@@ -78,11 +79,13 @@ parameter-list
   : parameter { $$ = new List({$1}); }
   | parameter-list ',' parameter { $$->add($3); }
                
-// COMPOUND STATEMENT
+// STATEMENT
 statement
   : expression-statement { $$ = $1; }
-  | compound-statement { $$ = $1  ; }
+  | compound-statement { $$ = $1; }
+  | iteration-statement { $$ = $1; }
 
+// COMPOUND STATEMENT
 compound-statement
   : '{' '}' { $$ = new Scope({}); }
   | '{' statement-list '}' { $$ = new Scope({$2}); }
@@ -94,13 +97,30 @@ statement-list
   | statement-list statement { $$ = $1->add($2); }
 
 expression-statement
-	: '.' { $$ = new Branch({}); }
+	: ';' { $$ = new List({}); }
+  | expression ';' { $$ = $1; }
 	//| expression ';'
+
+expression 
+  : primary-expression { $$ = $1; }
+  
+primary-expression
+  : //ID { $$ = $1; }
+  | CONSTANT { $$ = new Constant(*$1); }
+//  | STRING { $$ = $1; }
+  | '(' expression ')' { $$ = $2; }
+
+iteration-statement
+// Just make scopes with the statement
+  : WHILE '(' expression ')' statement { $$ = new WhileIteration({$5}/*$3, $5*/); }
+  | DO statement WHILE '(' expression ')' { $$ = new DoWhileIteration({$2}/*$5, $2*/); }
+  | FOR '(' expression-statement expression-statement ')' statement { $$ = new ForIteration({$6}/*$3,$4,$6*/); }
+  | FOR '(' expression-statement expression-statement  ')' { $$ = new ForIteration({}/*$3,$4*/); }
 
 // DECLARATION
 declaration-seq
-  : declaration-list SEMI { $$ = new List({$1}); }
-  | declaration-seq declaration-list SEMI { $$->add($2); }
+  : declaration-list ';' { $$ = new List({$1}); }
+  | declaration-seq declaration-list ';' { $$->add($2); }
 
 declaration-list
   : declaration { $$ = new List({$1}); }

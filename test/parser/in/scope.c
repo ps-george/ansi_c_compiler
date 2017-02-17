@@ -1,5 +1,5 @@
 int c(int x, int y) {
-  .
+  ;
 }
 
 int d(int x, int y) {
@@ -7,5 +7,5 @@ int d(int x, int y) {
   int b;
   int c;
   
-  .
+  ;
 }

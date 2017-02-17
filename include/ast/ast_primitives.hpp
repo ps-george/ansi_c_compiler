@@ -2,23 +2,16 @@
 #define ast_primitives_hpp
 
 // To satisfy my linter...
-#include "ast/ast_expression.hpp"
+#include "ast/ast_leaf.hpp"
 
 #include <iostream>
 #include <string>
 
-class Variable : public Leaf {
-private:
-  std::string id;
+class Primitive: public Leaf {
 public:
-  Variable(const std::string &_id)
-      : id(_id)
-  {}
-  std::string getId() const { return id; }
+  virtual std::string getType() const override = 0;
   
-  virtual std::string getType() const override { return "Variable"; }
-  
-  virtual std::string getHeader() const override {return "<" + getType() + " id=\"" + id +  "\"/>";}
+  virtual std::string getHeader() const override {return "<" + getType() + "\"/>";}
   
   virtual void print_xml() const override {
     tab(); 
@@ -36,10 +29,21 @@ public:
   
 };
 
-class Parameter: public Variable {
+class Variable: public Primitive {
 private:
   std::string id;
+public:
+  Variable(const std::string &_id)
+      : id(_id)
+  {}
+    
+  virtual std::string getType() const override { return "Variable"; }
+  
+  virtual std::string getHeader() const override {return "<" + getType() + " id=\"" + id +  "\"/>";}
+  
+};
 
+class Parameter: public Variable {
 public:
   Parameter(const std::string &_id)
       : Variable(_id)
@@ -48,5 +52,22 @@ public:
     return "Parameter";
   }
 };
+
+
+class Constant : public Primitive {
+private:
+  int value;
+public:
+  Constant(const std::string &_val)
+      : value(std::stoi(_val))
+  {}
+  
+  virtual std::string getType() const override {
+    return "id";
+  }
+  
+  virtual std::string getHeader() const override {return "<" + getType() + " value=\"" + std::to_string(value) +  "\"/>";}
+};
+
 
 #endif

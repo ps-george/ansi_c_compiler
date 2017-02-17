@@ -2,6 +2,7 @@
 #define ast_operators_hpp
 
 // To satisfy my linter...
+#include "ast/ast_leaf.hpp"
 #include "ast/ast_expression.hpp"
 
 #include <iostream>
