@@ -50,11 +50,14 @@ public:
   
   virtual void print_xml() const override {
     this->tab();
-    std::cout << getHeader() << "\n";
-    this->tab_incr();
-    // Print out all stems on the same level -> Using branch to store lots lists of things
-    print_stems();
-    this->tab(false);
+    std::cout << getHeader();
+    if (stems.size()>0){
+      std::cout << "\n";
+      this->tab_incr();
+      // Print out all stems on the same level -> Using branch to store lots lists of things
+      print_stems();
+      this->tab(false);
+    }
     std::cout << "</" << getType() << ">\n";
   }
 };
@@ -78,7 +81,8 @@ public:
   
   // Print out all stems on the same level -> Using list to store lists of things
   virtual void print_xml() const override {
-    print_stems();
+    if (stems.size()>0)
+      print_stems();
   }
 };
 
