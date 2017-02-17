@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<Program>
+  <Function id="f">
+    <Parameter id="x" />
+    <Scope>
+      <Variable id="y" />
+    </Scope>
+  </Function>
+</Program>

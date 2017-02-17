@@ -11,7 +11,7 @@ class Primitive: public Leaf {
 public:
   virtual std::string getType() const override = 0;
   
-  virtual std::string getHeader() const override {return "<" + getType() + "\"/>";}
+  virtual std::string getHeader() const override {return "<" + getType() + "\" />";}
   
   virtual void print_xml() const override {
     tab(); 
@@ -39,7 +39,7 @@ public:
     
   virtual std::string getType() const override { return "Variable"; }
   
-  virtual std::string getHeader() const override {return "<" + getType() + " id=\"" + id +  "\"/>";}
+  virtual std::string getHeader() const override {return "<" + getType() + " id=\"" + id +  "\" />";}
   
 };
 
@@ -66,7 +66,7 @@ public:
     return "id";
   }
   
-  virtual std::string getHeader() const override {return "<" + getType() + " value=\"" + std::to_string(value) +  "\"/>";}
+  virtual std::string getHeader() const override {return "<" + getType() + " value=\"" + std::to_string(value) +  "\" />";}
 };
 
 

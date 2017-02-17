@@ -33,7 +33,6 @@
 %token '(' ')' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
 
 %token INCLUDE
-
 // Represents the value associated with any kind of
 // AST node.
 %union{
@@ -46,11 +45,13 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <leaf> root program external-declaration function-definition declaration parameter-list parameter variable 
-%type <leaf> statement expression-statement compound-statement statement-list iteration-statement
-%type <leaf> declaration-seq declaration-list simple-declaration
+%type <leaf> statement expression-statement compound-statement statement-list iteration-statement selection-statement
+%type <leaf> declaration-seq declaration-list simple-declaration init-declaration
 %type <leaf> expression primary-expression
 
 %type <raw> STRING ID CONSTANT
+
+%right ';'
 
 %start root
 %%
@@ -64,10 +65,10 @@ program
 // EXTERNAL DECLARATIONS
 external-declaration
   : function-definition { $$ = $1; }
-  | declaration-seq { $$ = $1; }
-
+  | declaration-list ';' { $$ = $1; }
+  
 // FUNCTION
-// Snip the stems from the parameter list
+// Snip the stems from the parameter list to make tree smaller
 function-definition 
   : INT ID '(' parameter-list ')' statement { $$ = new Function($2,{$4->add($6)}); } //$4->getAllStems()
   | INT ID '(' ')' statement { $$ = new Function($2,{}); }
@@ -84,6 +85,10 @@ statement
   : expression-statement { $$ = $1; }
   | compound-statement { $$ = $1; }
   | iteration-statement { $$ = $1; }
+  | selection-statement { $$ = $1; }
+
+//selection-statement
+//  :
 
 // COMPOUND STATEMENT
 compound-statement
@@ -107,15 +112,18 @@ expression
 primary-expression
   : //ID { $$ = $1; }
   | CONSTANT { $$ = new Constant(*$1); }
+  | RETURN ID { $$ = new List({}); }
 //  | STRING { $$ = $1; }
   | '(' expression ')' { $$ = $2; }
 
 iteration-statement
 // Just make scopes with the statement
   : WHILE '(' expression ')' statement { $$ = new WhileIteration({$5}/*$3, $5*/); }
-  | DO statement WHILE '(' expression ')' { $$ = new DoWhileIteration({$2}/*$5, $2*/); }
+  //| DO statement WHILE '(' expression ')' { $$ = new DoWhileIteration({$2}/*$5, $2*/); }
   | FOR '(' expression-statement expression-statement ')' statement { $$ = new ForIteration({$6}/*$3,$4,$6*/); }
-  | FOR '(' expression-statement expression-statement  ')' { $$ = new ForIteration({}/*$3,$4*/); }
+  //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForIteration({}/*$3,$4*/); }
+
+
 
 // DECLARATION
 declaration-seq
@@ -128,9 +136,14 @@ declaration-list
 
 declaration  
   : simple-declaration { $$ = $1; }
+  | init-declaration { $$ = $1; }
 
 simple-declaration
   : variable { $$ = $1; }
+
+init-declaration
+  : variable '=' CONSTANT { $$ = $1; }
+  | variable '=' ID { $$ = $1; }
 
 variable : INT ID { $$ = new Variable(*$2); };
 

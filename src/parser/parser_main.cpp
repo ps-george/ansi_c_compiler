@@ -20,6 +20,7 @@ int Leaf::tabcount = 0;
 //int Leaf::changed = 0;
 
 int main() {
+  fprintf(stdout,"<?xml version=\"1.0\"?>\n");
   const Leaf *ast=parseAST();
   ast->print_xml();
   return 0;
