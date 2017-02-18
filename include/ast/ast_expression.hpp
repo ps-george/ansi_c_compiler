@@ -14,5 +14,4 @@ public:
   virtual double evaluate( const std::map<std::string,double> &bindings=std::map<std::string,double>()) const =0;
 };
 
-
 #endif

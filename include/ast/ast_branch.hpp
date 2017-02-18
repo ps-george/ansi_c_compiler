@@ -73,20 +73,7 @@ public:
   };
 };
 
-//! A list is like a branch but everything is on the same level and we don't print out the type name at all
-//! it is just a container
-class List : public Branch {
-public:
-  List(std::vector<const Leaf *> _stems) : Branch(_stems) {}
-  
-  // Print out all stems on the same level -> Using list to store lists of things
-  virtual void print_xml() const override {
-    if (stems.size()>0)
-      print_stems();
-  }
-};
-
-//! A function has a large number of children (declaration-lists, then a statement)
+//! A function has two children (declaration-list, then a statement)
 //! It also needs to print out it's id
 class Function : public Branch {
 private:

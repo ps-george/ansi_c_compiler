@@ -77,7 +77,7 @@ parameter
   : INT ID { $$ = new Parameter(*$2); }
 
 parameter-list 
-  : parameter { $$ = new List({$1}); }
+  : parameter { $$ = new ParameterList({$1}); }
   | parameter-list ',' parameter { $$->add($3); }
                
 // STATEMENT
@@ -127,11 +127,11 @@ iteration-statement
 
 // DECLARATION
 declaration-seq
-  : declaration-list ';' { $$ = new List({$1}); }
+  : declaration-list ';' { $$ = new DeclarationList({$1}); }
   | declaration-seq declaration-list ';' { $$->add($2); }
 
 declaration-list
-  : declaration { $$ = new List({$1}); }
+  : declaration { $$ = new DeclarationList({$1}); }
   | declaration-list ',' declaration { $$->add($3); }
 
 declaration  
