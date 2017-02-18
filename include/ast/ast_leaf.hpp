@@ -12,6 +12,17 @@ private:
 
 public:
   virtual ~Leaf() {}
+  
+  virtual std::vector<const Leaf *> getAllStems() const = 0;
+  virtual const Leaf * add(const Leaf * l) const = 0;
+  
+  
+  virtual std::string getType() const { return "Leaf"; }
+  
+  virtual std::string getHeader() const {
+    return "<" + getType() + ">";
+  };
+  
   //! For recursive print_xml function
   virtual void print_xml() const = 0;
 
@@ -25,23 +36,11 @@ public:
     // std::cout << tabcount;
     std::cout << std::string(tabcount, '\t');
   }
-  
   static void tab_incr() { tabcount++; }
   static void tab_decr() { tabcount--; }
-  
   static void tab() { if (tabcount) std::cout << std::string(tabcount, '\t'); }
   
-  virtual std::vector<const Leaf *> getAllStems() const = 0;
-  virtual const Leaf * add(const Leaf * l) const = 0;
-  
-  
-  virtual std::string getType() const { return "Leaf"; }
-  
-  virtual std::string getHeader() const {
-    return "<" + getType() + ">";
-  };
-  /* For fixed point shrinkree algorithm, useful for mathematical Expressions
-
+  /* For fixed point shrink algorithm, useful for mathematical Expressions
   virtual const Leaf *shrink() const =0;
   static void change() {
     changed++;

@@ -8,8 +8,8 @@
 #include <vector>
 
 //! Branch is a node of the ast that can have any number of children
-//! Name chosen to be branch because branches can have other branches on them or
-//! leafs
+//! Name chosen to be branch because branches can have other branches
+//! or leaves
 class Branch : public Leaf {
 private:
   //! Contains a vector of pointers to leaf nodes

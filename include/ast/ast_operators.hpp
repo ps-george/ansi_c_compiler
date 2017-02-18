@@ -2,8 +2,8 @@
 #define ast_operators_hpp
 
 // To satisfy my linter...
-#include "ast/ast_leaf.hpp"
-#include "ast/ast_expression.hpp"
+#include "ast_leaf.hpp"
+#include "ast_expression.hpp"
 
 #include <iostream>
 #include <string>
@@ -54,6 +54,13 @@ protected:
 public:
   AddOperator(const Expression *_left, const Expression *_right)
       : Operator(_left, _right) {}
+      
+  virtual double evaluate(
+      const std::map<std::string,double> &bindings
+  ) const override
+  {
+    return this->getLeft()->evaluate(bindings) + this->getRight()->evaluate(bindings);
+  }
 };
 
 class SubOperator : public Operator {
@@ -61,8 +68,13 @@ protected:
   virtual const char *getOpcode() const override { return "-"; }
 
 public:
-  SubOperator(const Expression *_left, const Expression *_right)
-      : Operator(_left, _right) {}
+  SubOperator(const Expression *_left, const Expression *_right) : Operator(_left, _right) {}
+  virtual double evaluate(
+      const std::map<std::string,double> &bindings
+  ) const override
+  {
+    return this->getLeft()->evaluate(bindings) - this->getRight()->evaluate(bindings);
+  }  
 };
 
 class MulOperator : public Operator {
@@ -70,8 +82,15 @@ protected:
   virtual const char *getOpcode() const override { return "*"; }
 
 public:
-  MulOperator(const Expression *_left, const Expression *_right)
-      : Operator(_left, _right) {}
+  MulOperator(const Expression *_left, const Expression *_right)  : Operator(_left, _right) {}
+  
+  virtual double evaluate(
+      const std::map<std::string,double> &bindings
+  ) const override
+  {
+    return this->getLeft()->evaluate(bindings) * this->getRight()->evaluate(bindings);
+  }
+    
 };
 
 class DivOperator : public Operator {
@@ -79,8 +98,14 @@ protected:
   virtual const char *getOpcode() const override { return "/"; }
 
 public:
-  DivOperator(const Expression *_left, const Expression *_right)
-      : Operator(_left, _right) {}
+  DivOperator(const Expression *_left, const Expression *_right) : Operator(_left, _right) {}
+  
+  virtual double evaluate(
+      const std::map<std::string,double> &bindings
+  ) const override
+  {
+    return this->getLeft()->evaluate(bindings) / this->getRight()->evaluate(bindings);
+  }
 };
 
 #endif

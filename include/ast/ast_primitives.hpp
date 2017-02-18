@@ -2,7 +2,7 @@
 #define ast_primitives_hpp
 
 // To satisfy my linter...
-#include "ast/ast_leaf.hpp"
+#include "ast_leaf.hpp"
 
 #include <iostream>
 #include <string>

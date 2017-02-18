@@ -71,7 +71,7 @@ external-declaration
 // Snip the stems from the parameter list to make tree smaller
 function-definition 
   : INT ID '(' parameter-list ')' statement { $$ = new Function($2,{$4->add($6)}); } //$4->getAllStems()
-  | INT ID '(' ')' statement { $$ = new Function($2,{}); }
+  | INT ID '(' ')' statement { $$ = new Function($2,{$5}); }
 
 parameter 
   : INT ID { $$ = new Parameter(*$2); }
@@ -95,7 +95,7 @@ compound-statement
   : '{' '}' { $$ = new Scope({}); }
   | '{' statement-list '}' { $$ = new Scope({$2}); }
   | '{' declaration-seq '}' { $$ = new Scope({$2}); } 
-  | '{' declaration-seq statement-list '}' { $$ = new Scope({$2}); }   // declarations must come before statements
+  | '{' declaration-seq statement-list '}' { $$ = new Scope({$2, $3}); }   // declarations must come before statements
 
 statement-list
   : statement { $$ = new List ({$1}); }
