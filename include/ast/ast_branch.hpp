@@ -73,7 +73,7 @@ public:
   };
 };
 
-//! A function has two children (declaration-list, then a statement)
+//! A function has two children (parameter-list, then a statement)
 //! It also needs to print out it's id
 class Function : public Branch {
 private:
@@ -89,6 +89,8 @@ public:
   }
 };
 
+//! Scope will have a declaration list then a statement
+//! Very similar to a function in a sense
 class Scope : public Branch {
 public:
   Scope(std::vector<const Leaf *> _stems) : Branch(_stems) {}

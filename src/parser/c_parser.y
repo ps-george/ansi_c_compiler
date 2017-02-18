@@ -44,10 +44,11 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <leaf> root program external-declaration function-definition declaration parameter-list parameter variable 
+%type <leaf> root program external-declaration function-definition declaration parameter-list parameter delcarator 
 %type <leaf> statement expression-statement compound-statement statement-list iteration-statement selection-statement
 %type <leaf> declaration-seq declaration-list simple-declaration init-declaration
-%type <leaf> expression primary-expression
+%type <leaf> expression primary-expression equality-expression
+%type <leaf> var_const
 
 %type <raw> STRING ID CONSTANT
 
@@ -85,10 +86,11 @@ statement
   : expression-statement { $$ = $1; }
   | compound-statement { $$ = $1; }
   | iteration-statement { $$ = $1; }
-//  | selection-statement { $$ = $1; }
+  | selection-statement { $$ = $1; }
 
-//selection-statement
-//  :
+selection-statement
+  : IF '(' expression ')' statement { $$ = new IfStatement($3, $5); }
+  | IF '(' expression ')' statement ELSE statement { $$ = new IfElseStatement($3, $5, $7); }
 
 // COMPOUND STATEMENT
 compound-statement
@@ -110,11 +112,14 @@ expression
   : primary-expression { $$ = $1; }
   
 primary-expression
-  : //ID { $$ = $1; }
-  | CONSTANT { $$ = new Constant(*$1); }
+  : equality-expression { $$ = $1; }
+  | var_const { $$ = $1; }
   | RETURN ID { $$ = new List({}); }
 //  | STRING { $$ = $1; }
   | '(' expression ')' { $$ = $2; }
+
+equality-expression
+  : var_const EQ var_const { $$ = new List({}); }
 
 iteration-statement
 // Just make scopes with the statement
@@ -122,8 +127,6 @@ iteration-statement
   //| DO statement WHILE '(' expression ')' { $$ = new DoWhileIteration({$2}/*$5, $2*/); }
   | FOR '(' expression-statement expression-statement ')' statement { $$ = new ForIteration({$6}/*$3,$4,$6*/); }
   //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForIteration({}/*$3,$4*/); }
-
-
 
 // DECLARATION
 declaration-seq
@@ -139,13 +142,17 @@ declaration
   | init-declaration { $$ = $1; }
 
 simple-declaration
-  : variable { $$ = $1; }
+  : delcarator { $$ = $1; }
 
 init-declaration
-  : variable '=' CONSTANT { $$ = $1; }
-  | variable '=' ID { $$ = $1; }
+  : delcarator '=' CONSTANT { $$ = $1; }
+  | delcarator '=' ID { $$ = $1; }
 
-variable : INT ID { $$ = new Variable(*$2); };
+delcarator : INT ID { $$ = new Variable(*$2); }
+
+var_const
+  : ID { $$ = new Variable(*$1); }
+  | CONSTANT { $$ = new Constant(*$1); }
 
 %%
 
