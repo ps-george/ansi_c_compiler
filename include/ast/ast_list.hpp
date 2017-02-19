@@ -57,20 +57,25 @@ public:
   TabbedList(std::vector<const Node *> _children) : List(_children) {}
 
   virtual std::string getType() const {
-    return "TabbedList";
+    return "Scope";
   };
   
   //! Return the child at a particular index
   //const Node *getChild(int i) const { return children.at(i); }
   
   virtual void print_xml() const {
-    tab();
-    std::cout << getHeader() << std::endl;
-    tab_incr();
-    // Print out all children on the same level -> Using list to store lots lists of things
-    print_children();
-    tab(false);
-    std::cout << getFooter() << std::endl;
+    if (getChildren().size()!=0){ 
+      tab();
+      std::cout << getHeader() << std::endl;
+      tab_incr();
+      // Print out all children on the same level -> Using list to store lots lists of things
+      print_children();
+      tab(false);
+      std::cout << getFooter() << std::endl;
+    }
+    else {
+      tab_decr();
+    }
   }
 };
 

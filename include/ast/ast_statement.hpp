@@ -5,16 +5,83 @@
 #include "ast_list.hpp"
 #include "ast_expression.hpp"
 
-class Statement : public Node {};
+class Statement : public Node {
+    virtual std::string getType() const {return "Statement";};
+};
 
-class IterationStatement : public Statement {};
-class WhileStatement : public IterationStatement {};
-class ForStatement : public IterationStatement {};
+class ConditionalStatement : public Statement {
+protected:
+  const Node * cond1;
+  const Node * stat1;
+public:
+  ConditionalStatement(const Node * c, const Node * s) : cond1(c),stat1(s){}
+  virtual std::string getType() const {return "ConditionalStatement";};
+  
+  inline virtual void print_xml() const {
+    tab();
+    std::cout << getHeader() << std::endl;
+    tab_incr();
+      //cond1->print_xml();
+      stat1->print_xml();
+    tab(false);
+    std::cout << getFooter() << std::endl;
+  }
+};
+
+class IterationStatement : public ConditionalStatement {
+  virtual std::string getType() const {return "IterationStatement";}; 
+public:
+  IterationStatement(const Node * c, const Node * s) : ConditionalStatement(c,s){}
+};
+
+class WhileStatement : public IterationStatement {
+public:
+  WhileStatement(const Node * c, const Node * s) : IterationStatement(c,s){}
+};
+
+class ForStatement : public IterationStatement {
+private:
+  const Node * cond2;
+  const Node * cond3;
+public:
+  ForStatement(const Node * c1, const Node * s) : IterationStatement(c1,s) {
+    cond2 = nullptr;
+    cond3 = nullptr;
+  }
+  ForStatement(const Node * c1, const Node * c2, const Node * s) : IterationStatement(c1,s), cond2(c2) {
+    cond3 = nullptr;
+  }
+  ForStatement(const Node * c1, const Node * c2, const Node * c3, const Node * s) : IterationStatement(c1,s), cond2(c2), cond3(c3) {}
+};
 class DoWhileStatement : public IterationStatement {};
 
-class SelectionStatement : public Statement {};
-class IfStatement : public SelectionStatement {};
-class IfElseStatement : public SelectionStatement {};
+class SelectionStatement : public ConditionalStatement {
+public:
+  SelectionStatement(const Node * c, const Node * s) : ConditionalStatement(c,s){}
+  
+};
+
+class IfStatement : public SelectionStatement {
+public:
+  IfStatement(const Node * c, const Node * s) : SelectionStatement(c,s) {}
+};
+class IfElseStatement : public IfStatement {
+private:
+  const Node * stat2;
+public:
+  IfElseStatement(const Node * c, const Node * s1, const Node * s2) : IfStatement(c,s1),stat2(s2){}
+  
+  inline virtual void print_xml() const {
+    IfStatement::print_xml();
+    tab();
+    std::cout << getHeader() << std::endl;
+    tab_incr();
+      //cond1->print_xml();
+      stat2->print_xml();
+    tab(false);
+    std::cout << getFooter() << std::endl;
+  }
+};
 class SwitchStatement : public SelectionStatement {};
 
 class JumpStatement : public Statement {};
@@ -34,7 +101,7 @@ private:
 public:
   CompoundStatement(const List * _d, const List * _s) : declars(_d), stats(_s) {};
   
-  virtual std::string getType() const {return "Scope";};
+  virtual std::string getType() const {return "CompoundStatement";};
   
   inline virtual void print_xml() const {
     tab();
@@ -71,13 +138,23 @@ private:
   const ParameterList * params;
   const CompoundStatement * stat;
 public:
-//  Function(std::string *_id, std::vector<const Node *> _children) : TabbedList(_children), id(*_id) {}
+  Function(std::string *_id, const Node * _p, const Node * _s) 
+    : id(*_id), params((const ParameterList *)_p), stat((const CompoundStatement *)_s)  {}
   // print functions
   virtual std::string getType() const {
     return "Function";
   };
   virtual std::string getHeader() const {
-    return "<" + getType() + " id =\"" + id + "\">";
+    return "<" + getType() + " id=\"" + id + "\">";
+  }
+  inline virtual void print_xml() const {
+    tab();
+    std::cout << getHeader() << std::endl;
+    tab_incr();
+      params->print_xml();
+      stat->print_xml();
+    tab(false);
+    std::cout << getFooter() << std::endl;
   }
 };
 

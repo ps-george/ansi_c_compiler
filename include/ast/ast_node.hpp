@@ -20,7 +20,7 @@ private:
   static int tabcount;
   static int changed;
 public:
-  virtual ~Node();
+  //virtual ~Node();
   
   //! Return the type of the node
   
@@ -32,8 +32,10 @@ public:
   //! Return the xml footer for the node
   virtual std::string getFooter() const { return "</" + getType() + ">"; };
   
+  virtual const Node * add(const Node* n) const {return this;};
+  
   //! Return a vector containing all of the children of the node
-  virtual std::vector<const Node *> getChildren() const = 0;
+  //virtual std::vector<const Node *> getChildren() const = 0;
   /*
   //! Print out the xml for all of the node's children
   virtual void print_children() const {

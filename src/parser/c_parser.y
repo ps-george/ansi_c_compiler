@@ -37,7 +37,6 @@
 // AST node.
 %union{
   const Node *node;
-  const List *list;
   double num;
   std::string *raw;
 }
@@ -45,11 +44,11 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <node> root program function-definition declaration  parameter delcarator 
-%type <list> external-declaration parameter-list declaration-list
+%type <node> root function-definition declaration parameter delcarator 
+%type <node> external-declaration parameter-list declaration-list statement-list program
 
-%type <node> statement expression-statement compound-statement statement-list iteration-statement selection-statement
-%type <node> declaration-seq declaration-list simple-declaration init-declaration
+%type <node> statement expression-statement compound-statement iteration-statement selection-statement
+%type <node> declaration-seq simple-declaration init-declaration
 %type <node> expression primary-expression equality-expression
 %type <node> var_const
 
@@ -60,7 +59,7 @@
 %start root
 %%
 
-root : program { g_root = $1; }
+root : program { g_root = (const Node*)$1; }
 
 program 
   : external-declaration { $$ = new Program({$1}); }
@@ -74,8 +73,8 @@ external-declaration
 // FUNCTION
 // Snip the stems from the parameter list to make tree smaller
 function-definition 
-  : INT ID '(' parameter-list ')' statement { $$ = new Function($2,{$4->add($6)}); } //$4->getAllStems()
-  | INT ID '(' ')' statement { $$ = new Function($2,{$5}); }
+  : INT ID '(' parameter-list ')' statement { $$ = new Function($2, $4, $6); } //$4->getAllStems()
+  | INT ID '(' ')' statement { $$ = new Function($2, new ParameterList({}),$5 ); }
 
 parameter 
   : INT ID { $$ = new Parameter(*$2); }
@@ -97,10 +96,10 @@ selection-statement
 
 // COMPOUND STATEMENT
 compound-statement
-  : '{' '}' { $$ = new Scope({}); }
-  | '{' statement-list '}' { $$ = new Scope({$2}); }
-  | '{' declaration-seq '}' { $$ = new Scope({$2}); } 
-  | '{' declaration-seq statement-list '}' { $$ = new Scope({$2, $3}); }   // declarations must come before statements
+  : '{' '}' { $$ = new CompoundStatement(new List({}), new List({})); }
+  | '{' statement-list '}' { $$ = new CompoundStatement(new List({}), new List({$2})); }
+  | '{' declaration-seq '}' { $$ = new CompoundStatement(new List({$2}),new List({})); } 
+  | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement(new List({$2}), new List({$3})); }   // declarations must come before statements
 
 statement-list
   : statement { $$ = new List ({$1}); }
@@ -126,10 +125,10 @@ equality-expression
 
 iteration-statement
 // Just make scopes with the statement
-  : WHILE '(' expression ')' statement { $$ = new WhileIteration({$5}/*$3, $5*/); }
-  //| DO statement WHILE '(' expression ')' { $$ = new DoWhileIteration({$2}/*$5, $2*/); }
-  | FOR '(' expression-statement expression-statement ')' statement { $$ = new ForIteration({$6}/*$3,$4,$6*/); }
-  //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForIteration({}/*$3,$4*/); }
+  : WHILE '(' expression ')' statement { $$ = new WhileStatement($3, $5); }
+  //| DO statement WHILE '(' expression ')' { $$ = new DoWhileStatement({$2}/*$5, $2*/); }
+  | FOR '(' expression-statement expression-statement expression-statement ')' statement { $$ = new ForStatement($3, $4, $5, $7); }
+  //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
 declaration-seq
