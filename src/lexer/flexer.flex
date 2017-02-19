@@ -1,4 +1,5 @@
 %option noyywrap
+%option nounput
 
 %{
 /* Bring in our declarations for token types and

@@ -32,7 +32,7 @@ public:
   //! Return the xml footer for the node
   virtual std::string getFooter() const { return "</" + getType() + ">"; };
   
-  virtual const Node * add(const Node* n) const {return this;};
+  virtual const Node * add(const Node* n) const {(void)n; return this;};
   
   //! Return a vector containing all of the children of the node
   //virtual std::vector<const Node *> getChildren() const = 0;

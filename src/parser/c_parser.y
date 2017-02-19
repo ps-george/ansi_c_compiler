@@ -22,7 +22,7 @@
 %token INT DOUBLE FLOAT CHAR VOID
 %token LONG SHORT SIGNED UNSIGNED CONST VOLATILE
 
-%token IF ELSE FOR SWITCH CASE DEFAULT DO WHILE BREAK GOTO CONTINUE RETURN 
+%token IF FOR SWITCH CASE DEFAULT DO WHILE BREAK GOTO CONTINUE RETURN 
 %token STRUCT ENUM UNION ELLIP
 %token EXTERN REGISTER STATIC AUTO TYPEDEF
 
@@ -30,7 +30,9 @@
 %token '=' ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS
 %token INCR DECR
 %token LE GE EQ NE GT LT LOR LAND
-%token '(' ')' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
+%token '(' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
+%nonassoc ')'
+%nonassoc ELSE
 
 %token INCLUDE
 // Represents the value associated with any kind of
@@ -205,9 +207,6 @@ primary-expression
 
 constant-expression
   : conditional-expression { $$ = $1; }
-
-equality-expression
-  : var_const EQ var_const { $$ = new List({}); }
 
 iteration-statement
 // Just make scopes with the statement
