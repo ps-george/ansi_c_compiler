@@ -1,6 +1,6 @@
 %code requires{
   #include "ast.hpp"
-  extern const Leaf *g_root; // A way of getting the AST out
+  extern const Node *g_root; // A way of getting the AST out
   
   #include "tokens.hpp"
 
@@ -36,7 +36,7 @@
 // Represents the value associated with any kind of
 // AST node.
 %union{
-  const Leaf *leaf;
+  const Node *node;
   double num;
   std::string *raw;
 }
@@ -44,11 +44,11 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <leaf> root program external-declaration function-definition declaration parameter-list parameter delcarator 
-%type <leaf> statement expression-statement compound-statement statement-list iteration-statement selection-statement
-%type <leaf> declaration-seq declaration-list simple-declaration init-declaration
-%type <leaf> expression primary-expression equality-expression
-%type <leaf> var_const
+%type <node> root program external-declaration function-definition declaration parameter-list parameter delcarator 
+%type <node> statement expression-statement compound-statement statement-list iteration-statement selection-statement
+%type <node> declaration-seq declaration-list simple-declaration init-declaration
+%type <node> expression primary-expression equality-expression
+%type <node> var_const
 
 %type <raw> STRING ID CONSTANT
 
@@ -156,9 +156,9 @@ var_const
 
 %%
 
-const Leaf *g_root; // Definition of variable (to match declaration earlier)
+const Node *g_root; // Definition of variable (to match declaration earlier)
 
-const Leaf *parseAST() {
+const Node *parseAST() {
   g_root=0;
   yyparse();
   return g_root;
