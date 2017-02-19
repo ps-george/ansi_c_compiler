@@ -117,8 +117,8 @@ expression-statement
 	//| expression ';'
 
 expression 
-  : assignment-expression { $$ = ExpressionList({$1}); }
-  | expression ',' assignment-expression { $$ = $$.add($3); }
+  : assignment-expression { $$ = new ExpressionList({$1}); }
+  | expression ',' assignment-expression { $$ = $$->add($3); }
   
 assignment-expression
   : conditional-expression { $$ = $1; }

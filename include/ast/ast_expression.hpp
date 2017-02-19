@@ -21,12 +21,12 @@ public:
 //! Unary expression points to one thing
 class UnaryExpression : public Expression {
 private:
-  const Expression * child;
+  const Node * child;
 public:
   virtual ~UnaryExpression(){
     delete child;
   }
-  explicit UnaryExpression(const Expression * c) : child(c) {};
+  explicit UnaryExpression(const Node * c) : child(c) {};
 };
 
 class ConstantExpression : public UnaryExpression {
@@ -79,9 +79,9 @@ public:
 //! 
 class TrinaryExpression : public Expression {
 private:
-  const Expression * left;
-  const Expression * middle;
-  const Expression * right;
+  const Node * left;
+  const Node * middle;
+  const Node * right;
 public:
   ~TrinaryExpression(){
     delete left;
@@ -89,7 +89,7 @@ public:
     delete right;
   }
   
-  TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
+  TrinaryExpression(const Node * l, const Node * m, const Node * r)
     : left(l), middle(m), right(r) {}
 };
 
@@ -97,16 +97,16 @@ public:
 class ConditionalExpression : public TrinaryExpression {
 private:
 public:
-  ConditionalExpression(const Expression * l, const Expression * m, const Expression * r)
+  ConditionalExpression(const Node * l, const Node * m, const Node * r)
     : TrinaryExpression(l,m,r){}
 };
 
 class BinaryExpression : public Expression {
 private:
-  const Expression * left;
-  const Expression * right;
+  const Node * left;
+  const Node * right;
 public:
-  explicit BinaryExpression(const Expression * l,const Expression * r)
+  explicit BinaryExpression(const Node * l,const Node * r)
     : left(l), right(r) {}
 };
 
