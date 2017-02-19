@@ -16,12 +16,12 @@ int yylcolno = 1;
 int yylsourcelino = 1;
 
 // Used for xml print indentation, static member of ast
-int Leaf::tabcount = 0;
-//int Leaf::changed = 0;
+int Node::tabcount = 0;
+//int Node::changed = 0;
 
 int main() {
   fprintf(stdout,"<?xml version=\"1.0\"?>\n");
-  const Leaf *ast=parseAST();
+  const Node *ast=parseAST();
   ast->print_xml();
   return 0;
 }
