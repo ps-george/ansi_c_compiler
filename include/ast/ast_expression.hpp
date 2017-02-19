@@ -7,12 +7,14 @@
 //! Abstract base class for expressions
 class Expression : public Node {
 public:
-  //virtual std::string getType() const = 0;
+  virtual ~Expression(){};
+  virtual std::string getType() const = 0;
 };
 
 //! Points to any number of expressions separated by commas
 class ExpressionList : public Expression, public List {
 public:
+  virtual ~ExpressionList(){};
   ExpressionList(std::vector<const Node *> _children) : List(_children) {}
 };
 
@@ -20,6 +22,10 @@ public:
 class UnaryExpression : public Expression {
 private:
   const Expression * child;
+public:
+  virtual ~UnaryExpression(){
+    delete child;
+  }
 };
 
 class ConstantExpression : public UnaryExpression {};
@@ -43,6 +49,12 @@ private:
   const Expression * left;
   const Expression * middle;
   const Expression * right;
+public:
+  ~TrinaryExpression(){
+    delete left;
+    delete middle;
+    delete right;
+  }
 };
 
 
