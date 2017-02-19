@@ -2,7 +2,7 @@
 <Program>
   <Function id="x" />
   <Variable id="g" />
-  <Function id="zz">
+  <Function id="fhzz">
     <Parameter id="a" />
     <Parameter id="b" />
     <Parameter id="c" />
