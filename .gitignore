@@ -12,6 +12,9 @@ bin/*
 *.log
 *.stackdump
 
+html
+html/*
+
 *.DS_Store
 
 .vagrant

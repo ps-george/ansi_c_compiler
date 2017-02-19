@@ -33,7 +33,7 @@ class PostfixExpression : public UnaryExpression {};
 class PrefixExpression : public UnaryExpression {};
 
 //! Points to typename
-class Sizeof : public UnaryExpression {};
+class SizeofExpression : public UnaryExpression {};
 
 //! AssignmentExpression has unaryExpression (left) followed by AssignmentExpression (right)
 
@@ -104,20 +104,19 @@ class ModExpression : public BinaryExpression {};
 //class PrimaryExpression {};
 
 // Primitives
-class StringLiteral : public Expression {};
-
-//! Abstract base class for constant
-class Constant : public Expression {};
-
-class FloatConstant : public Constant {};
-
-class IntConstant : public Constant {};
-
-//! An identifier, check identifier list for definition.
-//! Enum is of type int.
-class EnumConstant : public Constant {};
-
-class CharConstant : public Constant {};
-
+//class StringLiteral : public Expression {};
+//
+////! Abstract base class for constant
+//class Constant : public Expression {};
+//
+//class FloatConstant : public Constant {};
+//
+//class IntConstant : public Constant {};
+//
+////! An identifier, check identifier list for definition.
+////! Enum is of type int.
+//class EnumConstant : public Constant {};
+//
+//class CharConstant : public Constant {};
 
 #endif

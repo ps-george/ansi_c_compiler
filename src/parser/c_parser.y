@@ -37,6 +37,7 @@
 // AST node.
 %union{
   const Node *node;
+  const List *list;
   double num;
   std::string *raw;
 }
@@ -44,7 +45,9 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <node> root program external-declaration function-definition declaration parameter-list parameter delcarator 
+%type <node> root program function-definition declaration  parameter delcarator 
+%type <list> external-declaration parameter-list declaration-list
+
 %type <node> statement expression-statement compound-statement statement-list iteration-statement selection-statement
 %type <node> declaration-seq declaration-list simple-declaration init-declaration
 %type <node> expression primary-expression equality-expression
