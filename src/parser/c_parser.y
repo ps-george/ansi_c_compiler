@@ -36,6 +36,7 @@
 // Represents the value associated with any kind of
 // AST node.
 %union{
+  const List *list;
   const Node *node;
   double num;
   std::string *raw;
@@ -49,7 +50,11 @@
 
 %type <node> statement expression-statement compound-statement iteration-statement selection-statement
 %type <node> declaration-seq simple-declaration init-declaration
-%type <node> expression primary-expression equality-expression
+%type <node> expression primary-expression assignment-expression conditional-expression 
+%type <node> LOR-expression LAND-expression OR-expression EOR-expression AND-expression 
+%type <node> relational-expression shift-expression additive-expression multiplicative-expression 
+%type <node> cast-expression prefix-expression postfix-expression equality-expression
+
 %type <node> var_const
 
 %type <raw> STRING ID CONSTANT
@@ -105,19 +110,97 @@ statement-list
   : statement { $$ = new List ({$1}); }
   | statement-list statement { $$ = $1->add($2); }
 
+// Expressions
 expression-statement
 	: ';' { $$ = new List({}); }
   | expression ';' { $$ = $1; }
 	//| expression ';'
 
 expression 
-  : primary-expression { $$ = $1; }
+  : assignment-expression { $$ = ExpressionList({$1}); }
+  | expression ',' assignment-expression { $$ = $$.add($3); }
   
+assignment-expression
+  : conditional-expression { $$ = $1; }
+  | prefix-expression '=' assignment-expression { $$ = new AssignmentExpression($1, $3); }
+
+conditional-expression
+  : LOR-expression { $$ = $1; }
+  | LOR-expression '?' expression ':' conditional-expression { $$ = new TrinaryExpression($1, $3, $5); }
+
+LOR-expression
+  : LAND-expression { $$ = $1; }
+  | LOR-expression LOR LAND-expression { $$ = new LORExpression($1, $3); }
+
+LAND-expression
+  : OR-expression { $$ = $1; }
+  | LAND-expression LAND OR-expression { $$ = new ANDExpression($1, $3); }
+
+OR-expression
+  : EOR-expression { $$ = $1; }
+  | OR-expression '|' EOR-expression { $$ = new ORExpression($1, $3); }
+
+EOR-expression
+  : AND-expression { $$ = $1; }
+  | EOR-expression '^' AND-expression { $$ = new EORExpression($1, $3); }
+
+AND-expression
+  : equality-expression { $$ = $1; }
+  | AND-expression '&' equality-expression { $$ = new ANDExpression($1, $3); }
+  
+equality-expression 
+  : relational-expression { $$ = $1; }
+  | equality-expression EQ relational-expression { $$ = new EQExpression($1, $3); }
+  | equality-expression NE relational-expression { $$ = new NEExpression($1, $3); }
+  
+relational-expression
+  : shift-expression
+  | relational-expression '<' shift-expression { $$ = new LTExpression($1, $3); }
+  | relational-expression '>' shift-expression { $$ = new GTExpression($1, $3); }
+  | relational-expression LE shift-expression { $$ = new LEExpression($1, $3); }
+  | relational-expression GE shift-expression { $$ = new GEExpression($1, $3); }
+
+shift-expression
+  : additive-expression { $$ = $1; }
+  | shift-expression LL additive-expression { $$ = new LLExpression($1, $3); }
+  | shift-expression RR additive-expression { $$ = new RRExpression($1, $3); }
+
+additive-expression
+  : multiplicative-expression { $$ = $1; }
+  | additive-expression '+' multiplicative-expression { $$ = new AddExpression($1,$3); }
+  | additive-expression '-' multiplicative-expression { $$ = new SubExpression($1,$3); }
+
+multiplicative-expression
+  : cast-expression { $$ = $1; }
+  | multiplicative-expression '*' cast-expression { $$ = new MulExpression($1, $3); }
+  | multiplicative-expression '/' cast-expression { $$ = new DivExpression($1, $3); }
+  | multiplicative-expression '%' cast-expression { $$ = new ModExpression($1, $3); }
+
+cast-expression
+  : prefix-expression { $$ = $1; }
+//  | '(' type-name ')' cast-expression { $$ = new CastExpression($2,$4); }
+
+prefix-expression
+  : postfix-expression { $$ = $1; }
+  | INCR prefix-expression { $$ = new PreIncrExpression($2); }
+  | DECR prefix-expression { $$ = new PreDecrExpression($2); }
+  // | unary-operator cast-expression { $$ = new PrefixExpression(); }
+  | SIZEOF prefix-expression { $$ = new SizeofExpression($2); }
+
+postfix-expression
+  : primary-expression { $$ = $1; }
+  | postfix-expression '[' expression ']' { $$ = new PostfixExpression($1); }
+//  | postfix-expression '(' argument-expression-list ')' { $$ = new PostfixExpression($1); }
+  | postfix-expression '.' ID { $$ = new PostfixExpression($1); }
+  | postfix-expression ARROW ID { $$ = new PostfixExpression($1); }
+  | postfix-expression INCR { $$ = new PostIncrExpression($1); }
+  | postfix-expression DECR { $$ = new PostDecrExpression($1); }
+
 primary-expression
   : equality-expression { $$ = $1; }
   | var_const { $$ = $1; }
   | RETURN ID { $$ = new List({}); }
-//  | STRING { $$ = $1; }
+  | STRING { $$ = new StringLiteral(*$1); }
   | '(' expression ')' { $$ = $2; }
 
 equality-expression
