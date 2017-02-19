@@ -45,7 +45,7 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <node> root function-definition declaration parameter delcarator 
+%type <node> root function-definition declaration parameter declarator 
 %type <node> external-declaration parameter-list declaration-list statement-list program
 
 %type <node> statement expression-statement compound-statement iteration-statement selection-statement
@@ -53,7 +53,7 @@
 %type <node> expression primary-expression assignment-expression conditional-expression 
 %type <node> LOR-expression LAND-expression OR-expression EOR-expression AND-expression 
 %type <node> relational-expression shift-expression additive-expression multiplicative-expression 
-%type <node> cast-expression prefix-expression postfix-expression equality-expression
+%type <node> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
 %type <node> var_const
 
@@ -97,7 +97,8 @@ statement
 
 selection-statement
   : IF '(' expression ')' statement { $$ = new IfStatement($3, $5); }
-  | IF '(' expression ')' statement ELSE statement { $$ = new IfElseStatement($3, $5, $7); }
+  // SHIFT/REDUCE CONFLICT
+  | IF '(' expression ')' statement ELSE statement { $$ = new IfElseStatement($3, $5, $7); } 
 
 // COMPOUND STATEMENT
 compound-statement
@@ -197,11 +198,13 @@ postfix-expression
   | postfix-expression DECR { $$ = new PostDecrExpression($1); }
 
 primary-expression
-  : equality-expression { $$ = $1; }
-  | var_const { $$ = $1; }
+  : var_const { $$ = $1; }
   | RETURN ID { $$ = new List({}); }
   | STRING { $$ = new StringLiteral(*$1); }
   | '(' expression ')' { $$ = $2; }
+
+constant-expression
+  : conditional-expression { $$ = $1; }
 
 equality-expression
   : var_const EQ var_const { $$ = new List({}); }
@@ -227,13 +230,13 @@ declaration
   | init-declaration { $$ = $1; }
 
 simple-declaration
-  : delcarator { $$ = $1; }
+  : declarator { $$ = $1; }
 
 init-declaration
-  : delcarator '=' CONSTANT { $$ = $1; }
-  | delcarator '=' ID { $$ = $1; }
+  : declarator '=' CONSTANT { $$ = $1; }
+  | declarator '=' ID { $$ = $1; }
 
-delcarator : INT ID { $$ = new Variable(*$2); }
+declarator : INT ID { $$ = new Variable(*$2); }
 
 var_const
   : ID { $$ = new Variable(*$1); }

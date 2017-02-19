@@ -37,7 +37,6 @@ public:
 class IterationStatement : public ConditionalStatement {
 public:
   virtual ~IterationStatement(){};
-  
   virtual std::string getType() const {return "IterationStatement";}; 
   IterationStatement(const Node * c, const Node * s) : ConditionalStatement(c,s){}
 };
@@ -45,6 +44,7 @@ public:
 class WhileStatement : public IterationStatement {
 public:
   virtual ~WhileStatement(){};
+  virtual std::string getType() const {return "While";};
   WhileStatement(const Node * c, const Node * s) : IterationStatement(c,s){}
 };
 
@@ -58,6 +58,7 @@ public:
     if (num > 2){ delete cond2; }
     if (num==3) { delete cond3; }
   }
+  virtual std::string getType() const {return "For";};
   ForStatement(const Node * c1, const Node * s) : IterationStatement(c1,s) {
     cond2 = nullptr;
     cond3 = nullptr;
@@ -74,12 +75,13 @@ class DoWhileStatement : public IterationStatement {};
 class SelectionStatement : public ConditionalStatement {
 public:
   SelectionStatement(const Node * c, const Node * s) : ConditionalStatement(c,s){}
-  
+  virtual std::string getType() const {return "SelectionStatement";};
 };
 
 class IfStatement : public SelectionStatement {
 public:
   virtual ~IfStatement(){};
+  virtual std::string getType() const {return "If";};
   IfStatement(const Node * c, const Node * s) : SelectionStatement(c,s) {}
 };
 class IfElseStatement : public IfStatement {
@@ -87,7 +89,7 @@ private:
   const Node * stat2;
 public:
   IfElseStatement(const Node * c, const Node * s1, const Node * s2) : IfStatement(c,s1),stat2(s2){}
-  
+  virtual std::string getType() const {return "IfElse";};
   inline virtual void print_xml() const {
     IfStatement::print_xml();
     tab();
@@ -138,21 +140,21 @@ public:
 class LabeledStatement : public Statement {
 private:
   std::string id;
-  const Statement * stat;
+  const Node * stat;
 public:
   virtual ~LabeledStatement(){};
   
-  LabeledStatement(std::string _id, const Statement * _stat) : id(_id), stat(_stat) {};
+  LabeledStatement(std::string _id, const Node * _stat) : id(_id), stat(_stat) {};
 };
 
 class CaseLabel : public Statement {
 private:
-  const ConstantExpression * expr;
-  const Statement * stat;
+  const Node * expr;
+  const Node * stat;
 public:
   virtual ~CaseLabel(){};
   
-  CaseLabel(const ConstantExpression * _expr, const Statement * _stat) : expr(_expr),stat(_stat) {};
+  CaseLabel(const Node * _expr, const Node * _stat) : expr(_expr),stat(_stat) {};
 };
 
 class DefaultLabel : public CaseLabel {

@@ -29,19 +29,14 @@ public:
   explicit UnaryExpression(const Node * c) : child(c) {};
 };
 
-class ConstantExpression : public UnaryExpression {
-public:
-  using UnaryExpression::UnaryExpression;
-};
-
 //! PostfixExpression
 class PostfixExpression : public UnaryExpression {
 public:
   using UnaryExpression::UnaryExpression;
 };
-
-//! PrefixExpression
-class PrefixExpression : public UnaryExpression {};
+//
+////! PrefixExpression
+//class PrefixExpression : public UnaryExpression {};
 
 class PostIncrExpression : public UnaryExpression {
 public:
