@@ -20,7 +20,7 @@ private:
   static int tabcount;
   static int changed;
 public:
-  //virtual ~Node();
+  virtual ~Node(){};
   
   //! Return the type of the node
   
@@ -71,6 +71,8 @@ public:
   static void tab_incr() { tabcount++; }
   static void tab_decr() { tabcount--; }
   static void tab() { if (tabcount) std::cout << std::string(tabcount, '\t'); }
+  static void change() { changed++; }
+  int getChanged() { return changed; }
 };
 
 #endif

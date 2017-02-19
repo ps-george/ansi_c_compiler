@@ -6,7 +6,9 @@
 #include "ast_expression.hpp"
 
 class Statement : public Node {
-    virtual std::string getType() const {return "Statement";};
+public:
+  virtual ~Statement(){};
+  virtual std::string getType() const {return "Statement";};
 };
 
 class ConditionalStatement : public Statement {
@@ -14,6 +16,10 @@ protected:
   const Node * cond1;
   const Node * stat1;
 public:
+  virtual ~ConditionalStatement(){
+    delete cond1;
+    delete stat1;
+  };
   ConditionalStatement(const Node * c, const Node * s) : cond1(c),stat1(s){}
   virtual std::string getType() const {return "Scope";};
   
@@ -29,29 +35,39 @@ public:
 };
 
 class IterationStatement : public ConditionalStatement {
-  virtual std::string getType() const {return "Scope";}; 
 public:
+  virtual ~IterationStatement(){};
+  
+  virtual std::string getType() const {return "Scope";}; 
   IterationStatement(const Node * c, const Node * s) : ConditionalStatement(c,s){}
 };
 
 class WhileStatement : public IterationStatement {
 public:
+  virtual ~WhileStatement(){};
   WhileStatement(const Node * c, const Node * s) : IterationStatement(c,s){}
 };
 
 class ForStatement : public IterationStatement {
 private:
+  int num;
   const Node * cond2;
   const Node * cond3;
 public:
+  virtual ~ForStatement(){
+    if (num > 2){ delete cond2; }
+    if (num==3) { delete cond3; }
+  }
   ForStatement(const Node * c1, const Node * s) : IterationStatement(c1,s) {
     cond2 = nullptr;
     cond3 = nullptr;
+    num = 1;
   }
   ForStatement(const Node * c1, const Node * c2, const Node * s) : IterationStatement(c1,s), cond2(c2) {
     cond3 = nullptr;
+    num = 2;
   }
-  ForStatement(const Node * c1, const Node * c2, const Node * c3, const Node * s) : IterationStatement(c1,s), cond2(c2), cond3(c3) {}
+  ForStatement(const Node * c1, const Node * c2, const Node * c3, const Node * s) : IterationStatement(c1,s), cond2(c2), cond3(c3) { num = 3; }
 };
 class DoWhileStatement : public IterationStatement {};
 
@@ -63,6 +79,7 @@ public:
 
 class IfStatement : public SelectionStatement {
 public:
+  virtual ~IfStatement(){};
   IfStatement(const Node * c, const Node * s) : SelectionStatement(c,s) {}
 };
 class IfElseStatement : public IfStatement {
@@ -99,6 +116,10 @@ private:
   const List * declars;
   const List * stats;
 public:
+  virtual ~CompoundStatement(){
+    delete declars;
+    delete stats;
+  };
   CompoundStatement(const List * _d, const List * _s) : declars(_d), stats(_s) {};
   
   virtual std::string getType() const {return "Scope";};
@@ -118,12 +139,20 @@ class LabeledStatement : public Statement {
 private:
   std::string id;
   const Statement * stat;
+public:
+  virtual ~LabeledStatement(){};
+  
+  LabeledStatement(std::string _id, const Statement * _stat) : id(_id), stat(_stat) {};
 };
 
 class CaseLabel : public Statement {
 private:
   const ConstantExpression * expr;
   const Statement * stat;
+public:
+  virtual ~CaseLabel(){};
+  
+  CaseLabel(const ConstantExpression * _expr, const Statement * _stat) : expr(_expr),stat(_stat) {};
 };
 
 class DefaultLabel : public CaseLabel {
@@ -138,6 +167,8 @@ private:
   const ParameterList * params;
   const CompoundStatement * stat;
 public:
+  virtual ~Function(){};
+  
   Function(std::string *_id, const Node * _p, const Node * _s) 
     : id(*_id), params((const ParameterList *)_p), stat((const CompoundStatement *)_s)  {}
   // print functions
