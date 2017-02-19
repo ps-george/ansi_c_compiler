@@ -61,7 +61,7 @@
 
 %type <raw> STRING ID CONSTANT
 
-%right ';'
+//%right ';'
 
 %start root
 %%
