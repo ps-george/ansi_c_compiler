@@ -85,21 +85,26 @@ public:
   };
 };
 
-//! A function has two children (parameter-list, then a statement)
-//! It also needs to print out it's id
-class Function : public TabbedList {
-private:
-  std::string id;
+
+//! Scopes have a declaration list
+class DeclarationList : public List {
 public:
-  Function(std::string *_id, std::vector<const Node *> _children) : TabbedList(_children), id(*_id) {}
-  // print functions
-  virtual std::string getType() const {
-    return "Function";
+  DeclarationList(std::vector<const Node *> _stems) : List(_stems) {}
+  virtual std::string getType() const override {
+    return "DeclarationList";
   };
-  virtual std::string getHeader() const {
-    return "<" + getType() + " id =\"" + id + "\">";
-  }
 };
+
+//! Functions have a parameter list.
+class ParameterList : public DeclarationList {
+public:
+  ParameterList(std::vector<const Node *> _stems) : DeclarationList(_stems) {}
+  
+  virtual std::string getType() const override {
+    return "ParameterList";
+  };
+};
+
 
 
 

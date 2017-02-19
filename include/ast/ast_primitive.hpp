@@ -1,3 +1,10 @@
+#ifndef AST_PRIMITIVE_HPP_
+#define AST_PRIMITIVE_HPP_
+
+#include "ast_node.hpp"
+#include "ast_list.hpp"
+#include "ast_expression.hpp"
+
 // Primitives
 class StringLiteral : public Expression {};
 
@@ -13,3 +20,6 @@ class IntConstant : public Constant {};
 class EnumConstant : public Constant {};
 
 class CharConstant : public Constant {};
+
+
+#endif
