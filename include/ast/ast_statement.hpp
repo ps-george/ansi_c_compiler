@@ -15,7 +15,7 @@ protected:
   const Node * stat1;
 public:
   ConditionalStatement(const Node * c, const Node * s) : cond1(c),stat1(s){}
-  virtual std::string getType() const {return "ConditionalStatement";};
+  virtual std::string getType() const {return "Scope";};
   
   inline virtual void print_xml() const {
     tab();
@@ -29,7 +29,7 @@ public:
 };
 
 class IterationStatement : public ConditionalStatement {
-  virtual std::string getType() const {return "IterationStatement";}; 
+  virtual std::string getType() const {return "Scope";}; 
 public:
   IterationStatement(const Node * c, const Node * s) : ConditionalStatement(c,s){}
 };
@@ -101,7 +101,7 @@ private:
 public:
   CompoundStatement(const List * _d, const List * _s) : declars(_d), stats(_s) {};
   
-  virtual std::string getType() const {return "CompoundStatement";};
+  virtual std::string getType() const {return "Scope";};
   
   inline virtual void print_xml() const {
     tab();
