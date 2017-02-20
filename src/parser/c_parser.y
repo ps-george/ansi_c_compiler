@@ -60,6 +60,7 @@
 %type <node> var_const
 
 %type <raw> STRING ID CONSTANT
+%type <raw> assignment-op ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS '='
 
 //%right ';'
 
@@ -113,11 +114,13 @@ statement-list
   : statement { $$ = new List ({$1}); }
   | statement-list statement { $$ = $1->add($2); }
 
-// Expressions
+/*
+    EXPRESSIONS
+ */
+
 expression-statement
 	: ';' { $$ = new List({}); }
   | expression ';' { $$ = $1; }
-	//| expression ';'
 
 expression 
   : assignment-expression { $$ = new ExpressionList({$1}); }
@@ -125,7 +128,7 @@ expression
   
 assignment-expression
   : conditional-expression { $$ = $1; }
-  | prefix-expression '=' assignment-expression { $$ = new AssignmentExpression($1, $3); }
+  | prefix-expression assignment-op assignment-expression { $$ = new AssignmentExpression($1, $3, *$2); }
 
 conditional-expression
   : LOR-expression { $$ = $1; }
@@ -207,6 +210,22 @@ primary-expression
 
 constant-expression
   : conditional-expression { $$ = $1; }
+
+assignment-op
+  : '=' { $$ = $1; }
+  | MULASS  { $$ = $1; }
+  | DIVASS { $$ = $1; }
+  | MODASS { $$ = $1; }
+  | ADDASS { $$ = $1; }
+  | SUBASS { $$ = $1; }
+  | LLASS { $$ = $1; }
+  | RRASS { $$ = $1; }
+  | ANDASS { $$ = $1; }
+  | XORASS { $$ = $1; }
+  | ORASS { $$ = $1; }
+  
+
+/* END OF EXPRESSIONS */
 
 iteration-statement
 // Just make scopes with the statement

@@ -84,7 +84,7 @@ public:
     delete right;
   }
   
-  TrinaryExpression(const Node * l, const Node * m, const Node * r)
+  explicit TrinaryExpression(const Node * l, const Node * m, const Node * r)
     : left(l), middle(m), right(r) {}
 };
 
@@ -111,7 +111,13 @@ class CastExpression : public BinaryExpression {
 };
 //! AssignmentExpression: UnaryExpression assignment-op AssignmentExpression
 class AssignmentExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
+private:
+  std::string op;
+public:
+  AssignmentExpression(const Node * l, const Node * r, std::string _op) : BinaryExpression(l,r), op(_op) {};
+  ~AssignmentExpression(){};
+  
+  virtual void compile() const;
 };
 //! LORExpression: LORExpression || LANDExpression
 class LORExpression : public BinaryExpression {
