@@ -59,11 +59,23 @@ void AssignmentExpression::compile() const {
 /*
  * END OF COMPILE functions
  */
-
+/*
+* PRINT CPP functions
+*/
+void Node::print_cpp() const {
+  tab();
+  std::cout << getType() << std::endl;
+  tab_incr();
+  // print_children();
+  tab(0);
+  std::cout << getFooter() << std::endl;
+};
+/*
+ * END OFPRINT CPP functions
+ */
 /*
  * PRINT XML functions
  */
-
 void Node::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;

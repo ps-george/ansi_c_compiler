@@ -34,8 +34,8 @@ public:
       : cond(c), stat1(s) {}
   virtual std::string getType() const { return "ConditionalStatement"; };
   virtual void print_xml() const;
-  virtual const Expression *getCondition() { return cond; };
-  virtual const Statement *getBody() { return stat1; };
+  virtual const Expression *getCondition() const { return cond; };
+  virtual const Statement *getBody() const { return stat1; };
 };
 
 /*!
@@ -47,6 +47,14 @@ class IterationStatement : public ConditionalStatement {
 public:
   virtual ~IterationStatement(){};
   virtual std::string getType() const { return "IterationStatement"; };
+  virtual void print_cpp() const {
+    // while ()
+    std::cout << getType() << " (";
+    getCondition()->print_cpp();
+    std::cout << ")\n";
+    tab();
+    getBody()->print_cpp();  
+  };
   IterationStatement(const Expression *c, const Statement *s)
       : ConditionalStatement(c, s) {}
 };
@@ -59,7 +67,7 @@ public:
 class WhileStatement : public IterationStatement {
 public:
   virtual ~WhileStatement(){};
-  virtual std::string getType() const { return "While"; };
+  virtual std::string getType() const { return "while"; };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(c, s) {}
 };

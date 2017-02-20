@@ -44,6 +44,8 @@ public:
   */
   //! Print xml implicit recursive function
   virtual void print_xml() const;
+  virtual void print_cpp() const;
+  
   /*
   //virtual const Node * constant_fold() const = 0;
   //virtual const Node * constant_propagation() const = 0;
