@@ -4,11 +4,25 @@
 #include "ast_node.hpp"
 #include "ast_list.hpp"
 
+/*!
+ * \brief Statement
+ *
+ * Can be LabeledStatement, CompoundStatement, ExpressionStatement,
+ * SelectionStatement, IterationStatement, JumpStatement
+ */
+class Statement : public Node {
+public:
+  virtual ~Statement(){};
+  virtual std::string getType() const { return "Statement"; };
+};
+
 //! Abstract base class for expressions
-class Expression : public Node {
+class Expression : public Statement {
 public:
   virtual ~Expression(){};
   virtual std::string getType() const { return "Expression"; };
+  virtual const Expression * add(const Expression * child) const {(void)child; return this;};
+  
 };
 
 class EmptyExpression : public Expression {
@@ -19,21 +33,43 @@ public:
 };
 
 //! Points to any number of expressions separated by commas
-class ExpressionList : public List {
+class ExpressionList : public Expression, public List {
+  //! Contains a vector of pointers to ast nodes
 public:
   virtual ~ExpressionList(){};
   ExpressionList(std::vector<const Node *> _children) : List(_children) {}
+/*
+protected:
+  mutable std::vector<const Expression *> children;
+public:
+  //! Initialise using brace initializer new List({arg1, arg2, arg3})
+  ExpressionList(std::vector<const Expression *> _children) : children(_children) {}
+  //! Destructor for list
+  virtual ~ExpressionList(){};
+  
+  virtual std::string getType() const { return "List"; };
+  
+  virtual std::vector<const Expression *> getChildren() const { return children; };
+  
+  // Print out all children on the same level -> Using list to store lists of things
+  virtual void print_xml() const { print_children(); }
+  
+  virtual void print_children() const {};
+  
+  // Add a child
+  virtual const ExpressionList * add(const Expression * child) const;
+  */
 };
 
 //! Unary expression points to one thing
 class UnaryExpression : public Expression {
 private:
-  const Node * child;
+  const Expression * child;
 public:
   virtual ~UnaryExpression(){
     delete child;
   }
-  explicit UnaryExpression(const Node * c) : child(c) {};
+  explicit UnaryExpression(const Expression * c) : child(c) {};
 };
 
 //! PostfixExpression
@@ -81,9 +117,9 @@ public:
 //! 
 class TrinaryExpression : public Expression {
 private:
-  const Node * left;
-  const Node * middle;
-  const Node * right;
+  const Expression * left;
+  const Expression * middle;
+  const Expression * right;
 public:
   ~TrinaryExpression(){
     delete left;
@@ -91,7 +127,7 @@ public:
     delete right;
   }
   
-  explicit TrinaryExpression(const Node * l, const Node * m, const Node * r)
+  explicit TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
 };
 
@@ -99,16 +135,16 @@ public:
 class ConditionalExpression : public TrinaryExpression {
 private:
 public:
-  ConditionalExpression(const Node * l, const Node * m, const Node * r)
+  ConditionalExpression(const Expression * l, const Expression * m, const Expression * r)
     : TrinaryExpression(l,m,r){}
 };
 
 class BinaryExpression : public Expression {
 private:
-  const Node * left;
-  const Node * right;
+  const Expression * left;
+  const Expression * right;
 public:
-  explicit BinaryExpression(const Node * l,const Node * r)
+  explicit BinaryExpression(const Expression * l, const Expression * r)
     : left(l), right(r) {}
 };
 
@@ -121,7 +157,7 @@ class AssignmentExpression : public BinaryExpression {
 private:
   std::string op;
 public:
-  AssignmentExpression(const Node * l, const Node * r, std::string _op) : BinaryExpression(l,r), op(_op) {};
+  AssignmentExpression(const Expression * l, const Expression * r, std::string _op) : BinaryExpression(l,r), op(_op) {};
   ~AssignmentExpression(){};
   
   virtual void compile() const;
@@ -207,7 +243,7 @@ class SubExpression : public BinaryExpression {
   using BinaryExpression::BinaryExpression;
 };
 
-//! MulExpression: MulExpression * DivExpression
+//! MulExpression: MulExpression DivExpression
 class MulExpression : public BinaryExpression {
   using BinaryExpression::BinaryExpression;
 };

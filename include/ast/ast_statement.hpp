@@ -5,23 +5,10 @@
 #include "ast_list.hpp"
 #include "ast_node.hpp"
 
-/*!
- * \brief Statement
- *
- * Can be LabeledStatement, CompoundStatement, ExpressionStatement,
- * SelectionStatement, IterationStatement, JumpStatement
- */
-class Statement : public Node {
-public:
-  virtual ~Statement(){};
-  virtual std::string getType() const { return "Statement"; };
-};
-
 //! An expression evaluated as void for its side-effects
 class ExpressionStatement : public Statement {
 private:
   const Expression *expr;
-
 public:
   ExpressionStatement(const Expression *e) : expr(e){};
   ~ExpressionStatement(){};
@@ -95,12 +82,12 @@ public:
   virtual std::string getType() const { return "For"; };
   ForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                const Statement *s)
-      : IterationStatement(new EmptyExpression(), s), cond1(c1), cond2(c2) {
+      : IterationStatement(new ExpressionList({}), s), cond1(c1), cond2(c2) {
     num = 2;
   }
-  ForStatement(const ExpressionStatement *c, const ExpressionStatement *c1,
-               const Expression *c2, const Statement *s)
-      : IterationStatement(c2, s), cond1(c), cond2(c1) {
+  ForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
+               const Expression *c, const Statement *s)
+      : IterationStatement(c, s), cond1(c1), cond2(c2) {
     num = 3;
   }
 };
@@ -193,8 +180,11 @@ class SwitchStatement : public SelectionStatement {};
  * 
  * A jump statement causes an unconditional jump to another place
  */
-class JumpStatement : public Statement {};
-
+class JumpStatement : public Statement {
+public:
+  JumpStatement(){};
+  virtual ~JumpStatement(){};
+};
 /*!
 Constraints
 
@@ -204,7 +194,13 @@ Semantics
 
 A goto statement causes an unconditional jump to the statement prefixed by the named label in the current function. 
  */
-class GotoStatement : public JumpStatement {};
+class GotoStatement : public JumpStatement {
+private:
+  std::string label;
+public:
+  GotoStatement(const std::string l) : label(l) {};
+  virtual ~GotoStatement(){};
+};
 
 /*!
  * Constraints
@@ -217,7 +213,11 @@ A continue statement causes a jump to the loop-continuation portion of the
 smallest enclosing iteration statement; that is, to the end of the loop body.
 More precisely, in each of the statements
  */
-class ContinueStatement : public JumpStatement {};
+class ContinueStatement : public JumpStatement {
+public:
+  ContinueStatement(){};
+  virtual ~ContinueStatement(){};
+};
 
 /*! \brief BreakStatement
  * Constraints
@@ -227,7 +227,11 @@ Semantics
 A break statement terminates execution of the smallest enclosing switch or
 iteration statement.
  */
-class BreakStatement : public JumpStatement {};
+class BreakStatement : public JumpStatement {
+public:
+  BreakStatement(){};
+  virtual ~BreakStatement(){};
+};
 
 
 /*!
@@ -255,9 +259,9 @@ an expression.
  */
 class ReturnStatement : public JumpStatement {
 private:
-  const Expression *expr;
+  const ExpressionStatement *expr;
 public:
-  ReturnStatement(const Expression *e) : expr(e){};
+  ReturnStatement(const ExpressionStatement *e) : expr(e){};
 };
 
 //! \brief CompoundStatement
@@ -298,16 +302,16 @@ public:
 
 class CaseLabel : public Statement {
 private:
-  const Node *expr;
-  const Node *stat;
+  const Expression *expr;
+  const Statement *stat;
 
 public:
   virtual ~CaseLabel(){};
 
-  CaseLabel(const Node *_expr, const Node *_stat) : expr(_expr), stat(_stat){};
+  CaseLabel(const Expression *_expr, const Statement *_stat) : expr(_expr), stat(_stat){};
 };
 
-class DefaultLabel : public CaseLabel {};
+class DefaultLabel : public LabeledStatement {};
 
 //! A function has two children (parameter-list, then a statement)
 //! It also needs to print out it's id

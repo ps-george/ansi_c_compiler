@@ -51,6 +51,8 @@ public:
   virtual void print_xml() const;
 };
 
+
+
 //! The root of the ast
 //! It is a list because it can have any number of children
 class Program : public TabbedList {
@@ -72,7 +74,6 @@ public:
 class ParameterList : public DeclarationList {
 public:
   ParameterList(std::vector<const Node *> _stems) : DeclarationList(_stems) {}
-  
   virtual std::string getType() const override { return "ParameterList"; };
 };
 

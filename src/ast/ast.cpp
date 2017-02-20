@@ -10,6 +10,12 @@ const Node *List::add(const Node *child) const {
   children.push_back(child);
   return this;
 };
+/*
+const ExpressionList *ExpressionList::add(const Expression *child) const {
+  children.push_back(child);
+  return this;
+};
+*/
 
 List::~List() {
   for (auto &it : children)

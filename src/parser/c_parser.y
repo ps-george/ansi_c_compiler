@@ -40,6 +40,12 @@
 %union{
   const List *list;
   const Node *node;
+  const Function *function;
+  const Variable * variable;
+  const Statement * statement;
+  const Expression *expression;
+  const ExpressionStatement *expressionstatement;
+  const Parameter * parameter;
   double num;
   std::string *raw;
 }
@@ -47,18 +53,21 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <node> root function-definition declaration parameter declarator 
-%type <node> external-declaration 
-%type <list> parameter-list declaration-list statement-list program
+%type <node> root external-declaration
+%type <function> function-definition
+%type <variable> declaration declarator simple-declaration init-declaration
+%type <parameter> parameter
 
-%type <node> statement expression-statement compound-statement iteration-statement selection-statement
-%type <node> declaration-seq simple-declaration init-declaration
-%type <node> expression primary-expression assignment-expression conditional-expression 
-%type <node> LOR-expression LAND-expression OR-expression EOR-expression AND-expression 
-%type <node> relational-expression shift-expression additive-expression multiplicative-expression 
-%type <node> cast-expression prefix-expression postfix-expression equality-expression constant-expression
+%type <list> parameter-list declaration-list statement-list program declaration-seq
 
-%type <node> var_const
+%type <statement> statement compound-statement iteration-statement selection-statement jump-statement
+%type <expressionstatement> expression-statement
+%type <expression> expression primary-expression
+
+%type <expression> assignment-expression conditional-expression var_const
+%type <expression> LOR-expression LAND-expression OR-expression EOR-expression AND-expression 
+%type <expression> relational-expression shift-expression additive-expression multiplicative-expression 
+%type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
 %type <raw> STRING ID CONSTANT
 %type <raw> assignment-op ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS '='
@@ -98,6 +107,13 @@ statement
   | compound-statement { $$ = $1; }
   | iteration-statement { $$ = $1; }
   | selection-statement { $$ = $1; }
+  | jump-statement { $$ = $1; }
+  
+jump-statement
+  : GOTO ID ';' { $$ = new GotoStatement(*$2); } 
+  | CONTINUE ';' {$$ = new ContinueStatement(); }
+  | BREAK ';' { $$ = new BreakStatement(); }
+  | RETURN expression-statement { $$ = new ReturnStatement($2); }
 
 selection-statement
   : IF '(' expression ')' statement { $$ = new IfStatement($3, $5); }
@@ -112,7 +128,7 @@ compound-statement
   | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement(new List({$2}), new List({$3})); }   // declarations must come before statements
 
 statement-list
-  : statement { $$ = new List ({$1}); }
+  : statement { $$ = new List({$1}); }
   | statement-list statement { $$->add($2); }
 
 /*
@@ -120,12 +136,12 @@ statement-list
  */
 
 expression-statement
-	: ';' { $$ = new List({}); }
-  | expression ';' { $$ = $1; }
+	: ';' { $$ = new ExpressionStatement(new EmptyExpression()); }
+  | expression ';' { $$ = new ExpressionStatement($1); }
 
 expression 
   : assignment-expression { $$ = new ExpressionList({$1}); }
-  | expression ',' assignment-expression { $$ = $$->add($3); }
+  | expression ',' assignment-expression { $$->add($3); }
   
 assignment-expression
   : conditional-expression { $$ = $1; }
@@ -205,7 +221,6 @@ postfix-expression
 
 primary-expression
   : var_const { $$ = $1; }
-  | RETURN ID { $$ = new List({}); }
   | STRING { $$ = new StringLiteral(*$1); }
   | '(' expression ')' { $$ = $2; }
 
@@ -232,7 +247,7 @@ iteration-statement
 // Just make scopes with the statement
   : WHILE '(' expression ')' statement { $$ = new WhileStatement($3, $5); }
   //| DO statement WHILE '(' expression ')' { $$ = new DoWhileStatement({$2}/*$5, $2*/); }
-  | FOR '(' expression-statement expression-statement expression-statement ')' statement { $$ = new ForStatement($3, $4, $5, $7); }
+  | FOR '(' expression-statement expression-statement expression ')' statement { $$ = new ForStatement($3, $4,$5, $7); }
   //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
