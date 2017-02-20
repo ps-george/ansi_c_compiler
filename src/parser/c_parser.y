@@ -48,7 +48,8 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <node> root function-definition declaration parameter declarator 
-%type <node> external-declaration parameter-list declaration-list statement-list program
+%type <node> external-declaration 
+%type <list> parameter-list declaration-list statement-list program
 
 %type <node> statement expression-statement compound-statement iteration-statement selection-statement
 %type <node> declaration-seq simple-declaration init-declaration
@@ -71,7 +72,7 @@ root : program { g_root = (const Node*)$1; }
 
 program 
   : external-declaration { $$ = new Program({$1}); }
-  | program external-declaration { $$ = $$->add($2); }
+  | program external-declaration { $$->add($2); }
 
 // EXTERNAL DECLARATIONS
 external-declaration
@@ -112,7 +113,7 @@ compound-statement
 
 statement-list
   : statement { $$ = new List ({$1}); }
-  | statement-list statement { $$ = $1->add($2); }
+  | statement-list statement { $$->add($2); }
 
 /*
     EXPRESSIONS

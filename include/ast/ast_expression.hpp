@@ -11,6 +11,13 @@ public:
   virtual std::string getType() const { return "Expression"; };
 };
 
+class EmptyExpression : public Expression {
+public:
+  virtual ~EmptyExpression(){};
+  virtual std::string getType() const { return "EmptyExpression"; };
+  EmptyExpression(){};
+};
+
 //! Points to any number of expressions separated by commas
 class ExpressionList : public List {
 public:
