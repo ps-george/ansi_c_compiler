@@ -23,15 +23,7 @@ public:
   ConditionalStatement(const Node * c, const Node * s) : cond1(c),stat1(s){}
   virtual std::string getType() const {return "ConditionalStatement";};
   
-  inline virtual void print_xml() const {
-    tab();
-    std::cout << getHeader() << std::endl;
-    tab_incr();
-      //cond1->print_xml();
-      stat1->print_xml();
-    tab(false);
-    std::cout << getFooter() << std::endl;
-  }
+  virtual void print_xml() const;
 };
 
 class IterationStatement : public ConditionalStatement {
@@ -56,7 +48,7 @@ private:
 public:
   virtual ~ForStatement(){
     if (num > 2){ delete cond2; }
-    if (num==3) { delete cond3; }
+    if (num == 3) { delete cond3; }
   }
   virtual std::string getType() const {return "For";};
   ForStatement(const Node * c1, const Node * s) : IterationStatement(c1,s) {
@@ -90,26 +82,23 @@ private:
 public:
   IfElseStatement(const Node * c, const Node * s1, const Node * s2) : IfStatement(c,s1),stat2(s2){}
   virtual std::string getType() const {return "IfElse";};
-  inline virtual void print_xml() const {
-    IfStatement::print_xml();
-    tab();
-    std::cout << getHeader() << std::endl;
-    tab();
-    std::cout << "<!-- Else -->" << std::endl;
-    tab_incr();
-      //cond1->print_xml();
-      stat2->print_xml();
-    tab(false);
-    std::cout << getFooter() << std::endl;
-  }
+  virtual void print_xml() const;
 };
 class SwitchStatement : public SelectionStatement {};
 
 class JumpStatement : public Statement {};
-class GotoStatement : public JumpStatement {};
+class GotoStatement : public JumpStatement {
+  
+};
 class ContinueStatement : public JumpStatement {};
 class BreakStatement : public JumpStatement {};
-class ReturnStatement : public JumpStatement {};
+
+class ReturnStatement : public JumpStatement {
+private:
+  const Node * expr;
+public:
+  ReturnStatement(const Node * e) : expr(e) {};
+};
 
 //! An expression evaluated as void for its side-effects
 class ExpressionStatement : public Statement {};
@@ -128,15 +117,7 @@ public:
   
   virtual std::string getType() const {return "CompoundStatement";};
   
-  inline virtual void print_xml() const {
-    tab();
-    std::cout << getHeader() << std::endl;
-    tab_incr();
-      declars->print_xml();
-      stats->print_xml();
-    tab(false);
-    std::cout << getFooter() << std::endl;
-  }
+  virtual void print_xml() const;
 };
 
 class LabeledStatement : public Statement {
@@ -175,22 +156,11 @@ public:
   
   Function(std::string *_id, const Node * _p, const Node * _s) 
     : id(*_id), params((const ParameterList *)_p), stat((const CompoundStatement *)_s)  {}
+    
   // print functions
-  virtual std::string getType() const {
-    return "Function";
-  };
-  virtual std::string getHeader() const {
-    return "<" + getType() + " id=\"" + id + "\">";
-  }
-  inline virtual void print_xml() const {
-    tab();
-    std::cout << getHeader() << std::endl;
-    tab_incr();
-      params->print_xml();
-      stat->print_xml();
-    tab(false);
-    std::cout << getFooter() << std::endl;
-  }
+  virtual std::string getType() const { return "Function"; };
+  virtual std::string getHeader() const { return "<" + getType() + " id=\"" + id + "\">"; }
+  virtual void print_xml() const;
 };
 
 #endif

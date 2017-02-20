@@ -17,34 +17,19 @@ public:
   List(std::vector<const Node *> _children) : children(_children) {}
   
   //! Destructor for list
-  virtual ~List() {
-    for (auto &it : children)
-      delete it;
-    children.clear();
-  }
+  virtual ~List();
   
-  virtual std::string getType() const {
-    return "List";
-  };
+  virtual std::string getType() const { return "List"; };
   
-  virtual std::vector<const Node *> getChildren() const {return children;};
+  virtual std::vector<const Node *> getChildren() const { return children; };
   
   // Print out all children on the same level -> Using list to store lists of things
-  virtual void print_xml() const {
-      print_children();
-  }
+  virtual void print_xml() const { print_children(); }
   
-  virtual void print_children() const {
-    for (auto &it : getChildren()) {
-      it->print_xml();
-    }
-  };
+  virtual void print_children() const;
   
   // Add a child
-  virtual const Node * add(const Node * child) const {
-    children.push_back(child);
-    return this;
-  };
+  virtual const Node * add(const Node * child) const;
   
 };
 
@@ -63,20 +48,7 @@ public:
   //! Return the child at a particular index
   //const Node *getChild(int i) const { return children.at(i); }
   
-  virtual void print_xml() const {
-    if (getChildren().size()!=0){ 
-      tab();
-      std::cout << getHeader() << std::endl;
-      tab_incr();
-      // Print out all children on the same level -> Using list to store lots lists of things
-      print_children();
-      tab(false);
-      std::cout << getFooter() << std::endl;
-    }
-    else {
-      tab_decr();
-    }
-  }
+  virtual void print_xml() const;
 };
 
 //! The root of the ast
@@ -85,9 +57,7 @@ class Program : public TabbedList {
 public:
   Program(std::vector<const Node *> _children) : TabbedList(_children) {}
   // Print functions
-  virtual std::string getType() const {
-    return "Program";
-  };
+  virtual std::string getType() const { return "Program"; };
 };
 
 
@@ -95,9 +65,7 @@ public:
 class DeclarationList : public List {
 public:
   DeclarationList(std::vector<const Node *> _stems) : List(_stems) {}
-  virtual std::string getType() const override {
-    return "DeclarationList";
-  };
+  virtual std::string getType() const override { return "DeclarationList"; };
 };
 
 //! Functions have a parameter list.
@@ -105,9 +73,7 @@ class ParameterList : public DeclarationList {
 public:
   ParameterList(std::vector<const Node *> _stems) : DeclarationList(_stems) {}
   
-  virtual std::string getType() const override {
-    return "ParameterList";
-  };
+  virtual std::string getType() const override { return "ParameterList"; };
 };
 
 

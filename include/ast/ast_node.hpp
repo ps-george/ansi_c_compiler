@@ -45,14 +45,7 @@ public:
   };
   */
   //! Print xml implicit recursive function
-  virtual void print_xml() const {
-    tab();
-    std::cout << getHeader() << std::endl;
-    tab_incr();
-    //print_children();
-    tab(0);
-    std::cout << getFooter() << std::endl;
-  };
+  virtual void print_xml() const;
   /*
   //virtual const Node * constant_fold() const = 0;
   //virtual const Node * constant_propagation() const = 0;

@@ -30,9 +30,7 @@ public:
   virtual ~Constant(){};
   explicit Constant(const std::string &_valstr) : valstr(_valstr){};
   
-  virtual std::string getType() const override {
-    return "Constant";
-  }
+  virtual std::string getType() const override { return "Constant"; }
   virtual std::string getHeader() const override {return "<" + getType() + " value=\"" + valstr +  "\" />";}
 };
 
@@ -54,9 +52,7 @@ public:
     val = std::stof(_valstr);
   };
   
-  virtual std::string getType() const override {
-    return "Float";
-  }
+  virtual std::string getType() const override { return "Float"; }
 };
 
 class DoubleConstant : public Constant {
@@ -69,11 +65,10 @@ public:
     val = std::stod(_valstr);
   };
   
-  virtual std::string getType() const override {
-    return "Double";
-  }
+  virtual std::string getType() const override { return "Double"; }
   
 };
+
 
 class IntConstant : public Constant {
 private:
@@ -85,9 +80,7 @@ public:
     val = std::stoi(_valstr);
   };
   
-  virtual std::string getType() const override {
-    return "Int";
-  }
+  virtual std::string getType() const override { return "Int"; }
 };
 
 //! An identifier, check identifier list for definition.
@@ -120,9 +113,7 @@ public:
   virtual ~Parameter(){};
   Parameter(const std::string &_id) : Variable(_id){}
   
-  virtual std::string getType() const override {
-    return "Parameter";
-  }
+  virtual std::string getType() const override { return "Parameter"; }
 };
 
 
