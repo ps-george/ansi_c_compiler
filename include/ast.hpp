@@ -4,6 +4,7 @@
 #include "ast/ast_node.hpp"
 #include "ast/ast_primitive.hpp"
 #include "ast/ast_list.hpp"
+#include "ast/ast_declaration.hpp"
 #include "ast/ast_expression.hpp"
 #include "ast/ast_statement.hpp"
 
