@@ -60,10 +60,10 @@
         "Give examples of strings matching the regex 'a|a(j|8*7)?|s'",
         "containing 1, 2, 3, and 4 characters. The ' character is not part of the regex."
       ],
-      "answer_length1": "?",
-      "answer_length2": "??",
-      "answer_length3": "???",
-      "answer_length4": "????"
+      "answer_length1": "a",
+      "answer_length2": "aj",
+      "answer_length3": "a87",
+      "answer_length4": "a887"
     },
     {
       "qid": 1,
@@ -71,10 +71,10 @@
         "Give examples of strings matching the regex '([6-6G-H]+|x*)(z*[a-z]+)'",
         "containing 1, 2, 3, and 4 characters. The ' character is not part of the regex."
       ],
-      "answer_length1": "?",
-      "answer_length2": "??",
-      "answer_length3": "???",
-      "answer_length4": "????"
+      "answer_length1": "b",
+      "answer_length2": "Ga",
+      "answer_length3": "Gzc",
+      "answer_length4": "xzfj"
     },
     {
       "qid": 2,
@@ -89,8 +89,8 @@
         "2": "O(n log k)",
         "3": "O(n*k)"
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "1",
+      "confidence": "high"
     },
     {
       "qid": 3,
@@ -107,8 +107,8 @@
         "2": "No, because of rule 4",
         "3": "No, because of rules 1 and 2."
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "3",
+      "confidence": "High"
     },
     {
       "qid": 4,
@@ -123,8 +123,8 @@
         "2": "O(2^k)",
         "3": "O(k 2^m)"
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "1",
+      "confidence": "High"
     },
     {
       "qid": 5,
@@ -138,8 +138,8 @@
         "2": "Consuming a character could take us from SB to SA",
         "3": "SA cannot be an accepting state."
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "0",
+      "confidence": "High"
     },
     {
       "qid": 6,
@@ -153,8 +153,8 @@
         "2": "This extension requires back-tracking.",
         "3": "This extension cannot be supported in a DFA-based regex engine."
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "0",
+      "confidence": "Medium"
     },
     {
       "qid": 7,
@@ -168,8 +168,8 @@
         "2": "Yes, though you need 2^m bits of FSM state.",
         "3": "No, the non-determinism means that you might not be able to find a finite set of states."
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "2",
+      "confidence": "Medium"
     },
     {
       "qid": 8,
@@ -180,8 +180,8 @@
         "2": "A lexer groups characters into terminals.",
         "3": "A lexer cannot detect errors."
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "2",
+      "confidence": "High"
     },
     {
       "qid": 9,
@@ -192,8 +192,8 @@
         "2": "It takes the lexer one step closer to enlightenment.",
         "3": "It records the fact that the end of stream character has been reached."
       },
-      "answer": "?",
-      "confidence": "?"
+      "answer": "1",
+      "confidence": "High"
     }
   ]
 }
