@@ -85,9 +85,9 @@ void UnaryExpression::print_cpp() const {
 void TrinaryExpression::print_cpp() const {
   //Node::print_cpp(); 
   left->print_cpp();
-  std::cout << " ? "
+  std::cout << " ? ";
   middle->print_cpp();
-  std::cout << " : "
+  std::cout << " : ";
   right->print_cpp();
 }
 
@@ -103,7 +103,6 @@ void Constant::print_cpp() const {
   std::cout << getNodeType() << " " << getValue() << std::endl;
 }
 
-void 
 
 /*
  * END OFPRINT CPP functions

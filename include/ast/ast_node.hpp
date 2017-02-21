@@ -44,6 +44,7 @@ public:
   */
   //! Print xml implicit recursive function
   virtual void print_xml() const;
+  
   //! Print cpp implicit recursive function
   virtual void print_cpp() const;
   

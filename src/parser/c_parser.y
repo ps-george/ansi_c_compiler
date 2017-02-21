@@ -15,26 +15,6 @@
 
 %define parse.error verbose
 
-%token Invalid
-%token ID STRING SIZEOF
-%token CONSTANT
-
-%token INT DOUBLE FLOAT CHAR VOID
-%token LONG SHORT SIGNED UNSIGNED CONST VOLATILE
-
-%token IF FOR SWITCH CASE DEFAULT DO WHILE BREAK GOTO CONTINUE RETURN 
-%token STRUCT ENUM UNION ELLIP
-%token EXTERN REGISTER STATIC AUTO TYPEDEF
-
-%token '?' '!' '~' '|' '&' '^' '+' '-' '*' '/' '%'
-%token '=' ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS
-%token INCR DECR
-%token LE GE EQ NE GT LT LOR LAND
-%token '(' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
-%nonassoc ')'
-%nonassoc ELSE
-
-%token INCLUDE
 // Represents the value associated with any kind of
 // AST node.
 %union{
@@ -49,6 +29,34 @@
   double num;
   std::string *raw;
 }
+
+%token Invalid
+%token ID STRING SIZEOF
+%token CONSTANT
+
+%token INT DOUBLE FLOAT CHAR VOID
+%token LONG SHORT SIGNED UNSIGNED CONST VOLATILE
+
+%token IF FOR SWITCH CASE DEFAULT DO WHILE BREAK GOTO CONTINUE RETURN 
+%token STRUCT ENUM UNION ELLIP
+%token EXTERN REGISTER STATIC AUTO TYPEDEF
+
+%token '?' '!' '~' '|' '&' '^' '+' '-' '*' '/' '%'
+%type <raw> '?' '!' '~' '|' '&' '^' '+' '-' '*' '/' '%'
+%token '=' ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS
+%type <raw> '=' ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS
+%token INCR DECR
+%type <raw> INCR DECR
+%token LE GE EQ NE GT LT LOR LAND
+%type <raw> LE GE EQ NE GT LT LOR LAND
+%token '(' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
+%type <raw> '(' '{' '}' '[' ']' ';' ':' ',' '.' ARROW LL RR
+%nonassoc ')'
+%type <raw> ')'
+%nonassoc ELSE
+
+%token INCLUDE
+
 
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
@@ -70,7 +78,7 @@
 %type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
 %type <raw> STRING ID CONSTANT
-%type <raw> assignment-op ADDASS SUBASS MULASS DIVASS MODASS ANDASS ORASS XORASS LLASS RRASS '='
+%type <raw> assignment-op
 
 //%right ';'
 
@@ -178,8 +186,8 @@ equality-expression
   
 relational-expression
   : shift-expression
-  | relational-expression '<' shift-expression { $$ = new LTExpression($1, $3, *$2); }
-  | relational-expression '>' shift-expression { $$ = new GTExpression($1, $3, *$2); }
+  | relational-expression LT shift-expression { $$ = new LTExpression($1, $3, *$2); }
+  | relational-expression GT shift-expression { $$ = new GTExpression($1, $3, *$2); }
   | relational-expression LE shift-expression { $$ = new LEExpression($1, $3, *$2); }
   | relational-expression GE shift-expression { $$ = new GEExpression($1, $3, *$2); }
 

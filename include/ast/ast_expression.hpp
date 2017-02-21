@@ -21,7 +21,6 @@ class Expression : public Statement {
 public:
   virtual ~Expression(){};
   virtual std::string getNodeType() const { return "Expression"; };
-  virtual void print_cpp() const;
   virtual const Expression * add(const Expression * child) const {(void)child; return this;};
   
 };
@@ -71,6 +70,7 @@ public:
     delete child;
   }
   UnaryExpression(const Expression * c) : child(c) {};
+  virtual void print_cpp() const;
 };
 
 //! PostfixExpression
@@ -146,11 +146,13 @@ class BinaryExpression : public Expression {
 private:
   const Expression * left;
   const Expression * right;
+protected:
   std::string op;
 public:
   BinaryExpression(const Expression * l, const Expression * r, std::string op)
     : left(l), right(r) {}
   std::string getOp() const { return op; };
+  void print_cpp() const;
 };
 
 //! CastExpression: Left is type-name, right is an expression
