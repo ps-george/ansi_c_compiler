@@ -11,10 +11,10 @@ class Primitive : public Expression {
 public:
   virtual ~Primitive(){};
 
-  virtual std::string getType() const override = 0;
+  virtual std::string getNodeType() const override = 0;
 
   virtual std::string getHeader() const override {
-    return "<" + getType() + "\" />";
+    return "<" + getNodeType() + "\" />";
   }
 
   virtual void print_xml() const override {
@@ -27,22 +27,25 @@ public:
 class Constant : public Primitive {
 private:
   std::string valstr;
-
+// Constant will have a type as well`
 public:
   virtual ~Constant(){};
   explicit Constant(const std::string &_valstr) : valstr(_valstr){};
 
-  virtual std::string getType() const override { return "Constant"; }
+  virtual std::string getNodeType() const override { return "Constant"; }
+  
+  virtual std::string getValue() const { return valstr; };
   virtual std::string getHeader() const override {
-    return "<" + getType() + " value=\"" + valstr + "\" />";
+    return "<" + getNodeType() + " value=\"" + valstr + "\" />";
   }
+  virtual void print_cpp() const override;
 };
 
 class StringLiteral : public Constant {
 public:
   virtual ~StringLiteral(){};
   using Constant::Constant;
-  std::string getType() const override { return "StringLiteral"; };
+  std::string getNodeType() const override { return "StringLiteral"; };
 };
 
 class FloatConstant : public Constant {
@@ -56,7 +59,7 @@ public:
     val = std::stof(_valstr);
   };
 
-  virtual std::string getType() const override { return "Float"; }
+  virtual std::string getNodeType() const override { return "float"; }
 };
 
 class DoubleConstant : public Constant {
@@ -70,7 +73,7 @@ public:
     val = std::stod(_valstr);
   };
 
-  virtual std::string getType() const override { return "Double"; }
+  virtual std::string getNodeType() const override { return "double"; }
 };
 
 class IntConstant : public Constant {
@@ -83,7 +86,7 @@ public:
     val = std::stoi(_valstr);
   };
 
-  virtual std::string getType() const override { return "Int"; }
+  virtual std::string getNodeType() const override { return "int"; }
 };
 
 //! An identifier, check identifier list for definition.
@@ -99,16 +102,16 @@ class CharConstant : public Constant {
 class Variable : public Primitive {
 private:
   std::string id;
-
+  // Variable will have a type
 public:
   virtual ~Variable(){};
 
   Variable(const std::string &_id) : id(_id){};
 
-  virtual std::string getType() const override { return "Variable"; }
+  virtual std::string getNodeType() const override { return "Variable"; }
 
   virtual std::string getHeader() const override {
-    return "<" + getType() + " id=\"" + id + "\" />";
+    return "<" + getNodeType() + " id=\"" + id + "\" />";
   }
 };
 
@@ -117,7 +120,7 @@ public:
   virtual ~Parameter(){};
   Parameter(const std::string &_id) : Variable(_id) {}
 
-  virtual std::string getType() const override { return "Parameter"; }
+  virtual std::string getNodeType() const override { return "Parameter"; }
 };
 
 #endif

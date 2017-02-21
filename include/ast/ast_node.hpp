@@ -24,19 +24,19 @@ public:
   
   //! Return the type of the node
   
-  virtual std::string getType() const = 0;
+  virtual std::string getNodeType() const = 0;
   
   //! Return the xml header for the node
-  virtual std::string getHeader() const { return "<" + getType() + ">"; };
+  virtual std::string getHeader() const { return "<" + getNodeType() + ">"; };
   
   //! Return the xml footer for the node
-  virtual std::string getFooter() const { return "</" + getType() + ">"; };
+  virtual std::string getFooter() const { return "</" + getNodeType() + ">"; };
   
   //! Return a vector containing all of the children of the node
   //virtual std::vector<const Node *> getChildren() const = 0;
   /*
   //! Print out the xml for all of the node's children
-  virtual void print_children() const {
+  virtual void print_children_xml() const {
     for (auto &it : getChildren()) {
       it->print_xml();
     }
@@ -44,6 +44,7 @@ public:
   */
   //! Print xml implicit recursive function
   virtual void print_xml() const;
+  //! Print cpp implicit recursive function
   virtual void print_cpp() const;
   
   /*

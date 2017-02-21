@@ -153,51 +153,51 @@ conditional-expression
 
 LOR-expression
   : LAND-expression { $$ = $1; }
-  | LOR-expression LOR LAND-expression { $$ = new LORExpression($1, $3); }
+  | LOR-expression LOR LAND-expression { $$ = new LORExpression($1, $3, *$2); }
 
 LAND-expression
   : OR-expression { $$ = $1; }
-  | LAND-expression LAND OR-expression { $$ = new ANDExpression($1, $3); }
+  | LAND-expression LAND OR-expression { $$ = new ANDExpression($1, $3, *$2); }
 
 OR-expression
   : EOR-expression { $$ = $1; }
-  | OR-expression '|' EOR-expression { $$ = new ORExpression($1, $3); }
+  | OR-expression '|' EOR-expression { $$ = new ORExpression($1, $3, *$2); }
 
 EOR-expression
   : AND-expression { $$ = $1; }
-  | EOR-expression '^' AND-expression { $$ = new EORExpression($1, $3); }
+  | EOR-expression '^' AND-expression { $$ = new EORExpression($1, $3, *$2); }
 
 AND-expression
   : equality-expression { $$ = $1; }
-  | AND-expression '&' equality-expression { $$ = new ANDExpression($1, $3); }
+  | AND-expression '&' equality-expression { $$ = new ANDExpression($1, $3, *$2); }
   
 equality-expression 
   : relational-expression { $$ = $1; }
-  | equality-expression EQ relational-expression { $$ = new EQExpression($1, $3); }
-  | equality-expression NE relational-expression { $$ = new NEExpression($1, $3); }
+  | equality-expression EQ relational-expression { $$ = new EQExpression($1, $3, *$2); }
+  | equality-expression NE relational-expression { $$ = new NEExpression($1, $3, *$2); }
   
 relational-expression
   : shift-expression
-  | relational-expression '<' shift-expression { $$ = new LTExpression($1, $3); }
-  | relational-expression '>' shift-expression { $$ = new GTExpression($1, $3); }
-  | relational-expression LE shift-expression { $$ = new LEExpression($1, $3); }
-  | relational-expression GE shift-expression { $$ = new GEExpression($1, $3); }
+  | relational-expression '<' shift-expression { $$ = new LTExpression($1, $3, *$2); }
+  | relational-expression '>' shift-expression { $$ = new GTExpression($1, $3, *$2); }
+  | relational-expression LE shift-expression { $$ = new LEExpression($1, $3, *$2); }
+  | relational-expression GE shift-expression { $$ = new GEExpression($1, $3, *$2); }
 
 shift-expression
   : additive-expression { $$ = $1; }
-  | shift-expression LL additive-expression { $$ = new LLExpression($1, $3); }
-  | shift-expression RR additive-expression { $$ = new RRExpression($1, $3); }
+  | shift-expression LL additive-expression { $$ = new LLExpression($1, $3, *$2); }
+  | shift-expression RR additive-expression { $$ = new RRExpression($1, $3, *$2); }
 
 additive-expression
   : multiplicative-expression { $$ = $1; }
-  | additive-expression '+' multiplicative-expression { $$ = new AddExpression($1,$3); }
-  | additive-expression '-' multiplicative-expression { $$ = new SubExpression($1,$3); }
+  | additive-expression '+' multiplicative-expression { $$ = new AddExpression($1,$3, *$2); }
+  | additive-expression '-' multiplicative-expression { $$ = new SubExpression($1,$3, *$2); }
 
 multiplicative-expression
   : cast-expression { $$ = $1; }
-  | multiplicative-expression '*' cast-expression { $$ = new MulExpression($1, $3); }
-  | multiplicative-expression '/' cast-expression { $$ = new DivExpression($1, $3); }
-  | multiplicative-expression '%' cast-expression { $$ = new ModExpression($1, $3); }
+  | multiplicative-expression '*' cast-expression { $$ = new MulExpression($1, $3, *$2); }
+  | multiplicative-expression '/' cast-expression { $$ = new DivExpression($1, $3, *$2); }
+  | multiplicative-expression '%' cast-expression { $$ = new ModExpression($1, $3, *$2); }
 
 cast-expression
   : prefix-expression { $$ = $1; }

@@ -63,13 +63,48 @@ void AssignmentExpression::compile() const {
 * PRINT CPP functions
 */
 void Node::print_cpp() const {
-  tab();
-  std::cout << getType() << std::endl;
-  tab_incr();
-  // print_children();
-  tab(0);
-  std::cout << getFooter() << std::endl;
-};
+  std::cout << "// " << getNodeType() << std::endl;
+}
+
+void List::print_children_cpp() const {
+  for (auto &it : getChildren()) {
+    it->print_cpp();
+  }
+}
+
+void List::print_cpp() const {
+  //Node::print_cpp(); 
+  print_children_cpp(); 
+}
+ 
+void UnaryExpression::print_cpp() const {
+  //Node::print_cpp(); 
+  child->print_cpp(); 
+}
+
+void TrinaryExpression::print_cpp() const {
+  //Node::print_cpp(); 
+  left->print_cpp();
+  std::cout << " ? "
+  middle->print_cpp();
+  std::cout << " : "
+  right->print_cpp();
+}
+
+void BinaryExpression::print_cpp() const {
+  //Node::print_cpp(); 
+  left->print_cpp();
+  std::cout << " " << getOp() << " ";
+  right->print_cpp();
+}
+
+void Constant::print_cpp() const {
+  Node::print_cpp();
+  std::cout << getNodeType() << " " << getValue() << std::endl;
+}
+
+void 
+
 /*
  * END OFPRINT CPP functions
  */
@@ -80,7 +115,7 @@ void Node::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;
   tab_incr();
-  // print_children();
+  // print_children_xml();
   tab(0);
   std::cout << getFooter() << std::endl;
 };
@@ -92,7 +127,7 @@ void TabbedList::print_xml() const {
     tab_incr();
     // Print out all children on the same level -> Using list to store lots
     // lists of things
-    print_children();
+    print_children_xml();
     tab(false);
     std::cout << getFooter() << std::endl;
   } else {
@@ -100,7 +135,7 @@ void TabbedList::print_xml() const {
   }
 }
 
-void List::print_children() const {
+void List::print_children_xml() const {
   for (auto &it : getChildren()) {
     it->print_xml();
   }

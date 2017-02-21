@@ -19,9 +19,18 @@ int yylsourcelino = 1;
 int Node::tabcount = 0;
 //int Node::changed = 0;
 
-int main() {
-  fprintf(stdout,"<?xml version=\"1.0\"?>\n");
+int main(int argc, char * argv[]) {
+  
   const Node *ast=parseAST();
-  ast->print_xml();
+  if (argc>1){
+    std::string arg(argv[1]);
+    //if (argv[1]=="c"){
+      ast->print_cpp();
+    //}
+  }
+  else {
+    fprintf(stdout,"<?xml version=\"1.0\"?>\n");
+    ast->print_xml();
+  }
   return 0;
 }

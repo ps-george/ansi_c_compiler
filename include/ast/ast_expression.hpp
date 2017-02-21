@@ -13,14 +13,15 @@
 class Statement : public Node {
 public:
   virtual ~Statement(){};
-  virtual std::string getType() const { return "Statement"; };
+  virtual std::string getNodeType() const { return "Statement"; };
 };
 
 //! Abstract base class for expressions
 class Expression : public Statement {
 public:
   virtual ~Expression(){};
-  virtual std::string getType() const { return "Expression"; };
+  virtual std::string getNodeType() const { return "Expression"; };
+  virtual void print_cpp() const;
   virtual const Expression * add(const Expression * child) const {(void)child; return this;};
   
 };
@@ -28,7 +29,7 @@ public:
 class EmptyExpression : public Expression {
 public:
   virtual ~EmptyExpression(){};
-  virtual std::string getType() const { return "EmptyExpression"; };
+  virtual std::string getNodeType() const { return "EmptyExpression"; };
   EmptyExpression(){};
 };
 
@@ -47,14 +48,14 @@ public:
   //! Destructor for list
   virtual ~ExpressionList(){};
   
-  virtual std::string getType() const { return "List"; };
+  virtual std::string getNodeType() const { return "List"; };
   
   virtual std::vector<const Expression *> getChildren() const { return children; };
   
   // Print out all children on the same level -> Using list to store lists of things
-  virtual void print_xml() const { print_children(); }
+  virtual void print_xml() const { print_children_xml(); }
   
-  virtual void print_children() const {};
+  virtual void print_children_xml() const {};
   
   // Add a child
   virtual const ExpressionList * add(const Expression * child) const;
@@ -69,7 +70,7 @@ public:
   virtual ~UnaryExpression(){
     delete child;
   }
-  explicit UnaryExpression(const Expression * c) : child(c) {};
+  UnaryExpression(const Expression * c) : child(c) {};
 };
 
 //! PostfixExpression
@@ -127,7 +128,9 @@ public:
     delete right;
   }
   
-  explicit TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
+  virtual void print_cpp() const;
+  
+  TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
 };
 
@@ -143,9 +146,11 @@ class BinaryExpression : public Expression {
 private:
   const Expression * left;
   const Expression * right;
+  std::string op;
 public:
-  explicit BinaryExpression(const Expression * l, const Expression * r)
+  BinaryExpression(const Expression * l, const Expression * r, std::string op)
     : left(l), right(r) {}
+  std::string getOp() const { return op; };
 };
 
 //! CastExpression: Left is type-name, right is an expression
@@ -154,12 +159,8 @@ class CastExpression : public BinaryExpression {
 };
 //! AssignmentExpression: UnaryExpression assignment-op AssignmentExpression
 class AssignmentExpression : public BinaryExpression {
-private:
-  std::string op;
 public:
-  AssignmentExpression(const Expression * l, const Expression * r, std::string _op) : BinaryExpression(l,r), op(_op) {};
-  ~AssignmentExpression(){};
-  
+  using BinaryExpression::BinaryExpression;
   virtual void compile() const;
 };
 //! LORExpression: LORExpression || LANDExpression

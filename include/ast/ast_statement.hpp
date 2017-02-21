@@ -32,7 +32,7 @@ public:
   //! Constructor with Expression and Statement
   ConditionalStatement(const Expression *c, const Statement *s)
       : cond(c), stat1(s) {}
-  virtual std::string getType() const { return "ConditionalStatement"; };
+  virtual std::string getNodeType() const { return "ConditionalStatement"; };
   virtual void print_xml() const;
   virtual const Expression *getCondition() const { return cond; };
   virtual const Statement *getBody() const { return stat1; };
@@ -46,10 +46,10 @@ public:
 class IterationStatement : public ConditionalStatement {
 public:
   virtual ~IterationStatement(){};
-  virtual std::string getType() const { return "IterationStatement"; };
+  virtual std::string getNodeType() const { return "IterationStatement"; };
   virtual void print_cpp() const {
     // while ()
-    std::cout << getType() << " (";
+    std::cout << getNodeType() << " (";
     getCondition()->print_cpp();
     std::cout << ")\n";
     tab();
@@ -67,7 +67,7 @@ public:
 class WhileStatement : public IterationStatement {
 public:
   virtual ~WhileStatement(){};
-  virtual std::string getType() const { return "while"; };
+  virtual std::string getNodeType() const { return "while"; };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(c, s) {}
 };
@@ -87,7 +87,7 @@ public:
       delete cond2;
     }
   }
-  virtual std::string getType() const { return "For"; };
+  virtual std::string getNodeType() const { return "For"; };
   ForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                const Statement *s)
       : IterationStatement(new ExpressionList({}), s), cond1(c1), cond2(c2) {
@@ -108,7 +108,7 @@ public:
 class DoWhileStatement : public WhileStatement {
 public:
   virtual ~DoWhileStatement(){};
-  virtual std::string getType() const { return "DoWhile"; };
+  virtual std::string getNodeType() const { return "DoWhile"; };
   DoWhileStatement(const Expression *c, const Statement *s)
       : WhileStatement(c, s) {}
 };
@@ -122,7 +122,7 @@ class SelectionStatement : public ConditionalStatement {
 public:
   SelectionStatement(const Expression *c, const Statement *s)
       : ConditionalStatement(c, s) {}
-  virtual std::string getType() const { return "SelectionStatement"; };
+  virtual std::string getNodeType() const { return "SelectionStatement"; };
 };
 
 /**
@@ -133,7 +133,7 @@ public:
 class IfStatement : public SelectionStatement {
 public:
   virtual ~IfStatement(){};
-  virtual std::string getType() const { return "If"; };
+  virtual std::string getNodeType() const { return "If"; };
   IfStatement(const Expression *c, const Statement *s)
       : SelectionStatement(c, s) {}
 };
@@ -150,7 +150,7 @@ private:
 public:
   IfElseStatement(const Expression *c, const Statement *s1, const Statement *s2)
       : IfStatement(c, s1), stat2(s2) {}
-  virtual std::string getType() const { return "IfElse"; };
+  virtual std::string getNodeType() const { return "IfElse"; };
   virtual void print_xml() const;
 };
 
@@ -286,7 +286,7 @@ public:
     delete stats;
   };
   CompoundStatement(const List *_d, const List *_s) : declars(_d), stats(_s){};
-  virtual std::string getType() const { return "CompoundStatement"; };
+  virtual std::string getNodeType() const { return "CompoundStatement"; };
   virtual void print_xml() const;
 };
 
@@ -337,9 +337,9 @@ public:
         stat((const CompoundStatement *)_s) {}
 
   // print functions
-  virtual std::string getType() const { return "Function"; };
+  virtual std::string getNodeType() const { return "Function"; };
   virtual std::string getHeader() const {
-    return "<" + getType() + " id=\"" + id + "\">";
+    return "<" + getNodeType() + " id=\"" + id + "\">";
   }
   virtual void print_xml() const;
 };
