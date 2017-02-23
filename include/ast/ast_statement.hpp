@@ -50,24 +50,26 @@ public:
 
 class ForStatement : public IterationStatement {
 private:
-  int num;
-  const Node * cond2;
-  const Node * cond3;
+  //int num;
+  //const Node * cond2;
+  // const Node * cond3;
 public:
   virtual ~ForStatement(){
-    if (num > 2){ delete cond2; }
-    if (num==3) { delete cond3; }
+    // if (num > 2){ delete cond2; }
+    // if (num==3) { delete cond3; }
   }
   ForStatement(const Node * c1, const Node * s) : IterationStatement(c1,s) {
-    cond2 = nullptr;
-    cond3 = nullptr;
-    num = 1;
+    // cond2 = nullptr;
+    // cond3 = nullptr;
+    //num = 1;
   }
+  /*
   ForStatement(const Node * c1, const Node * c2, const Node * s) : IterationStatement(c1,s), cond2(c2) {
     cond3 = nullptr;
     num = 2;
   }
   ForStatement(const Node * c1, const Node * c2, const Node * c3, const Node * s) : IterationStatement(c1,s), cond2(c2), cond3(c3) { num = 3; }
+  */
 };
 class DoWhileStatement : public IterationStatement {};
 

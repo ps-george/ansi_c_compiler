@@ -44,7 +44,7 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <node> root function-definition declaration parameter delcarator 
+%type <node> root function-definition declaration parameter
 %type <node> external-declaration parameter-list declaration-list statement-list program
 
 %type <node> statement expression-statement compound-statement iteration-statement selection-statement
@@ -53,8 +53,6 @@
 %type <node> var_const
 
 %type <raw> STRING ID CONSTANT
-
-%right ';'
 
 %start root
 %%
@@ -68,7 +66,7 @@ program
 // EXTERNAL DECLARATIONS
 external-declaration
   : function-definition { $$ = $1; }
-  | declaration-list ';' { $$ = $1; }
+  | INT declaration-list ';' { $$ = $2; }
   
 // FUNCTION
 // Snip the stems from the parameter list to make tree smaller
@@ -117,6 +115,7 @@ primary-expression
   : equality-expression { $$ = $1; }
   | var_const { $$ = $1; }
   | RETURN ID { $$ = new List({}); }
+  | RETURN { $$ = new List({}); }
 //  | STRING { $$ = $1; }
   | '(' expression ')' { $$ = $2; }
 
@@ -127,13 +126,15 @@ iteration-statement
 // Just make scopes with the statement
   : WHILE '(' expression ')' statement { $$ = new WhileStatement($3, $5); }
   //| DO statement WHILE '(' expression ')' { $$ = new DoWhileStatement({$2}/*$5, $2*/); }
-  | FOR '(' expression-statement expression-statement expression-statement ')' statement { $$ = new ForStatement($3, $4, $5, $7); }
-  //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
+  | FOR '(' expression-statement expression-statement expression-statement ')' statement { $$ = new ForStatement($3, $7); }
+  | FOR '(' expression-statement expression-statement  ')' statement { $$ = new ForStatement($3, $6); }
+  | FOR '(' INT declaration ';' expression-statement  ')' statement { $$ = new ForStatement($6, $8); }
+  | FOR '(' INT declaration ';' expression-statement expression  ')' statement { $$ = new ForStatement($6, $9); }
 
 // DECLARATION
 declaration-seq
-  : declaration-list ';' { $$ = new DeclarationList({$1}); }
-  | declaration-seq declaration-list ';' { $$->add($2); }
+  : INT declaration-list ';' { $$ = new DeclarationList({$2}); }
+  | declaration-seq INT declaration-list ';' { $$->add($3); }
 
 declaration-list
   : declaration { $$ = new DeclarationList({$1}); }
@@ -144,13 +145,11 @@ declaration
   | init-declaration { $$ = $1; }
 
 simple-declaration
-  : delcarator { $$ = $1; }
+  : ID { $$ = new Variable(*$1); }
 
 init-declaration
-  : delcarator '=' CONSTANT { $$ = $1; }
-  | delcarator '=' ID { $$ = $1; }
-
-delcarator : INT ID { $$ = new Variable(*$2); }
+  : ID '=' CONSTANT { $$ = new Variable(*$1); }
+  | ID '=' ID { $$ = new Variable(*$1); }
 
 var_const
   : ID { $$ = new Variable(*$1); }
