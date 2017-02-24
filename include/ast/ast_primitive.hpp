@@ -125,7 +125,7 @@ public:
   virtual std::string getHeader() const override {
     return "<" + getNodeType() + " value=\"" + valstr + "\" />";
   }
-  virtual void print_cpp() const override;
+  virtual void print_c() const override;
 };
 
 class StringLiteral : public Constant {

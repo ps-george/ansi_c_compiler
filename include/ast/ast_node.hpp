@@ -48,7 +48,7 @@ public:
   virtual void print_xml() const;
   
   //! Print cpp implicit recursive function
-  virtual void print_cpp() const;
+  virtual void print_c() const;
   
   /*
   //virtual const Node * constant_fold() const = 0;

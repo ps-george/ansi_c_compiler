@@ -62,48 +62,48 @@ void AssignmentExpression::compile() const {
 /*
 * PRINT CPP functions
 */
-void Node::print_cpp() const {
+void Node::print_c() const {
   std::cout << "// " << getNodeType() << std::endl;
 }
 
 void List::print_children_cpp() const {
   for (auto &it : getChildren()) {
-    it->print_cpp();
+    it->print_c();
   }
 }
 
-void List::print_cpp() const {
-  //Node::print_cpp(); 
+void List::print_c() const {
+  //Node::print_c(); 
   print_children_cpp(); 
 }
 
-void UnaryExpression::print_cpp() const {
-  //Node::print_cpp(); 
-  child->print_cpp(); 
+void UnaryExpression::print_c() const {
+  //Node::print_c(); 
+  child->print_c(); 
 }
 
-void TrinaryExpression::print_cpp() const {
-  //Node::print_cpp(); 
-  left->print_cpp();
+void TrinaryExpression::print_c() const {
+  //Node::print_c(); 
+  left->print_c();
   std::cout << " ? ";
-  middle->print_cpp();
+  middle->print_c();
   std::cout << " : ";
-  right->print_cpp();
+  right->print_c();
 }
 
-void BinaryExpression::print_cpp() const {
-  //Node::print_cpp(); 
-  left->print_cpp();
+void BinaryExpression::print_c() const {
+  //Node::print_c(); 
+  left->print_c();
   std::cout << " " << getOp() << " ";
-  right->print_cpp();
+  right->print_c();
 }
 
-void Constant::print_cpp() const {
-  Node::print_cpp();
+void Constant::print_c() const {
+  Node::print_c();
   std::cout << getNodeType() << " " << getValue() << std::endl;
 }
 
-void TabbedList::print_cpp() const {
+void TabbedList::print_c() const {
   if (getChildren().size() != 0) {
     tab_incr();
     // Print out all children on the same level -> Using list to store lots

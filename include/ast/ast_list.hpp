@@ -25,7 +25,7 @@ public:
   
   // Print out all children on the same level -> Using list to store lists of things
   virtual void print_xml() const { print_children_xml(); }
-  virtual void print_cpp() const;
+  virtual void print_c() const;
   
   virtual void print_children_xml() const;
   virtual void print_children_cpp() const;
@@ -51,7 +51,7 @@ public:
   //const Node *getChild(int i) const { return children.at(i); }
   
   virtual void print_xml() const;
-  virtual void print_cpp() const;
+  virtual void print_c() const;
 };
 
 

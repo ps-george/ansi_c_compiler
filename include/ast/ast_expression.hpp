@@ -74,7 +74,7 @@ public:
   UnaryExpression(const Expression * c) : child(c) {
     op = "";
   };
-  virtual void print_cpp() const;
+  virtual void print_c() const;
 };
 
 //! PostfixExpression
@@ -105,7 +105,7 @@ public:
     delete right;
   }
   
-  virtual void print_cpp() const;
+  virtual void print_c() const;
   TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
 };
@@ -120,7 +120,7 @@ public:
   BinaryExpression(const Expression * l, const Expression * r, std::string * _op)
     : left(l), right(r), op(*_op) {}
   std::string getOp() const { return op; };
-  void print_cpp() const;
+  void print_c() const;
 };
 
 

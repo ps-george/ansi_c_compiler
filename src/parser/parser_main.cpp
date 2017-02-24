@@ -25,7 +25,7 @@ int main(int argc, char * argv[]) {
   if (argc>1){
     std::string arg(argv[1]);
     //if (argv[1]=="c"){
-      ast->print_cpp();
+      ast->print_c();
     //}
   }
   else {

@@ -47,15 +47,15 @@ public:
   virtual ~IterationStatement(){};
   virtual std::string getNodeType() const { return "IterationStatement"; };
   virtual std::vector<const Expression*> getConditions() const = 0;
-  virtual void print_cpp() const {
+  virtual void print_c() const {
     // while ()
     std::cout << getNodeType() << " (";
     for (auto &it : getConditions()) {
-      it->print_cpp();
+      it->print_c();
     }
     std::cout << ")\n";
     tab();
-    getBody()->print_cpp();
+    getBody()->print_c();
   };
   IterationStatement(const Statement *s)
       : ConditionalStatement(s) {}
