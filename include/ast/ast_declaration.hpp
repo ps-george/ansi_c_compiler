@@ -60,15 +60,11 @@ public:
 class Declaration : public Node {
 private:
   const Type * type;
-  mutable const List * dlist;
+  const List * dlist;
 public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   Declaration(const Type * t) : type(t), dlist(nullptr) {};
   virtual std::string getNodeType() const override { return "Declaration"; };
-  virtual const Declaration * add(const List * d) const{
-    dlist = d;
-    return this;
-  }
   virtual void print_xml() const override;
 };
 

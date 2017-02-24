@@ -276,8 +276,8 @@ declaration-seq
   | declaration-seq declaration { $$->add($2); }
 
 declaration
-  : declaration-specifiers ';' { $$ = new Declaration($1); }
-  | declaration-specifiers init-declarator-list ';' { $$->add($2); }
+  : declaration-specifiers ';' { $$ = new Declaration($1, new List({})); }
+  | declaration-specifiers init-declarator-list ';' { $$ = new Declaration($1,$2); }
 
 declaration-specifiers
   : type-specifier { $$ = $1;}
