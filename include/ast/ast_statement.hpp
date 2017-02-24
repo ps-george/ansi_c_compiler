@@ -33,7 +33,7 @@ public:
   //! Constructor with Expression and Statement
   ConditionalStatement(const Expression *c, const Statement *s)
       : cond(c), stat1(s) {}
-  virtual std::string getNodeType() const { return "ConditionalStatement"; };
+  virtual std::string getNodeType() const { return "Scope"; };
   virtual void print_xml() const;
   virtual const Expression *getCondition() const { return cond; };
   virtual const Statement *getBody() const { return stat1; };
@@ -68,7 +68,7 @@ public:
 class WhileStatement : public IterationStatement {
 public:
   virtual ~WhileStatement(){};
-  virtual std::string getNodeType() const { return "while"; };
+  virtual std::string getNodeType() const { return "Scope"; };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(c, s) {}
 };
@@ -88,7 +88,7 @@ public:
       delete cond2;
     }
   }
-  virtual std::string getNodeType() const { return "For"; };
+  virtual std::string getNodeType() const { return "Scope"; };
   ForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                const Statement *s)
       : IterationStatement(new ExpressionList({}), s), cond1(c1), cond2(c2) {
@@ -134,7 +134,7 @@ public:
 class IfStatement : public SelectionStatement {
 public:
   virtual ~IfStatement(){};
-  virtual std::string getNodeType() const { return "If"; };
+  virtual std::string getNodeType() const { return "Scope"; };
   IfStatement(const Expression *c, const Statement *s)
       : SelectionStatement(c, s) {}
 };
@@ -151,7 +151,7 @@ private:
 public:
   IfElseStatement(const Expression *c, const Statement *s1, const Statement *s2)
       : IfStatement(c, s1), stat2(s2) {}
-  virtual std::string getNodeType() const { return "IfElse"; };
+  virtual std::string getNodeType() const { return "Scope"; };
   virtual void print_xml() const;
 };
 
@@ -287,7 +287,7 @@ public:
     delete stats;
   };
   CompoundStatement(const List *_d, const List *_s) : declars(_d), stats(_s){};
-  virtual std::string getNodeType() const { return "CompoundStatement"; };
+  virtual std::string getNodeType() const { return "Scope"; };
   virtual void print_xml() const;
 };
 

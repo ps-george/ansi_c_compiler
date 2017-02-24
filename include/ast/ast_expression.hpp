@@ -14,6 +14,7 @@ class Statement : public Node {
 public:
   virtual ~Statement(){};
   virtual std::string getNodeType() const { return "Statement"; };
+  virtual void print_xml() const { return; };
 };
 
 //! Abstract base class for expressions
