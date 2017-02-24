@@ -46,10 +46,14 @@ class IterationStatement : public ConditionalStatement {
 public:
   virtual ~IterationStatement(){};
   virtual std::string getNodeType() const { return "IterationStatement"; };
+  virtual std::vector<const Expression*> getConditions() const = 0;
   virtual void print_cpp() const {
     // while ()
-    //std::cout << getNodeType() << " (";
-    //std::cout << ")\n";
+    std::cout << getNodeType() << " (";
+    for (auto &it : getConditions()) {
+      it->print_cpp();
+    }
+    std::cout << ")\n";
     tab();
     getBody()->print_cpp();
   };
@@ -67,7 +71,10 @@ private:
   const Expression *cond;
 public:
   virtual ~WhileStatement(){};
-  virtual std::string getNodeType() const { return "While"; };
+  virtual std::string getNodeType() const { return "while"; };
+  virtual std::vector<const Expression*> getConditions() const override {
+    return {cond};
+  };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
 };
@@ -80,6 +87,9 @@ public:
   virtual std::string getNodeType() const { return "For"; };
   ForStatement(const ExpressionStatement *c1, const Statement *s1)
       : IterationStatement(s1), cond1(c1)  {};
+  virtual std::vector<const Expression*> getConditions() const override {
+    return {(const Expression*)cond1};
+  };
 };
 
 class EEForStatement : public ForStatement {

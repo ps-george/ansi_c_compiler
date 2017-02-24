@@ -76,7 +76,7 @@ void List::print_cpp() const {
   //Node::print_cpp(); 
   print_children_cpp(); 
 }
- 
+
 void UnaryExpression::print_cpp() const {
   //Node::print_cpp(); 
   child->print_cpp(); 
@@ -103,6 +103,17 @@ void Constant::print_cpp() const {
   std::cout << getNodeType() << " " << getValue() << std::endl;
 }
 
+void TabbedList::print_cpp() const {
+  if (getChildren().size() != 0) {
+    tab_incr();
+    // Print out all children on the same level -> Using list to store lots
+    // lists of things
+    print_children_cpp();
+    tab(false);
+  } else {
+    tab_decr();
+  }
+}
 
 /*
  * END OFPRINT CPP functions

@@ -51,6 +51,7 @@ public:
   //const Node *getChild(int i) const { return children.at(i); }
   
   virtual void print_xml() const;
+  virtual void print_cpp() const;
 };
 
 
