@@ -67,7 +67,7 @@ private:
   const Expression *cond;
 public:
   virtual ~WhileStatement(){};
-  virtual std::string getNodeType() const { return "while"; };
+  virtual std::string getNodeType() const { return "While"; };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
 };
