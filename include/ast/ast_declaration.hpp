@@ -20,13 +20,20 @@ public:
 };
 
 //! A declarator is what we are declaring; it is essentially just an ID when it follows a specifier.
-class Declarator : public Node {
-  
+class Declarator : public Primitive {
+std::string id;
+public:
+  Declarator(std::string * _id) : id(*_id) {};
+  virtual std::string getNodeType() const override { return "Declarator"; };
 };
 
 //! Init declarator
+
 class InitDeclarator : public Declarator {
-  
+const Expression * e;
+public:
+  InitDeclarator(std::string * _id, const Expression * _e) : Declarator(_id), e(_e) {};
+  virtual std::string getNodeType() const override { return "InitDeclarator"; };
 };
 
 //! \brief A declaration of a variable
@@ -39,7 +46,7 @@ private:
 public:
   Declaration(const Type * t, const DeclarationList * d) : type(t), dlist(d){};
   Declaration(const Type * t) : type(t), dlist(nullptr) {};
-  
+  virtual std::string getNodeType() const override { return "Declaration"; };
   virtual const Declaration * add(const DeclarationList * d) const{
     dlist = d;
     return this;

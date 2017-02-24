@@ -1,7 +1,6 @@
 #ifndef AST_PRIMITIVE_HPP_
 #define AST_PRIMITIVE_HPP_
 
-#include "ast_declaration.hpp"
 #include "ast_expression.hpp"
 #include "ast_list.hpp"
 #include "ast_node.hpp"
@@ -59,6 +58,7 @@ private:
   std::string name;
 public:
   TypeSpecifier(std::string* n) : name(*n) {};
+  virtual std::string getNodeType() const override { return "TypeSpecifier"; };
 };
 
 /*! \brief A type is a primitive
@@ -80,9 +80,10 @@ public:
       s << i << ' '; 
     return s.str(); 
   }
+  virtual std::string getNodeType() const override { return "Type"; };
 };
 
-class Variable : public Primitive {
+class Variable : public Expression {
 private:
   std::string id;
   const Type * type;
@@ -91,6 +92,7 @@ public:
   virtual ~Variable(){};
 
   Variable(const std::string &_id, const Type * t) : id(_id), type(t) {};
+  Variable(const std::string &_id) : id(_id) { type = nullptr;};
   
   virtual std::string getType() const { return type->getTypename(); }
   virtual std::string getNodeType() const override { return "Variable"; }
@@ -104,12 +106,12 @@ class Parameter : public Variable {
 public:
   virtual ~Parameter(){};
   Parameter(const std::string &_id, const Type * t) : Variable(_id, t) {}
-
+Parameter(const std::string &_id) : Variable(_id) {}
   virtual std::string getNodeType() const override { return "Parameter"; }
 };
 
 //! Abstract base class for constant
-class Constant : public Expression, public Primitive {
+class Constant : public Expression {
 private:
   std::string valstr;
   // Constant will have a type as well`

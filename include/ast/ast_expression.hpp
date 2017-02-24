@@ -91,7 +91,6 @@ public:
   PrefixExpression(const Expression * c) : UnaryExpression(c) {};
 };
 
-//! AssignmentExpression has unaryExpression (left) followed by AssignmentExpression (right)
 
 //! 
 class TrinaryExpression : public Expression {
@@ -122,6 +121,14 @@ public:
     : left(l), right(r), op(*_op) {}
   std::string getOp() const { return op; };
   void print_cpp() const;
+};
+
+
+//! AssignmentExpression: UnaryExpression assignment-op AssignmentExpression
+class AssignmentExpression : public BinaryExpression {
+public:
+  using BinaryExpression::BinaryExpression;
+  virtual void compile() const;
 };
 
 //! Primary expression points to identifier, constant, StringLiteral or (expression)

@@ -26,6 +26,8 @@
   const Expression *expression;
   const ExpressionStatement *expressionstatement;
   const Parameter * parameter;
+  const Type * type;
+  const Declaration * declaration;
   double num;
   std::string *raw;
 }
@@ -61,12 +63,15 @@
 //root : declaration { g_root = new Program({$1}); }
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
-%type <node> root external-declaration
+%type <node> root external-declaration 
+%type <node> declarator direct-declarator initializer init-declarator type-specifier init-declarator-list declaration-specifiers
+%type <type> declaration-specifier
+%type <declaration> declaration
+
 %type <function> function-definition
-%type <variable> declaration declarator simple-declaration init-declaration
 %type <parameter> parameter
 
-%type <list> parameter-list declaration-list statement-list program declaration-seq
+%type <list> parameter-list statement-list program declaration-seq
 
 %type <statement> statement compound-statement iteration-statement selection-statement jump-statement
 %type <expressionstatement> expression-statement
@@ -77,7 +82,7 @@
 %type <expression> relational-expression shift-expression additive-expression multiplicative-expression 
 %type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
-%type <raw> STRING ID CONSTANT
+%type <raw> INT FLOAT STRING ID CONSTANT SIZEOF
 %type <raw> assignment-op
 
 //%right ';'
@@ -94,7 +99,7 @@ program
 // EXTERNAL DECLARATIONS
 external-declaration
   : function-definition { $$ = $1; }
-  | declaration-list ';' { $$ = $1; }
+  | declaration { $$ = $1; }
   
 // FUNCTION
 // Snip the stems from the parameter list to make tree smaller
@@ -224,8 +229,8 @@ postfix-expression
 //  | postfix-expression '(' argument-expression-list ')' { $$ = new PostfixExpression($1); }
   | postfix-expression '.' ID { $$ = new PostfixExpression($1); }
   | postfix-expression ARROW ID { $$ = new PostfixExpression($1); }
-  | postfix-expression INCR { $$ = new PostIncrExpression($1); }
-  | postfix-expression DECR { $$ = new PostDecrExpression($1); }
+  | postfix-expression INCR { $$ = new PostfixExpression($1, $2); }
+  | postfix-expression DECR { $$ = new PostfixExpression($1, $2); }
 
 primary-expression
   : var_const { $$ = $1; }
@@ -259,37 +264,40 @@ iteration-statement
   //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
+declaration-seq
+  : declaration-seq { $$ = new DeclarationList({$1}); }
+  | declaration-seq declaration { $$->add($2); }
+
 declaration
-  : declaration-specifiers ';' { $$ = new Declaration($1) }
-  | declaration-specifiers init-declarator-list ';' { $$.add($2); }
+  : declaration-specifiers ';' { $$ = new Declaration($1); }
+  | declaration-specifiers init-declarator-list ';' { $$->add($2); }
 
 declaration-specifiers
-  : type-specifier { $$ = new Type($1);}
+  : type-specifier { $$ = $1;}
 
-init_declarator_list
-	: init_declarator { $$ = new DeclarationList({$1}); }
-	| init_declarator_list ',' init_declarator { $$.add($3); }
+init-declarator-list
+	: init-declarator { $$ = new DeclarationList({$1}); }
+	| init-declarator-list ',' init-declarator { $$->add($3); }
 
 type-specifier
   : INT { $$ = new Type({new TypeSpecifier($1)}); }
   | FLOAT { $$ = new Type({new TypeSpecifier($1)}); }
 
 init-declarator
-	: declarator
-	| declarator '=' initializer
+	: declarator { $$ = $1; }
+	| declarator '=' initializer { $$ = new InitDeclarator($1,$3); }
 
 initializer
-  : assignment-expression
+  : assignment-expression { $$ = $1; }
   
 declarator
   : direct-declarator { $$ = $1; }
 
 direct-declarator 
-  : ID { $$ = $1 }
+  : ID { $$ = new Declarator($1); }
 
-declaration-seq
-  : declaration-list ';' { $$ = new DeclarationList({$1}); }
-  | declaration-seq declaration-list ';' { $$->add($2); }
+/*
+
 
 declaration-list
   : declaration { $$ = new DeclarationList({$1}); }
@@ -307,7 +315,7 @@ init-declaration
   | declarator '=' ID { $$ = $1; }
 
 declarator : INT ID { $$ = new Variable(*$2); }
-
+*/
 var_const
   : ID { $$ = new Variable(*$1); }
   | CONSTANT { $$ = new Constant(*$1); }
