@@ -134,6 +134,18 @@ void TabbedList::print_xml() const {
   }
 }
 
+void Declarator::print_xml() const{
+  Node::print_xml();
+}
+
+void DeclarationList::print_xml() const{
+  Node::print_xml();
+};
+
+void Declaration::print_xml() const{
+  Node::print_xml();
+};
+
 void List::print_children_xml() const {
   for (auto &it : getChildren()) {
     it->print_xml();
@@ -177,7 +189,7 @@ void Function::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;
   tab_incr();
-  params->print_xml();
+  // declarator->print_xml();
   stat->print_xml();
   tab(false);
   std::cout << getFooter() << std::endl;

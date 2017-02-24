@@ -28,6 +28,7 @@
   const Parameter * parameter;
   const Type * type;
   const Declaration * declaration;
+  const Declarator * declarator;
   double num;
   std::string *raw;
 }
@@ -64,18 +65,18 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <node> root external-declaration 
-%type <node> declarator direct-declarator initializer init-declarator type-specifier init-declarator-list declaration-specifiers
-%type <type> declaration-specifier
+%type <node> declarator direct-declarator init-declarator
+%type <type> declaration-specifiers type-specifier 
 %type <declaration> declaration
 
 %type <function> function-definition
 %type <parameter> parameter
 
-%type <list> parameter-list statement-list program declaration-seq
+%type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list 
 
 %type <statement> statement compound-statement iteration-statement selection-statement jump-statement
 %type <expressionstatement> expression-statement
-%type <expression> expression primary-expression
+%type <expression> expression primary-expression initializer
 
 %type <expression> assignment-expression conditional-expression var_const
 %type <expression> LOR-expression LAND-expression OR-expression EOR-expression AND-expression 
@@ -90,7 +91,7 @@
 %start root
 %%
 
-root : program { g_root = (const Node*)$1; }
+root : program { g_root = (const Node *)$1; }
 
 program 
   : external-declaration { $$ = new Program({$1}); }
@@ -103,12 +104,18 @@ external-declaration
   
 // FUNCTION
 // Snip the stems from the parameter list to make tree smaller
-function-definition 
-  : INT ID '(' parameter-list ')' statement { $$ = new Function($2, $4, $6); } //$4->getAllStems()
-  | INT ID '(' ')' statement { $$ = new Function($2, new ParameterList({}),$5 ); }
+
+function-definition
+ 	: declaration-specifiers declarator compound-statement { $$ = new Function($2, $3); }
+//  | declaration-specifiers declarator declaration-seq compound-statement { $$ = new Function($2, $3, $4); } weird old-style function
+ 	
+
+// function-definition 
+//  : INT ID '(' parameter-list ')' statement { $$ = new Function($2, $4, $6); } //$4->getAllStems()
+//  | INT ID '(' ')' statement { $$ = new Function($2, new ParameterList({}),$5 ); }
 
 parameter 
-  : INT ID { $$ = new Parameter(*$2); }
+  : INT ID { $$ = new Parameter($2); }
 
 parameter-list 
   : parameter { $$ = new ParameterList({$1}); }
@@ -264,7 +271,7 @@ iteration-statement
   //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
-declaration-seq
+declaration-seq 
   : declaration-seq { $$ = new DeclarationList({$1}); }
   | declaration-seq declaration { $$->add($2); }
 
@@ -294,7 +301,15 @@ declarator
   : direct-declarator { $$ = $1; }
 
 direct-declarator 
-  : ID { $$ = new Declarator($1); }
+  : ID { $$ = new Variable($1); }
+  | '(' declarator ')' { $$ = $2; } // declarator can be surrounded by any number of brackets 
+  | direct-declarator '[' constant-expression ']' { $$ = new ArrayDeclarator($1, $3); } // Array with fixed size
+  | direct-declarator '[' ']' { $$ = new ArrayDeclarator($1, new Constant("-1")); }   // Array without size specified
+  | direct-declarator '(' parameter-list ')' { $$ = new FunctionDeclarator($1,$3); } // Function declaration with parameter list
+  | direct-declarator '(' identifier-list ')' { $$ = new FunctionDeclarator($1,$3); } // Function declaration with id list, must be followed by weird declaration list following definition
+                                              // e.g. int max(a,b) int a,b; {}
+  | direct-declarator '(' ')' { $$ = new FunctionDeclarator($1, new List({})); }                // Function with no arguments
+
 
 /*
 
@@ -317,8 +332,12 @@ init-declaration
 declarator : INT ID { $$ = new Variable(*$2); }
 */
 var_const
-  : ID { $$ = new Variable(*$1); }
+  : ID { $$ = new Variable($1); }
   | CONSTANT { $$ = new Constant(*$1); }
+
+identifier-list
+	: ID { $$ = new List({new Variable($1)}); }
+	| identifier-list ',' ID { $$->add(new Variable($3)); }
 
 %%
 

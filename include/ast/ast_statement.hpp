@@ -4,6 +4,7 @@
 #include "ast_expression.hpp"
 #include "ast_list.hpp"
 #include "ast_node.hpp"
+#include "ast_declaration.hpp"
 
 //! An expression evaluated as void for its side-effects
 class ExpressionStatement : public Statement {
@@ -325,21 +326,20 @@ class DefaultLabel : public LabeledStatement {};
 //! It also needs to print out it's id
 class Function : public Node {
 private:
-  std::string id;
-  const ParameterList *params;
+  const Declarator *declarator;
   const CompoundStatement *stat;
 
 public:
   virtual ~Function(){};
 
-  Function(std::string *_id, const Node *_p, const Node *_s)
-      : id(*_id), params((const ParameterList *)_p),
+  Function(const Node *_dec,const Node *_s)
+      : declarator((const Declarator *)_dec), // Declarator contains the params
         stat((const CompoundStatement *)_s) {}
 
   // print functions
   virtual std::string getNodeType() const { return "Function"; };
   virtual std::string getHeader() const {
-    return "<" + getNodeType() + " id=\"" + id + "\">";
+    return "<" + getNodeType() + " id=\"" + declarator->getHeader() + "\">";
   }
   virtual void print_xml() const;
 };

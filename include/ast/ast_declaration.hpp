@@ -10,6 +10,7 @@ class DeclarationList : public List {
 public:
   DeclarationList(std::vector<const Node *> _stems) : List(_stems)  {}
   virtual std::string getNodeType() const override { return "DeclarationList"; };
+  virtual void print_xml() const override;
 };
 
 //! Functions have a parameter list.
@@ -20,20 +21,37 @@ public:
 };
 
 //! A declarator is what we are declaring; it is essentially just an ID when it follows a specifier.
-class Declarator : public Primitive {
-std::string id;
+class Declarator : public Node {
+const Node * child;
 public:
-  Declarator(std::string * _id) : id(*_id) {};
+  Declarator(const Node * _child) : child(_child) {};
   virtual std::string getNodeType() const override { return "Declarator"; };
+  virtual void print_xml() const override;
 };
 
 //! Init declarator
-
 class InitDeclarator : public Declarator {
 const Expression * e;
 public:
-  InitDeclarator(std::string * _id, const Expression * _e) : Declarator(_id), e(_e) {};
+  InitDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {};
   virtual std::string getNodeType() const override { return "InitDeclarator"; };
+};
+
+//! Array declarator
+class ArrayDeclarator : public Declarator {
+const Expression * e;
+public:
+  ArrayDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {};
+  virtual std::string getNodeType() const override { return "ArrayDeclarator"; };
+};
+
+//! Function declarator
+class FunctionDeclarator : public Declarator {
+const List * e; //! Parameter list/indentifier list for old-style functions
+public:
+  FunctionDeclarator(const Node * _child, const List * _e) : Declarator(_child), e(_e) {};
+  virtual std::string getNodeType() const override { return "FunctionDeclarator"; };
+  
 };
 
 //! \brief A declaration of a variable
@@ -42,15 +60,16 @@ public:
 class Declaration : public Node {
 private:
   const Type * type;
-  mutable const DeclarationList * dlist;
+  mutable const List * dlist;
 public:
-  Declaration(const Type * t, const DeclarationList * d) : type(t), dlist(d){};
+  Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   Declaration(const Type * t) : type(t), dlist(nullptr) {};
   virtual std::string getNodeType() const override { return "Declaration"; };
-  virtual const Declaration * add(const DeclarationList * d) const{
+  virtual const Declaration * add(const List * d) const{
     dlist = d;
     return this;
   }
+  virtual void print_xml() const override;
 };
 
 #endif

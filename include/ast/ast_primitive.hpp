@@ -91,8 +91,8 @@ private:
 public:
   virtual ~Variable(){};
 
-  Variable(const std::string &_id, const Type * t) : id(_id), type(t) {};
-  Variable(const std::string &_id) : id(_id) { type = nullptr;};
+  Variable(const std::string* _id, const Type * t) : id(*_id), type(t) {};
+  Variable(const std::string* _id) : id(*_id) { type = nullptr;};
   
   virtual std::string getType() const { return type->getTypename(); }
   virtual std::string getNodeType() const override { return "Variable"; }
@@ -105,8 +105,8 @@ public:
 class Parameter : public Variable {
 public:
   virtual ~Parameter(){};
-  Parameter(const std::string &_id, const Type * t) : Variable(_id, t) {}
-Parameter(const std::string &_id) : Variable(_id) {}
+  Parameter(const std::string* _id, const Type * t) : Variable(_id, t) {}
+Parameter(const std::string* _id) : Variable(_id) {}
   virtual std::string getNodeType() const override { return "Parameter"; }
 };
 
