@@ -84,6 +84,13 @@ public:
   PostfixExpression(const Expression * c) : UnaryExpression(c) {};
 };
 
+//! PostfixExpression
+class PrefixExpression : public UnaryExpression {
+public:
+  PrefixExpression(const Expression * c, std::string* _op) : UnaryExpression(c,_op) {};
+  PrefixExpression(const Expression * c) : UnaryExpression(c) {};
+};
+
 //! AssignmentExpression has unaryExpression (left) followed by AssignmentExpression (right)
 
 //! 
