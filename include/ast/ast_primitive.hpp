@@ -6,6 +6,8 @@
 #include "ast_list.hpp"
 #include "ast_node.hpp"
 
+#include <sstream>
+
 // Primitives
 
 class Primitive : public Node {
@@ -52,7 +54,12 @@ declaration specifiers.
  * typedef-name
  *
  */
-class TypeSpecifier : public Primitive {};
+class TypeSpecifier : public Primitive {
+private:
+  std::string name;
+public:
+  TypeSpecifier(std::string* n) : name(*n) {};
+};
 
 /*! \brief A type is a primitive
  *
@@ -62,20 +69,30 @@ class Type : public Primitive {
       type_specifiers; //! void, char, short, int, long, float
                        //! double, signed, unsigned, struct-or-union-specifier
                        //! enum-specifier, typdef-name (if in list of typedefs)
-  std::string storage_class_specifier;      //! One of: typedef, extern, static,
+  // std::string storage_class_specifier;      //! One of: typedef, extern, static,
                                             //! auto, register
-  std::vector<std::string> type_qualifiers; //! const or volatile
+  // std::vector<std::string> type_qualifiers; //! const or volatile
+public:
+  Type(std::vector<TypeSpecifier *> tspecs) : type_specifiers(tspecs){};
+  virtual std::string getTypename() const { 
+    std::stringstream s; 
+    for (auto i: type_specifiers)
+      s << i << ' '; 
+    return s.str(); 
+  }
 };
 
 class Variable : public Primitive {
 private:
   std::string id;
+  const Type * type;
   // Variable will have a type
 public:
   virtual ~Variable(){};
 
-  Variable(const std::string &_id) : id(_id){};
-
+  Variable(const std::string &_id, const Type * t) : id(_id), type(t) {};
+  
+  virtual std::string getType() const { return type->getTypename(); }
   virtual std::string getNodeType() const override { return "Variable"; }
 
   virtual std::string getHeader() const override {
@@ -86,7 +103,7 @@ public:
 class Parameter : public Variable {
 public:
   virtual ~Parameter(){};
-  Parameter(const std::string &_id) : Variable(_id) {}
+  Parameter(const std::string &_id, const Type * t) : Variable(_id, t) {}
 
   virtual std::string getNodeType() const override { return "Parameter"; }
 };

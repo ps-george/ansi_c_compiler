@@ -64,19 +64,4 @@ public:
   virtual std::string getNodeType() const { return "Program"; };
 };
 
-
-//! Scopes have a declaration list
-class DeclarationList : public List {
-public:
-  DeclarationList(std::vector<const Node *> _stems) : List(_stems) {}
-  virtual std::string getNodeType() const override { return "DeclarationList"; };
-};
-
-//! Functions have a parameter list.
-class ParameterList : public DeclarationList {
-public:
-  ParameterList(std::vector<const Node *> _stems) : DeclarationList(_stems) {}
-  virtual std::string getNodeType() const override { return "ParameterList"; };
-};
-
 #endif

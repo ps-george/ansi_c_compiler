@@ -259,6 +259,34 @@ iteration-statement
   //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
+declaration
+  : declaration-specifiers ';' { $$ = new Declaration($1) }
+  | declaration-specifiers init-declarator-list ';' { $$.add($2); }
+
+declaration-specifiers
+  : type-specifier { $$ = new Type($1);}
+
+init_declarator_list
+	: init_declarator { $$ = new DeclarationList({$1}); }
+	| init_declarator_list ',' init_declarator { $$.add($3); }
+
+type-specifier
+  : INT { $$ = new Type({new TypeSpecifier($1)}); }
+  | FLOAT { $$ = new Type({new TypeSpecifier($1)}); }
+
+init-declarator
+	: declarator
+	| declarator '=' initializer
+
+initializer
+  : assignment-expression
+  
+declarator
+  : direct-declarator { $$ = $1; }
+
+direct-declarator 
+  : ID { $$ = $1 }
+
 declaration-seq
   : declaration-list ';' { $$ = new DeclarationList({$1}); }
   | declaration-seq declaration-list ';' { $$->add($2); }
