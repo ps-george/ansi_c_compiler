@@ -65,52 +65,23 @@ public:
 class UnaryExpression : public Expression {
 private:
   const Expression * child;
+  std::string op;
 public:
   virtual ~UnaryExpression(){
     delete child;
   }
-  UnaryExpression(const Expression * c) : child(c) {};
+  UnaryExpression(const Expression * c, std::string* _op) : child(c), op(*_op) {};
+  UnaryExpression(const Expression * c) : child(c) {
+    op = "";
+  };
   virtual void print_cpp() const;
 };
 
 //! PostfixExpression
 class PostfixExpression : public UnaryExpression {
 public:
-  using UnaryExpression::UnaryExpression;
-};
-//
-////! PrefixExpression
-//class PrefixExpression : public UnaryExpression {};
-
-class PostIncrExpression : public UnaryExpression {
-public:
-  using UnaryExpression::UnaryExpression;
-};
-
-class PostDecrExpression : public UnaryExpression {
-public:
-  using UnaryExpression::UnaryExpression;
-  
-};
-
-//! PrefixExpression
-//! Referred to as UnaryExpression in the spec
-
-class PreIncrExpression : public UnaryExpression {
-public:
-  using UnaryExpression::UnaryExpression;
-};
-
-class PreDecrExpression : public UnaryExpression {
-public:
-  using UnaryExpression::UnaryExpression;
-};
-
-
-//! Points to typename
-class SizeofExpression : public UnaryExpression {
-public:
-  using UnaryExpression::UnaryExpression;
+  PostfixExpression(const Expression * c, std::string* _op) : UnaryExpression(c,_op) {};
+  PostfixExpression(const Expression * c) : UnaryExpression(c) {};
 };
 
 //! AssignmentExpression has unaryExpression (left) followed by AssignmentExpression (right)
@@ -129,17 +100,8 @@ public:
   }
   
   virtual void print_cpp() const;
-  
   TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
-};
-
-
-class ConditionalExpression : public TrinaryExpression {
-private:
-public:
-  ConditionalExpression(const Expression * l, const Expression * m, const Expression * r)
-    : TrinaryExpression(l,m,r){}
 };
 
 class BinaryExpression : public Expression {
@@ -149,116 +111,10 @@ private:
 protected:
   std::string op;
 public:
-  BinaryExpression(const Expression * l, const Expression * r, std::string op)
-    : left(l), right(r) {}
+  BinaryExpression(const Expression * l, const Expression * r, std::string * _op)
+    : left(l), right(r), op(*_op) {}
   std::string getOp() const { return op; };
   void print_cpp() const;
-};
-
-//! CastExpression: Left is type-name, right is an expression
-class CastExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-//! AssignmentExpression: UnaryExpression assignment-op AssignmentExpression
-class AssignmentExpression : public BinaryExpression {
-public:
-  using BinaryExpression::BinaryExpression;
-  virtual void compile() const;
-};
-//! LORExpression: LORExpression || LANDExpression
-class LORExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! LANDExpression: LANDExpression || ORExpression
-class LANDExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! ORExpression: ORExpression | ANDExpression
-class ORExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! ANDExpression: ANDExpression & EORExpression
-class ANDExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! EORExpression: EORExpression ^ EqExpression
-class EORExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! EqExpression: EqExpression EqOp RelExpression
-class EQExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! NeExpression: EqExpression NeOp RelExpression
-class NEExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! RelExpression: RelExpression RelOp ShiftExpression
-//class RelExpression : public BinaryExpression {};
-
-//! LtExpression: LtExpression < ShiftExpression
-class LTExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! GtExpression: LtExpression < ShiftExpression
-class GTExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! LeExpression: LtExpression < ShiftExpression
-class LEExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! GeExpression: LtExpression < ShiftExpression
-class GEExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! ShiftExpression: ShiftExpression ShiftOp AddExpression
-//class ShiftExpression : public BinaryExpression {};
-
-//! ShiftExpression: ShiftExpression ShiftOp AddExpression
-class RRExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! ShiftExpression: ShiftExpression ShiftOp AddExpression
-class LLExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! AddExpression: AddExpression + SubExpression
-class AddExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! SubExpression: SubExpression - MulExpression
-class SubExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! MulExpression: MulExpression DivExpression
-class MulExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! DivExpression: DivExpression / ModExpression
-class DivExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
-};
-
-//! ModExpression: ModExpression % CastExpression
-class ModExpression : public BinaryExpression {
-  using BinaryExpression::BinaryExpression;
 };
 
 //! Primary expression points to identifier, constant, StringLiteral or (expression)
