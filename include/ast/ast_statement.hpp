@@ -30,15 +30,9 @@ public:
     delete stat1;
   };
   //! Constructor with Expression and Statement
-<<<<<<< HEAD
-  ConditionalStatement(const Expression *c, const Statement *s)
-      : cond(c), stat1(s) {}
   virtual std::string getNodeType() const { return "Scope"; };
-=======
   ConditionalStatement(const Statement *s)
       : stat1(s) {}
-  virtual std::string getNodeType() const { return "ConditionalStatement"; };
->>>>>>> master
   virtual void print_xml() const;
   virtual const Statement *getBody() const { return stat1; };
 };
@@ -85,9 +79,11 @@ private:
 public:
   virtual ~ForStatement() {
     delete cond1;
+  }
   virtual std::string getNodeType() const { return "Scope"; };
+  
   ForStatement(const ExpressionStatement *c1, const Statement *s1)
-      : IterationStatement(s1), cond1(c1)  {};
+      : IterationStatement(s1), cond1(c1) {}
 };
 
 class EEForStatement : public ForStatement {
