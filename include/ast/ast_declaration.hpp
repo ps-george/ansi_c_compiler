@@ -19,6 +19,16 @@ public:
   virtual std::string getNodeType() const override { return "ParameterList"; };
 };
 
+//! A declarator is what we are declaring; it is essentially just an ID when it follows a specifier.
+class Declarator : public Node {
+  
+};
+
+//! Init declarator
+class InitDeclarator : public Declarator {
+  
+};
+
 //! \brief A declaration of a variable
 //! 
 //! A declaration has a type and a list of declared things
