@@ -267,7 +267,10 @@ iteration-statement
 // Just make scopes with the statement
   : WHILE '(' expression ')' statement { $$ = new WhileStatement($3, $5); }
   //| DO statement WHILE '(' expression ')' { $$ = new DoWhileStatement({$2}/*$5, $2*/); }
-  | FOR '(' expression-statement expression-statement expression ')' statement { $$ = new ForStatement($3, $4,$5, $7); }
+  | FOR '(' expression-statement expression-statement expression ')' statement { $$ = new EEEForStatement($3, $4, $5, $7); }
+  | FOR '(' expression-statement expression-statement  ')' statement { $$ = new EEForStatement($3, $4, $6); }
+  | FOR '(' declaration expression-statement ')' statement { $$ = new DEForStatement($3, $4, $6); }
+	| FOR '(' declaration expression-statement expression ')' statement { $$ = new DEEForStatement($3,$4,$5,$7); }
   //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
