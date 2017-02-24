@@ -1,15 +1,16 @@
 #ifndef AST_STATEMENT_HPP
 #define AST_STATEMENT_HPP
 
+#include "ast_declaration.hpp"
 #include "ast_expression.hpp"
 #include "ast_list.hpp"
 #include "ast_node.hpp"
-#include "ast_declaration.hpp"
 
 //! An expression evaluated as void for its side-effects
 class ExpressionStatement : public Statement {
 private:
   const Expression *expr;
+
 public:
   ExpressionStatement(const Expression *e) : expr(e){};
   ~ExpressionStatement(){};
@@ -22,20 +23,23 @@ public:
  */
 class ConditionalStatement : public Statement {
 protected:
-  const Expression *cond;
   const Statement *stat1;
 
 public:
   virtual ~ConditionalStatement() {
-    delete cond;
     delete stat1;
   };
   //! Constructor with Expression and Statement
+<<<<<<< HEAD
   ConditionalStatement(const Expression *c, const Statement *s)
       : cond(c), stat1(s) {}
   virtual std::string getNodeType() const { return "Scope"; };
+=======
+  ConditionalStatement(const Statement *s)
+      : stat1(s) {}
+  virtual std::string getNodeType() const { return "ConditionalStatement"; };
+>>>>>>> master
   virtual void print_xml() const;
-  virtual const Expression *getCondition() const { return cond; };
   virtual const Statement *getBody() const { return stat1; };
 };
 
@@ -50,14 +54,13 @@ public:
   virtual std::string getNodeType() const { return "IterationStatement"; };
   virtual void print_cpp() const {
     // while ()
-    std::cout << getNodeType() << " (";
-    getCondition()->print_cpp();
-    std::cout << ")\n";
+    //std::cout << getNodeType() << " (";
+    //std::cout << ")\n";
     tab();
-    getBody()->print_cpp();  
+    getBody()->print_cpp();
   };
-  IterationStatement(const Expression *c, const Statement *s)
-      : ConditionalStatement(c, s) {}
+  IterationStatement(const Statement *s)
+      : ConditionalStatement(s) {}
 };
 
 /*!
@@ -66,39 +69,64 @@ public:
  * Has an Expression as the condition, Statement as iterated body
  */
 class WhileStatement : public IterationStatement {
+private:
+  const Expression *cond;
 public:
   virtual ~WhileStatement(){};
   virtual std::string getNodeType() const { return "Scope"; };
   WhileStatement(const Expression *c, const Statement *s)
-      : IterationStatement(c, s) {}
+      : IterationStatement(s), cond(c) {}
 };
 
 class ForStatement : public IterationStatement {
 private:
-  int num;
   const ExpressionStatement *cond1;
-  const ExpressionStatement *cond2;
 
 public:
   virtual ~ForStatement() {
-    if (num == 2) {
-      delete cond1;
-    }
-    if (num == 3) {
-      delete cond2;
-    }
-  }
+    delete cond1;
   virtual std::string getNodeType() const { return "Scope"; };
-  ForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
-               const Statement *s)
-      : IterationStatement(new ExpressionList({}), s), cond1(c1), cond2(c2) {
-    num = 2;
-  }
-  ForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
-               const Expression *c, const Statement *s)
-      : IterationStatement(c, s), cond1(c1), cond2(c2) {
-    num = 3;
-  }
+  ForStatement(const ExpressionStatement *c1, const Statement *s1)
+      : IterationStatement(s1), cond1(c1)  {};
+};
+
+class EEForStatement : public ForStatement {
+private:
+  const ExpressionStatement *cond2;
+
+public:
+  EEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
+                 const Statement *s1)
+      : ForStatement(c1, s1), cond2(c2) {};
+};
+
+class EEEForStatement : public EEForStatement {
+private:
+  const Expression *cond3;
+
+public:
+  EEEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
+                  const Expression *c3, const Statement *s1)
+      : EEForStatement(c1, c2, s1), cond3(c3)  {};
+};
+
+class DEForStatement : public ForStatement {
+private:
+  const Declaration *dec;
+
+public:
+  DEForStatement(const Declaration *d, const ExpressionStatement *c1,
+                 const Statement *s1)
+      :  ForStatement(c1, s1), dec(d)  {};
+};
+
+class DEEForStatement : public DEForStatement {
+private:
+  const Expression *cond2;
+public:
+  DEEForStatement(const Declaration *d, const ExpressionStatement *c1,
+                  const Expression *c2, const Statement *s1)
+      : DEForStatement(d, c1, s1), cond2(c2)  {};
 };
 
 /**
@@ -120,9 +148,11 @@ public:
  * Can be If, IfElse and Switch
  */
 class SelectionStatement : public ConditionalStatement {
+private:
+  const Expression *cond;
 public:
   SelectionStatement(const Expression *c, const Statement *s)
-      : ConditionalStatement(c, s) {}
+      : ConditionalStatement(s), cond(c) {}
   virtual std::string getNodeType() const { return "SelectionStatement"; };
 };
 
@@ -184,9 +214,8 @@ default label, no part of the switch body is executed.
  */
 class SwitchStatement : public SelectionStatement {};
 
-
 /*! \brief JumpStatement
- * 
+ *
  * A jump statement causes an unconditional jump to another place
  */
 class JumpStatement : public Statement {
@@ -197,17 +226,20 @@ public:
 /*!
 Constraints
 
-The identifier in a goto statement shall name a label located somewhere in the current function.
+The identifier in a goto statement shall name a label located somewhere in the
+current function.
 
 Semantics
 
-A goto statement causes an unconditional jump to the statement prefixed by the named label in the current function. 
+A goto statement causes an unconditional jump to the statement prefixed by the
+named label in the current function.
  */
 class GotoStatement : public JumpStatement {
 private:
   std::string label;
+
 public:
-  GotoStatement(const std::string l) : label(l) {};
+  GotoStatement(const std::string l) : label(l){};
   virtual ~GotoStatement(){};
 };
 
@@ -242,9 +274,8 @@ public:
   virtual ~BreakStatement(){};
 };
 
-
 /*!
- * 
+ *
 Constraints
 
 A return statement with an expression shall not appear in a function whose
@@ -269,18 +300,20 @@ an expression.
 class ReturnStatement : public JumpStatement {
 private:
   const ExpressionStatement *expr;
+
 public:
   ReturnStatement(const ExpressionStatement *e) : expr(e){};
 };
 
 //! \brief CompoundStatement
-//! 
+//!
 //! Any number of declarations (including 0), followed by any number of
 //! statements
 class CompoundStatement : public Statement {
 private:
   const List *declars;
   const List *stats;
+
 public:
   virtual ~CompoundStatement() {
     delete declars;
@@ -294,16 +327,20 @@ public:
 /*! \nrief LabeledStatement
 Constraints
 
-A case or default label shall appear only in a switch statement. Further constraints on such labels are discussed under the switch statement.
+A case or default label shall appear only in a switch statement. Further
+constraints on such labels are discussed under the switch statement.
 
 Semantics
 
-Any statement may be preceded by a prefix that declares an identifier as a label name. Labels in themselves do not alter the flow of control, which continues unimpeded across them. 
+Any statement may be preceded by a prefix that declares an identifier as a label
+name. Labels in themselves do not alter the flow of control, which continues
+unimpeded across them.
  */
 class LabeledStatement : public Statement {
 private:
   std::string id;
   const Node *stat;
+
 public:
   virtual ~LabeledStatement(){};
   LabeledStatement(std::string _id, const Node *_stat) : id(_id), stat(_stat){};
@@ -317,7 +354,8 @@ private:
 public:
   virtual ~CaseLabel(){};
 
-  CaseLabel(const Expression *_expr, const Statement *_stat) : expr(_expr), stat(_stat){};
+  CaseLabel(const Expression *_expr, const Statement *_stat)
+      : expr(_expr), stat(_stat){};
 };
 
 class DefaultLabel : public LabeledStatement {};
@@ -332,7 +370,7 @@ private:
 public:
   virtual ~Function(){};
 
-  Function(const Node *_dec,const Node *_s)
+  Function(const Node *_dec, const Node *_s)
       : declarator((const Declarator *)_dec), // Declarator contains the params
         stat((const CompoundStatement *)_s) {}
 
