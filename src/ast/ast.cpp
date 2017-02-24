@@ -119,6 +119,11 @@ void Node::print_xml() const {
   std::cout << getFooter() << std::endl;
 };
 
+void Variable::print_xml() const {
+  tab();
+  std::cout << getHeader() << std::endl;
+}
+
 void TabbedList::print_xml() const {
   if (getChildren().size() != 0) {
     tab();
@@ -135,15 +140,29 @@ void TabbedList::print_xml() const {
 }
 
 void Declarator::print_xml() const{
-  Node::print_xml();
+  tab();
+  std::cout << "<Variable id=\"" << getId() << "\" />" << std::endl;
 }
 
 void DeclarationList::print_xml() const{
-  Node::print_xml();
+  List::print_xml();
+};
+
+void ParameterList::print_xml() const{
+  for (auto &it : getChildren()) {
+    std::cout << "<Parameter id=\"" << it->getId() << "\" />" << std::endl;
+  }
+};
+
+void FunctionDeclarator::print_xml() const {
+  for (auto &it : p->getChildren()) {
+    tab();
+    std::cout << "<Parameter id=\"" << it->getId() << "\" />" << std::endl;
+  }
 };
 
 void Declaration::print_xml() const{
-  Node::print_xml();
+  dlist->print_xml();
 };
 
 void List::print_children_xml() const {
@@ -189,7 +208,7 @@ void Function::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;
   tab_incr();
-  // declarator->print_xml();
+  declarator->print_xml();
   stat->print_xml();
   tab(false);
   std::cout << getFooter() << std::endl;

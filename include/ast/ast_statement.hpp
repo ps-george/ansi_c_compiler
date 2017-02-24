@@ -339,7 +339,7 @@ public:
   // print functions
   virtual std::string getNodeType() const { return "Function"; };
   virtual std::string getHeader() const {
-    return "<" + getNodeType() + " id=\"" + declarator->getHeader() + "\">";
+    return "<" + getNodeType() + " id=\"" + declarator->getId() + "\">";
   }
   virtual void print_xml() const;
 };

@@ -18,6 +18,7 @@ class ParameterList : public DeclarationList {
 public:
   ParameterList(std::vector<const Node *> _stems) : DeclarationList(_stems) {}
   virtual std::string getNodeType() const override { return "ParameterList"; };
+  virtual void print_xml() const override;
 };
 
 //! A declarator is what we are declaring; it is essentially just an ID when it follows a specifier.
@@ -26,6 +27,7 @@ const Node * child;
 public:
   Declarator(const Node * _child) : child(_child) {};
   virtual std::string getNodeType() const override { return "Declarator"; };
+  virtual std::string getId() const override { return child->getId(); };
   virtual void print_xml() const override;
 };
 
@@ -47,11 +49,11 @@ public:
 
 //! Function declarator
 class FunctionDeclarator : public Declarator {
-const List * e; //! Parameter list/indentifier list for old-style functions
+const List * p; //! Parameter list/indentifier list for old-style functions
 public:
-  FunctionDeclarator(const Node * _child, const List * _e) : Declarator(_child), e(_e) {};
+  FunctionDeclarator(const Node * _child, const List * _p) : Declarator(_child), p(_p) {};
   virtual std::string getNodeType() const override { return "FunctionDeclarator"; };
-  
+  virtual void print_xml() const override;
 };
 
 //! \brief A declaration of a variable
@@ -63,7 +65,6 @@ private:
   const List * dlist;
 public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
-  Declaration(const Type * t) : type(t), dlist(nullptr) {};
   virtual std::string getNodeType() const override { return "Declaration"; };
   virtual void print_xml() const override;
 };

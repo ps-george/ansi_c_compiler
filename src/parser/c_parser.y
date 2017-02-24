@@ -272,7 +272,7 @@ iteration-statement
 
 // DECLARATION
 declaration-seq 
-  : declaration-seq { $$ = new DeclarationList({$1}); }
+  : declaration { $$ = new DeclarationList({$1}); }
   | declaration-seq declaration { $$->add($2); }
 
 declaration

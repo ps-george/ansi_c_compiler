@@ -96,10 +96,9 @@ public:
   
   virtual std::string getType() const { return type->getTypename(); }
   virtual std::string getNodeType() const override { return "Variable"; }
-
-  virtual std::string getHeader() const override {
-    return "<" + getNodeType() + " id=\"" + id + "\" />";
-  }
+  virtual std::string getId() const { return id; };
+  virtual std::string getHeader() const override { return "<" + getNodeType() + " id=\"" + getId() + "\" />"; }
+  virtual void print_xml() const override;
 };
 
 class Parameter : public Variable {
