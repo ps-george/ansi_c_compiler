@@ -13,6 +13,7 @@ class Statement : public Node {
 public:
   virtual ~Statement(){};
   virtual std::string getNodeType() const override;
+  virtual void print_c() const override;
 };
 
 //! Abstract base class for expressions

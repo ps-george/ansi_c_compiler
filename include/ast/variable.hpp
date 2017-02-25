@@ -15,14 +15,14 @@ public:
   virtual ~Variable(){};
 
   Variable(const std::string* _id, const Type * t) : id(*_id), type(t) {};
-  Variable(const std::string* _id) : id(*_id) { type = nullptr;};
+  Variable(const std::string* _id) : id(*_id) { type = new Type({new TypeSpecifier("int")});};
   
-  virtual std::string getType() const { return type->getTypename(); }
-  virtual std::string getNodeType() const override { return "Variable"; }
-  virtual std::string getId() const override { return id; };
-  virtual std::string getHeader() const override { return "<" + getNodeType() + " id=\"" + getId() + "\" />";
-  }
+  virtual std::string getType() const;
+  virtual std::string getNodeType() const override;
+  virtual std::string getId() const override;
+  virtual std::string getHeader() const override;
   virtual void print_xml() const override;
+  virtual void print_c() const override;
 };
 
 class Parameter : public Variable {
@@ -30,7 +30,7 @@ public:
   virtual ~Parameter(){};
   Parameter(const std::string* _id, const Type * t) : Variable(_id, t) {}
   Parameter(const std::string* _id) : Variable(_id) {}
-  virtual std::string getNodeType() const override { return "Parameter"; }
+  virtual std::string getNodeType() const override;
 };
 
 #endif

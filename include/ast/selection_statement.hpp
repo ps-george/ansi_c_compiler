@@ -15,6 +15,7 @@ public:
   SelectionStatement(const Expression *c, const Statement *s)
       : ConditionalStatement(s), cond(c) {}
   virtual std::string getNodeType() const { return "SelectionStatement"; };
+  virtual const Expression *getCondition() const;
 };
 
 /**
@@ -28,6 +29,8 @@ public:
   virtual std::string getNodeType() const { return "If"; };
   IfStatement(const Expression *c, const Statement *s)
       : SelectionStatement(c, s) {}
+      
+  
 };
 
 /**

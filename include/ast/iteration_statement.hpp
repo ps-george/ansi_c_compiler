@@ -34,6 +34,7 @@ public:
   };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
+  virtual const Expression * getCondition() const;
 };
 
 class ForStatement : public IterationStatement {
@@ -47,6 +48,7 @@ public:
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1};
   };
+  virtual const Expression * getCondition() const { return (const Expression *)cond1;};
 };
 
 class EEForStatement : public ForStatement {
@@ -57,6 +59,8 @@ public:
   EEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                  const Statement *s1)
       : ForStatement(c1, s1), cond2(c2) {};
+      
+  virtual const Expression * getCondition() const { return (const Expression *)cond2;};
 };
 
 class EEEForStatement : public EEForStatement {
@@ -67,6 +71,7 @@ public:
   EEEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                   const Expression *c3, const Statement *s1)
       : EEForStatement(c1, c2, s1), cond3(c3)  {};
+  virtual const Expression * getCondition() const override { return (const Expression *)cond3;};
 };
 
 class DEForStatement : public ForStatement {
@@ -77,6 +82,7 @@ public:
   DEForStatement(const Declaration *d, const ExpressionStatement *c1,
                  const Statement *s1)
       :  ForStatement(c1, s1), dec(d)  {};
+  virtual const Expression * getCondition() const override { return nullptr;};
 };
 
 class DEEForStatement : public DEForStatement {
@@ -86,6 +92,7 @@ public:
   DEEForStatement(const Declaration *d, const ExpressionStatement *c1,
                   const Expression *c2, const Statement *s1)
       : DEForStatement(d, c1, s1), cond2(c2)  {};
+  virtual const Expression * getCondition() const override { return (const Expression *)cond2;};
 };
 
 /**

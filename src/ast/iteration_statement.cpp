@@ -6,7 +6,7 @@
 
 #include "ast/iteration_statement.hpp"
 
-
+const Expression *WhileStatement::getCondition() const { return cond; };
 
 std::string IterationStatement::getNodeType() const { return "IterationStatement"; }
 

@@ -12,6 +12,7 @@ public:
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override { return child->getId(); };
   virtual void print_xml() const override;
+  virtual void print_c() const override;
 };
 
 //! Init declarator
@@ -37,6 +38,7 @@ public:
   FunctionDeclarator(const Node * _child, const List * _p) : Declarator(_child), p(_p) {};
   virtual std::string getNodeType() const override;
   virtual void print_xml() const override;
+  virtual void print_c() const override;
 };
 
 //! \brief A declaration of a variable

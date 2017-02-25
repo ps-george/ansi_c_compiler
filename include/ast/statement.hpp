@@ -33,6 +33,8 @@ public:
       : stat1(s) {}
   virtual std::string getNodeType() const { return "ConditionalStatement"; };
   virtual void print_xml() const;
+  virtual void print_c() const;
+  virtual const Expression *getCondition() const = 0;
   virtual const Statement *getBody() const { return stat1; };
 };
 
@@ -51,8 +53,9 @@ public:
     delete stats;
   };
   CompoundStatement(const List *_d, const List *_s) : declars(_d), stats(_s){};
-  virtual std::string getNodeType() const { return "CompoundStatement"; };
-  virtual void print_xml() const;
+  virtual std::string getNodeType() const override;
+  virtual void print_xml() const override;
+  virtual void print_c() const override;
 };
 
 #endif

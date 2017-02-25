@@ -41,6 +41,8 @@ private:
   std::string name;
 public:
   TypeSpecifier(std::string* n) : name(*n) {};
+  TypeSpecifier(std::string n) : name(n) {};
+  virtual std::string getName() const;
   virtual std::string getNodeType() const { return "TypeSpecifier"; };
 };
 
@@ -57,12 +59,7 @@ class Type : public Node {
   // std::vector<std::string> type_qualifiers; //! const or volatile
 public:
   Type(std::vector<TypeSpecifier *> tspecs) : type_specifiers(tspecs){};
-  virtual std::string getTypename() const { 
-    std::stringstream s; 
-    for (auto i: type_specifiers)
-      s << i << ' '; 
-    return s.str(); 
-  }
+  virtual std::string getTypename() const;
   virtual std::string getNodeType() const { return "Type"; };
 };
 

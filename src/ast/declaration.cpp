@@ -16,16 +16,32 @@ std::string Declaration::getNodeType() const { return "Declaration"; };
 /* PRINT XML FUNCTIONS */
 void Declarator::print_xml() const{
   tab();
-  std::cout << "<Variable id=\"" << getId() << "\" />" << std::endl;
+  child->print_xml();
 }
 
 void FunctionDeclarator::print_xml() const {
+  // For each of the parameters, print out the parameter
   for (auto &it : p->getChildren()) {
-    tab();
-    std::cout << "<Parameter id=\"" << it->getId() << "\" />" << std::endl;
+    it->print_xml();
   }
 };
 
 void Declaration::print_xml() const{
   dlist->print_xml();
+};
+
+
+void Declarator::print_c() const{
+  
+  child->print_c();
+}
+
+void FunctionDeclarator::print_c() const {
+  // For each of the parameters, print out the parameters
+  bool first = true;
+  for (auto &it : p->getChildren()) {
+    if (!first)
+      std::cout << ", ";
+    it->print_c();
+  }
 };

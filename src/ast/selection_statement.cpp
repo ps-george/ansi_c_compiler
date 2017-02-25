@@ -6,6 +6,7 @@
 
 #include "ast/selection_statement.hpp"
 
+const Expression *SelectionStatement::getCondition() const { return cond; };
 
 void IfElseStatement::print_xml() const {
   IfStatement::print_xml();

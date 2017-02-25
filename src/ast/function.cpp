@@ -6,6 +6,20 @@
 
 #include "ast/function.hpp"
 
+Function::Function(const Node *_type, const Node *_dec, const Node *_s)
+    : type((const Type *)_type),
+      declarator((const Declarator *)_dec), // Declarator contains the params
+      stat((const CompoundStatement *)_s) {};
+
+std::string Function::getType() const { return type->getTypename(); }
+
+std::string Function::getHeader() const {
+  return "<" + getNodeType() 
+             + " id=\"" + declarator->getId() 
+             + "\" type=\"" + getType()
+             + "\">";
+}
+
 void Function::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;
@@ -14,4 +28,14 @@ void Function::print_xml() const {
   stat->print_xml();
   tab(false);
   std::cout << getFooter() << std::endl;
+}
+
+void Function::print_c() const {
+  tab();
+  std::cout << getType() << " "
+            << getId() << "(";
+  declarator->print_c();
+  std::cout << ")\n";
+  stat->print_c();
+  tab(false);
 }

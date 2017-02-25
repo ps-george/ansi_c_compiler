@@ -106,7 +106,7 @@ external-declaration
 // Snip the stems from the parameter list to make tree smaller
 
 function-definition
- 	: declaration-specifiers declarator compound-statement { $$ = new Function($2, $3); }
+ 	: declaration-specifiers declarator compound-statement { $$ = new Function($1, $2, $3); }
 //  | declaration-specifiers declarator declaration-seq compound-statement { $$ = new Function($2, $3, $4); } weird old-style function
  	
 
