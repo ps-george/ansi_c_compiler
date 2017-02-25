@@ -31,11 +31,8 @@ void Function::print_xml() const {
 }
 
 void Function::print_c() const {
-  tab();
-  std::cout << getType() << " "
-            << getId() << "(";
+  std::cout << getType() << " ";
   declarator->print_c();
-  std::cout << ")\n";
+  std::cout << "\n";
   stat->print_c();
-  tab(false);
 }

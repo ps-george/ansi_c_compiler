@@ -27,21 +27,40 @@ void FunctionDeclarator::print_xml() const {
 };
 
 void Declaration::print_xml() const{
+  std::cout << "/* "<< getNodeType() << "*/";
   dlist->print_xml();
 };
 
 
 void Declarator::print_c() const{
-  
   child->print_c();
 }
 
 void FunctionDeclarator::print_c() const {
   // For each of the parameters, print out the parameters
+  // std::cout << "/* "<< getNodeType() << "*/";
+  std::cout << getId() << "(";
   bool first = true;
   for (auto &it : p->getChildren()) {
-    if (!first)
+    if (!first){
       std::cout << ", ";
+    }
+    first = false;
     it->print_c();
   }
+  std::cout << ")";
+};
+
+void Declaration::print_c() const{
+  tab();
+  std::cout << type->getTypename() << " ";
+  bool first = true;
+  for (auto &it : dlist->getChildren()) {
+    if (!first){
+      std::cout << ", ";
+    }
+    first = false;
+    it->print_c();
+  }
+  std::cout << "; // "<< getNodeType() << std::endl;
 };

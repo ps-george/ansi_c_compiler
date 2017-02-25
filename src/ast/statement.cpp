@@ -31,8 +31,7 @@ void CompoundStatement::print_xml() const {
 
 void Statement::print_c() const {
   tab();
-  std::cout << getNodeType() << ';';
-  tab(false);
+  std::cout << getNodeType() << ';' << std::endl;
 }
 
 void ConditionalStatement::print_c() const {
@@ -47,10 +46,11 @@ void ConditionalStatement::print_c() const {
 
 void CompoundStatement::print_c() const {
   tab();
-  std::cout << "{";
+  std::cout << "{\n";
   tab_incr();
-  declars->print_xml();
-  stats->print_xml();
-  tab(false);
+  declars->print_c();
+  stats->print_c();
+  tab_decr();
+  tab();
   std::cout << "}\n";
 }

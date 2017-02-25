@@ -80,12 +80,9 @@ void List::print_c() const {
 
 void TabbedList::print_c() const {
   if (getChildren().size() != 0) {
-    tab_incr();
+    //tab_incr();
     // Print out all children on the same level -> Using list to store lots
     // lists of things
     print_children_cpp();
-    tab(false);
-  } else {
-    tab_decr();
   }
 }

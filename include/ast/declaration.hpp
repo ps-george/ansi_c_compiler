@@ -52,6 +52,7 @@ public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   virtual std::string getNodeType() const override;
   virtual void print_xml() const override;
+  virtual void print_c() const override;
 };
 
 #endif

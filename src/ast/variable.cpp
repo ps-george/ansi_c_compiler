@@ -27,5 +27,5 @@ void Variable::print_xml() const {
 }
 
 void Variable::print_c() const {
-  std::cout << getType() << " " << getId();
+  std::cout << getId();
 }

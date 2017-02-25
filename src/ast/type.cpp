@@ -18,6 +18,7 @@ std::string Type::getTypename() const {
     if (!first){
       ss << " ";
     }
+    first = false;
     ss << i->getName();
   }
   return ss.str(); 
