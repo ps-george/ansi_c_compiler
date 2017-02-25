@@ -266,12 +266,11 @@ assignment-op
 iteration-statement
 // Just make scopes with the statement
   : WHILE '(' expression ')' statement { $$ = new WhileStatement($3, $5); }
-  //| DO statement WHILE '(' expression ')' { $$ = new DoWhileStatement({$2}/*$5, $2*/); }
+  | DO statement WHILE '(' expression ')' { $$ = new DoWhileStatement($2, $5); }
   | FOR '(' expression-statement expression-statement expression ')' statement { $$ = new EEEForStatement($3, $4, $5, $7); }
   | FOR '(' expression-statement expression-statement  ')' statement { $$ = new EEForStatement($3, $4, $6); }
   | FOR '(' declaration expression-statement ')' statement { $$ = new DEForStatement($3, $4, $6); }
 	| FOR '(' declaration expression-statement expression ')' statement { $$ = new DEEForStatement($3,$4,$5,$7); }
-  //| FOR '(' expression-statement expression-statement  ')' { $$ = new ForStatement({}/*$3,$4*/); }
 
 // DECLARATION
 declaration-seq 
@@ -313,27 +312,6 @@ direct-declarator
                                               // e.g. int max(a,b) int a,b; {}
   | direct-declarator '(' ')' { $$ = new FunctionDeclarator($1, new List({})); }                // Function with no arguments
 
-
-/*
-
-
-declaration-list
-  : declaration { $$ = new DeclarationList({$1}); }
-  | declaration-list ',' declaration { $$->add($3); }
-
-declaration  
-  : simple-declaration { $$ = $1; }
-  | init-declaration { $$ = $1; }
-
-simple-declaration
-  : declarator { $$ = $1; }
-
-init-declaration
-  : declarator '=' CONSTANT { $$ = $1; }
-  | declarator '=' ID { $$ = $1; }
-
-declarator : INT ID { $$ = new Variable(*$2); }
-*/
 var_const
   : ID { $$ = new Variable($1); }
   | CONSTANT { $$ = new Constant(*$1); }

@@ -39,7 +39,12 @@ include/c_parser.tab.h: src/parser/c_parser.y
 ###
 # Source files
 _PSRCS=parser_main.cpp flexer.yy.cpp c_parser.tab.c
-PSRCS=$(patsubst %,$(PSDIR)/%,$(_PSRCS)) src/ast/ast.cpp
+
+_ASTSRCSi:=$(wildcard src/ast/*.cpp)
+
+PSRCS=$(patsubst %,$(PSDIR)/%,$(_PSRCS))
+PSRCS += $(wildcard src/ast/*.cpp)
+
 
 bin/c_parser: include/c_parser.tab.h $(PSRCS:%.cpp=%.o) 
 	mkdir -p bin
