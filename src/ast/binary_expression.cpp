@@ -6,7 +6,11 @@
 
 #include "ast/binary_expression.hpp"
 
+BinaryExpression::BinaryExpression(const Expression *l, const Expression *r,
+                                   std::string *_op)
+    : left(l), right(r), op(*_op) {}
 
+std::string BinaryExpression::getOp() const { return op; };
 
 void AssignmentExpression::compile() const {
   if (op == "=") {

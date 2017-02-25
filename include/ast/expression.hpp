@@ -12,14 +12,14 @@
 class Statement : public Node {
 public:
   virtual ~Statement(){};
-  virtual std::string getNodeType() const { return "Statement"; };
+  virtual std::string getNodeType() const override;
 };
 
 //! Abstract base class for expressions
 class Expression : public Statement {
 public:
   virtual ~Expression(){};
-  virtual std::string getNodeType() const { return "Expression"; };
+  virtual std::string getNodeType() const override;
   virtual const Expression * add(const Expression * child) const {(void)child; return this;};
   
 };
@@ -27,7 +27,7 @@ public:
 class EmptyExpression : public Expression {
 public:
   virtual ~EmptyExpression(){};
-  virtual std::string getNodeType() const { return "EmptyExpression"; };
+  virtual std::string getNodeType() const override;
   EmptyExpression(){};
 };
 
@@ -43,8 +43,8 @@ public:
     delete middle;
     delete right;
   }
-  
-  virtual void print_c() const;
+  virtual std::string getNodeType() const override;
+  virtual void print_c() const override;
   TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
 };

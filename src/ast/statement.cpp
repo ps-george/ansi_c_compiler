@@ -6,6 +6,8 @@
 
 #include "ast/statement.hpp"
 
+std::string Statement::getNodeType() const { return "Statement"; }
+
 void ConditionalStatement::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;

@@ -11,18 +11,9 @@
 class IterationStatement : public ConditionalStatement {
 public:
   virtual ~IterationStatement(){};
-  virtual std::string getNodeType() const { return "IterationStatement"; };
+  virtual std::string getNodeType() const;
   virtual std::vector<const Expression*> getConditions() const = 0;
-  virtual void print_c() const {
-    // while ()
-    std::cout << getNodeType() << " (";
-    for (auto &it : getConditions()) {
-      it->print_c();
-    }
-    std::cout << ")\n";
-    tab();
-    getBody()->print_c();
-  };
+  virtual void print_c() const;
   IterationStatement(const Statement *s)
       : ConditionalStatement(s) {}
 };

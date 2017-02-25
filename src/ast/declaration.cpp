@@ -6,6 +6,12 @@
 
 #include "ast/declaration.hpp"
 
+std::string Declarator::getNodeType() const { return "Declarator"; };
+std::string InitDeclarator::getNodeType() const { return "InitDeclarator"; };
+std::string ArrayDeclarator::getNodeType() const { return "ArrayDeclarator"; };
+std::string FunctionDeclarator::getNodeType() const { return "FunctionDeclarator"; };
+std::string Declaration::getNodeType() const { return "Declaration"; };
+
 
 /* PRINT XML FUNCTIONS */
 void Declarator::print_xml() const{

@@ -10,9 +10,8 @@ private:
 protected:
   std::string op;
 public:
-  BinaryExpression(const Expression * l, const Expression * r, std::string * _op)
-    : left(l), right(r), op(*_op) {}
-  std::string getOp() const { return op; };
+  BinaryExpression(const Expression * l, const Expression * r, std::string * _op);
+  std::string getOp() const;
   void print_c() const;
 };
 
