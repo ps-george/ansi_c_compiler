@@ -48,7 +48,10 @@ void CompoundStatement::print_c() const {
   tab();
   std::cout << "{\n";
   tab_incr();
-  declars->print_c();
+  for (auto &it : declars->getChildren()) {
+    it->print_c();
+    std::cout << ';' << std::endl;
+  };
   stats->print_c();
   tab_decr();
   tab();

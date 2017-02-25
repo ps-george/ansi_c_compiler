@@ -79,10 +79,17 @@ void List::print_c() const {
 }
 
 void TabbedList::print_c() const {
+  print_children_cpp(); 
+}
+
+void Program::print_c() const {
   if (getChildren().size() != 0) {
     //tab_incr();
     // Print out all children on the same level -> Using list to store lots
     // lists of things
-    print_children_cpp();
+    for (auto &it : getChildren()) {
+      it->print_c();
+      std::cout << ';' <<std::endl;
+    } 
   }
 }

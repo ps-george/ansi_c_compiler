@@ -25,7 +25,6 @@
   const Statement * statement;
   const Expression *expression;
   const ExpressionStatement *expressionstatement;
-  const Parameter * parameter;
   const Type * type;
   const Declaration * declaration;
   const Declarator * declarator;
@@ -65,12 +64,11 @@
 //     | root declaration { g_root = new Program($1->getAllStems(), $2) ; }
 
 %type <node> root external-declaration 
-%type <node> declarator direct-declarator init-declarator
+%type <node> declarator direct-declarator init-declarator parameter-declaration
 %type <type> declaration-specifiers type-specifier 
-%type <declaration> declaration
+%type <declaration> declaration 
 
 %type <function> function-definition
-%type <parameter> parameter
 
 %type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list 
 
@@ -110,16 +108,15 @@ function-definition
 //  | declaration-specifiers declarator declaration-seq compound-statement { $$ = new Function($2, $3, $4); } weird old-style function
  	
 
-// function-definition 
-//  : INT ID '(' parameter-list ')' statement { $$ = new Function($2, $4, $6); } //$4->getAllStems()
-//  | INT ID '(' ')' statement { $$ = new Function($2, new ParameterList({}),$5 ); }
-
-parameter 
-  : INT ID { $$ = new Parameter($2); }
-
 parameter-list 
-  : parameter { $$ = new ParameterList({$1}); }
-  | parameter-list ',' parameter { $$->add($3); }
+  : parameter-declaration { $$ = new ParameterList({$1}); }
+	| parameter-list ',' parameter-declaration { $$->add($3);  }
+
+parameter-declaration
+	: declaration-specifiers declarator { $$ = new Declaration($1, new DeclarationList({$2})); }
+  	//| declaration_specifiers abstract_declarator
+  	//| declaration_specifiers
+  	
                
 // STATEMENT
 statement
@@ -144,8 +141,8 @@ selection-statement
 compound-statement
   : '{' '}' { $$ = new CompoundStatement(new List({}), new List({})); }
   | '{' statement-list '}' { $$ = new CompoundStatement(new List({}), new List({$2})); }
-  | '{' declaration-seq '}' { $$ = new CompoundStatement(new List({$2}),new List({})); } 
-  | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement(new List({$2}), new List({$3})); }   // declarations must come before statements
+  | '{' declaration-seq '}' { $$ = new CompoundStatement($2,new List({})); } 
+  | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement($2, new List({$3})); }   // declarations must come before statements
 
 statement-list
   : statement { $$ = new List({$1}); }

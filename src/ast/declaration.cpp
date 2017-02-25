@@ -62,5 +62,5 @@ void Declaration::print_c() const{
     first = false;
     it->print_c();
   }
-  std::cout << "; // "<< getNodeType() << std::endl;
+  // std::cout << "/* "<< getNodeType() << "*/" << std::endl;
 };

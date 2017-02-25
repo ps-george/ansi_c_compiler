@@ -66,6 +66,7 @@ public:
   
   //! Getters
   virtual std::string getNodeType() const override;
+  virtual void print_c() const;
 };
 
 //! Scopes have a declaration list
