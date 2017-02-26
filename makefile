@@ -50,9 +50,6 @@ bin/c_parser: include/c_parser.tab.h $(PSRCS:%.cpp=%.o)
 	mkdir -p bin
 	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $(PSRCS:%.cpp=%.o)
 
-%/flexer.yy.cpp: src/lexer/flexer.flex include/c_parser.tab.h
-	flex -o $@ $^
-
 %/c_parser.tab.c: include/c_parser.tab.h
 
 -include $(_PSRCS:%.cpp=%.d)
@@ -61,9 +58,11 @@ bin/c_parser: include/c_parser.tab.h $(PSRCS:%.cpp=%.o)
 ### BUILD RULES FOR COMPILER
 ###
 # Source files
-_CSRCS=
+_CSRCS=comiler_main.cpp
 CSRCS=$(patsubst %,$(CSDIR)/%,$(_CSRCS))
-bin/c_compiler : $(CSRCS:%.cpp=%.o)
+CSRCS += $(wildcard src/ast/*.cpp)
+
+bin/c_compiler : include/c_parser.tab.h $(CSRCS:%.cpp=%.o)
 	mkdir -p bin
 	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $^
 
@@ -78,6 +77,10 @@ clean:
 	rm -f src/parser/*.d
 	rm -f src/parser/*.tab.*
 	rm -f src/parser/*.yy.*
+	rm -f src/compiler/*.o
+	rm -f src/compiler/*.d
+	rm -f src/compiler/*.tab.*
+	rm -f src/compiler/*.yy.*
 	rm -f src/ast/*.o
 	rm -f src/ast/*.d
 

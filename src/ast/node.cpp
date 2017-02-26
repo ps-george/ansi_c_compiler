@@ -6,6 +6,10 @@
 
 #include "ast/node.hpp"
 
+std::string Node::getNodeType() const {
+  return "Node";
+}
+
 //! Return the xml header for the node
 std::string Node::getHeader() const { return "<" +getNodeType() + ">"; };
 
@@ -22,6 +26,10 @@ void Node::tab(bool open){
    tabcount--;
  }
  std::cout << std::string(tabcount, '\t');
+}
+
+void Node::print_asm(Context& ctxt) const {
+  ctxt.ss() << "# " << getNodeType() << " not implemented yet" << std::endl;
 }
 
 void Node::print_c() const {
