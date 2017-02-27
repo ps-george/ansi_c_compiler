@@ -40,7 +40,7 @@ main:
 	lw	$2,0($fp)
 	addiu	$2,$2,1
 	sw	$2,0($fp)
-	move	$2,$0
+	lw	$2,0($fp)
 	move	$sp,$fp
 	.cfi_def_cfa_register 29
 	lw	$fp,20($sp)
