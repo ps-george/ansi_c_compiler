@@ -4,7 +4,9 @@
 
 #include <iomanip>
 #include <string.h>
-#include <sstream>
+#include <fstream>
+#include <iostream>
+
 // Define the instance of the variable that is declared in the header
 //YYSTYPE yylval;
 
@@ -24,7 +26,8 @@ int Node::tabcount = 0;
 int main(int argc, char * argv[]) {
   std::stringstream ss;
   const Node *ast=parseAST();
-  Context ctxt(stdout);
+  std::ostream& out = std::cout;
+  Context ctxt(&out);
   ast->print_asm(ctxt);
   return 0;
 }

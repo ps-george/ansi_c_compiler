@@ -25,6 +25,7 @@ public:
   //! print functions
   virtual void print_xml() const;
   virtual void print_c() const;
+  virtual void print_asm(Context& ctxt) const; //! Print out mips assembly
 };
 
 #endif

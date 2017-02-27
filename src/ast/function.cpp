@@ -36,3 +36,9 @@ void Function::print_c() const {
   std::cout << "\n";
   stat->print_c();
 }
+
+void Function::print_asm(Context& ctxt) const{
+  // Indicated that we're printing out a function
+  ctxt.ss() << "\t" << "# Function" << std::endl;
+  // 
+}
