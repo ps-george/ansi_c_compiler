@@ -11,6 +11,10 @@ class Node {
 private:
   static int tabcount;
   static int changed;
+  // metadata;
+  // variables used by children
+  // variables defined by parents
+  // def-use analysis
 public:
   virtual ~Node(){};
   
