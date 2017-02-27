@@ -8,12 +8,17 @@ INC=-Iinclude
 # Preprocessor flags, MMD creates dependency files
 CPPFLAGS += -MMD $(INC)
 
+
+FLX = $(LSDIR)/flexer.yy.cpp
+BIS = $(PSDIR)/c_parser.tab.c
 ###
 ### BUILD RULES FOR LEXER
 ###
 # List of source files for lexer
 _LSRCS= lexer_main.cpp flexer.yy.cpp
 LSRCS=$(patsubst %,$(LSDIR)/%,$(_LSRCS))
+
+#FLX =  $(patsubst %,$(LSDIR)/%,$(_FLX))
 
 bin/c_lexer: include/c_parser.tab.h $(LSRCS:%.cpp=%.o) 
 	mkdir -p bin
@@ -27,7 +32,6 @@ include/c_parser.tab.h: src/parser/c_parser.y
 %/flexer.yy.cpp: %/flexer.flex include/c_parser.tab.h
 	flex -o $@ $^ 
 
-
 # Need to build flexer.yy.o next
 %/flexer.yy.o: flexer.yy.cpp
 	g++ $(CPPFLAGS) $(CXXFLAGS) -o $@ $^
@@ -38,12 +42,12 @@ include/c_parser.tab.h: src/parser/c_parser.y
 ### BUILD RULES FOR PARSER
 ###
 # Source files
-_PSRCS=parser_main.cpp flexer.yy.cpp c_parser.tab.c
-
-_ASTSRCSi:=$(wildcard src/ast/*.cpp)
-
+_PSRCS=parser_main.cpp
 PSRCS=$(patsubst %,$(PSDIR)/%,$(_PSRCS))
+PSRCS += $(FLX)
+PSRCS += $(BIS)
 PSRCS += $(wildcard src/ast/*.cpp)
+
 
 
 bin/c_parser: include/c_parser.tab.h $(PSRCS:%.cpp=%.o) 
@@ -52,14 +56,20 @@ bin/c_parser: include/c_parser.tab.h $(PSRCS:%.cpp=%.o)
 
 %/c_parser.tab.c: include/c_parser.tab.h
 
+# Need to generate flexer.yy.cpp from .flex first
+%/flexer.yy.cpp: %/flexer.flex include/c_parser.tab.h
+	flex -o $@ $^ 
+
 -include $(_PSRCS:%.cpp=%.d)
 
 ###
 ### BUILD RULES FOR COMPILER
 ###
 # Source files
-_CSRCS=comiler_main.cpp
+_CSRCS=compiler_main.cpp
 CSRCS=$(patsubst %,$(CSDIR)/%,$(_CSRCS))
+CSRCS += $(FLX)
+CSRCS += $(BIS)
 CSRCS += $(wildcard src/ast/*.cpp)
 
 bin/c_compiler : include/c_parser.tab.h $(CSRCS:%.cpp=%.o)
