@@ -4,7 +4,6 @@
 
 #include <iomanip>
 #include <string.h>
-#include <fstream>
 #include <iostream>
 
 // Define the instance of the variable that is declared in the header
@@ -24,10 +23,13 @@ int Node::tabcount = 0;
 //int Node::changed = 0;
 
 int main(int argc, char * argv[]) {
-  std::stringstream ss;
+  // Parse the input into the AST
   const Node *ast=parseAST();
+  // Print the output to cout
   std::ostream& out = std::cout;
+  // Initialize context with cout as target
   Context ctxt(&out);
+  // Print assembly
   ast->print_asm(ctxt);
   return 0;
 }

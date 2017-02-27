@@ -34,10 +34,12 @@ public:
   //! Printers
   virtual void print_xml() const;
   virtual void print_c() const;
+  virtual void print_asm(Context& ctxt) const;
   
   //! Printer helpers
   virtual void print_children_xml() const;
   virtual void print_children_cpp() const;
+  virtual void print_children_asm(Context& ctxt) const;
 };
 
 //! TabbedList is a node of the ast that can have any number of children
@@ -67,6 +69,7 @@ public:
   //! Getters
   virtual std::string getNodeType() const override;
   virtual void print_c() const;
+  //virtual void print_asm(Context& ctxt) const;
 };
 
 //! Scopes have a declaration list
