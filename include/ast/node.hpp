@@ -28,6 +28,7 @@ public:
   virtual std::string getNodeType() const;  //! Return the type of the node
   virtual std::string getHeader() const;        //! Return the xml header for the node
   virtual std::string getFooter() const;        //! Return the xml footer for the node
+  virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
   
   virtual void getChildDefs() const; //! Child defs is the most useful, especially for functions

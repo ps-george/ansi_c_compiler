@@ -44,6 +44,7 @@ public:
   TypeSpecifier(std::string n) : name(n) {};
   virtual std::string getName() const;
   virtual std::string getNodeType() const { return "TypeSpecifier"; };
+  std::vector<const Node *> getChildren() const { return {this}; }
 };
 
 /*! \brief A type is a primitive

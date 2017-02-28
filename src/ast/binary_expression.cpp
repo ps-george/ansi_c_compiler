@@ -11,6 +11,9 @@ BinaryExpression::BinaryExpression(const Expression *l, const Expression *r,
     : left(l), right(r), op(*_op) {}
 
 std::string BinaryExpression::getOp() const { return op; };
+std::vector<const Node *> BinaryExpression::getChildren() const {
+  return {left, right};
+}
 
 void AssignmentExpression::compile() const {
   if (op == "=") {

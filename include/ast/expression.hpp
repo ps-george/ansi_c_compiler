@@ -30,6 +30,7 @@ public:
   virtual ~EmptyExpression(){};
   virtual std::string getNodeType() const override;
   EmptyExpression(){};
+  virtual std::vector<const Node *> getChildren() const { return {};}
 };
 
 //! 
@@ -48,6 +49,7 @@ public:
   virtual void print_c() const override;
   TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
+  virtual std::vector<const Node *> getChildren() const;
 };
 
 //! Primary expression points to identifier, constant, StringLiteral or (expression)

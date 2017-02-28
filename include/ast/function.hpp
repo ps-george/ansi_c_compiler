@@ -21,6 +21,7 @@ public:
   virtual std::string getType() const;
   virtual std::string getNodeType() const { return "Function"; };
   virtual std::string getHeader() const;
+  virtual std::vector<const Node *> getChildren() const;
   
   //! print functions
   virtual void print_xml() const;

@@ -13,6 +13,8 @@ public:
   virtual std::string getId() const override { return child->getId(); };
   virtual void print_xml() const override;
   virtual void print_c() const override;
+  std::vector<const Node *> getChildren() const { return {child}; }
+  
 };
 
 //! Init declarator
@@ -21,6 +23,7 @@ const Expression * e;
 public:
   InitDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {};
   virtual std::string getNodeType() const override;
+  std::vector<const Node *> getChildren() const;
 };
 
 //! Array declarator

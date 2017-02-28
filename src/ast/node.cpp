@@ -21,7 +21,11 @@ std::string Node::getId() const { return getNodeType();}
 
 //! Populate metadata vectors with the declarations held by the children
 void Node::getChildDefs() const {
-  
+  // Get all the children
+  for (auto &it : getChildren()){
+  // For each of the children, get the result of their getChildDefs and apppend them together
+  }
+
 }
 
 void Node::tab(bool open){

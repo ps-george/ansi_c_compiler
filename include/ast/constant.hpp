@@ -18,6 +18,8 @@ public:
   virtual std::string getHeader() const {
     return "<" + getNodeType() + " value=\"" + valstr + "\" />";
   }
+  
+  virtual std::vector<const Node *> getChildren() const {return {this};}
   virtual void print_c() const;
 };
 

@@ -13,6 +13,12 @@ std::string FunctionDeclarator::getNodeType() const { return "FunctionDeclarator
 std::string Declaration::getNodeType() const { return "Declaration"; };
 
 
+std::vector<const Node *> InitDeclarator::getChildren() const {
+  std::vector<const Node *> v = Declarator::getChildren();
+  v.push_back(e);
+  return v;
+}
+
 /* PRINT XML FUNCTIONS */
 void Declarator::print_xml() const{
   tab();

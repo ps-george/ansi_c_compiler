@@ -10,6 +10,10 @@ std::string Expression::getNodeType() const { return "Statement"; };
 std::string EmptyExpression::getNodeType() const { return "EmptyExpression"; };
 std::string TrinaryExpression::getNodeType() const { return "TrinaryExpression"; };
 
+std::vector<const Node *> TrinaryExpression::getChildren() const{
+  return {left,middle,right};
+}
+
 void TrinaryExpression::print_c() const {
   left->print_c();
   std::cout << " ? ";

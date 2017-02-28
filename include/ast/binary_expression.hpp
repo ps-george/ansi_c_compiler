@@ -12,6 +12,7 @@ protected:
 public:
   BinaryExpression(const Expression * l, const Expression * r, std::string * _op);
   std::string getOp() const;
+  virtual std::vector<const Node *> getChildren() const;
   void print_c() const;
 };
 

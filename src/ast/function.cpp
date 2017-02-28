@@ -11,6 +11,11 @@ Function::Function(const Node *_type, const Node *_dec, const Node *_s)
       declarator((const Declarator *)_dec), // Declarator contains the params
       stat((const CompoundStatement *)_s) {};
 
+
+std::vector<const Node *> Function::getChildren() const{
+  return {declarator, stat};
+}
+
 std::string Function::getType() const { return type->getTypename(); }
 
 std::string Function::getHeader() const {
