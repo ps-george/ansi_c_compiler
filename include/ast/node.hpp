@@ -12,8 +12,14 @@ private:
   static int tabcount;
   static int changed;
   // metadata;
+  mutable std::vector<std::string> childDefs; //! Child defs
+  // mutable std::vector<std::string> childUses; //! and child uses are more useful and easier to implement
+  // std::vector<std::string> parentDefs; -> need pointer to parent on each node, effort.
+  
+  // A list of:
   // variables used by children
   // variables defined by parents
+  // variables defined by children
   // def-use analysis
 public:
   virtual ~Node(){};
@@ -23,6 +29,9 @@ public:
   virtual std::string getHeader() const;        //! Return the xml header for the node
   virtual std::string getFooter() const;        //! Return the xml footer for the node
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
+  
+  virtual void getChildDefs() const; //! Child defs is the most useful, especially for functions
+  // virtual void childUses() const;
   
   //! Printers
   virtual void print_xml() const;    //! Print xml implicit recursive function

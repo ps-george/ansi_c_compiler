@@ -19,6 +19,11 @@ std::string Node::getFooter() const { return "</" + getNodeType() + ">"; };
 //! Return the id of a variable, ideally should be pure virtual
 std::string Node::getId() const { return getNodeType();}
 
+//! Populate metadata vectors with the declarations held by the children
+void Node::getChildDefs() const {
+  
+}
+
 void Node::tab(bool open){
  if (open) {
    tabcount++;
