@@ -140,9 +140,9 @@ selection-statement
 // COMPOUND STATEMENT
 compound-statement
   : '{' '}' { $$ = new CompoundStatement(new List({}), new List({})); }
-  | '{' statement-list '}' { $$ = new CompoundStatement(new List({}), new List({$2})); }
+  | '{' statement-list '}' { $$ = new CompoundStatement(new List({}), $2); }
   | '{' declaration-seq '}' { $$ = new CompoundStatement($2,new List({})); } 
-  | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement($2, new List({$3})); }   // declarations must come before statements
+  | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement($2, $3); }   // declarations must come before statements
 
 statement-list
   : statement { $$ = new List({$1}); }

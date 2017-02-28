@@ -13,6 +13,7 @@ Function::Function(const Node *_type, const Node *_dec, const Node *_s)
 
 
 std::vector<const Node *> Function::getChildren() const{
+  std::cerr << "Finding children of " << declarator->getId() << ":" << std::endl;
   return {declarator, stat};
 }
 
@@ -43,14 +44,18 @@ void Function::print_c() const {
 }
 
 void Function::print_asm(Context& ctxt) const{
+  setChildDefs();
+  std::vector<std::string> vars = getChildDefs();
+  int vars_size = vars.size()*4;
+  std::cerr << vars_size << std::endl;
   // Indicated that we're printing out a function
   ctxt.ss() << "# Function " << declarator->getId() << std::endl
   // Label for the function
   << declarator->getId() << ":" << std::endl
   // Need to know the number of variables in the function..!
-  << "\t.frame $fp,f" << "# vars= , regs= 1/0, args= 0, gp= 0" << std::endl
+  << "\t.frame $fp,f" << "# vars="<< vars_size <<" , regs= 1/0, args= 0, gp= 0" << std::endl
   << "\t.mask = 0x40000000,-4" << std::endl
-  << "\taddiu $sp, $sp,-" << " #(insert vars + 8)" << std::endl
-  << "\tsw $fp,(var+4)($sp)" << std::endl
+  << "\taddiu $sp, $sp,-" << vars_size+8 << " #(insert vars + 8)" << std::endl
+  << "\tsw $fp,"<< vars_size+4 << "($sp)" << std::endl
   << "\tmove $fp, $sp" << std::endl;
 }

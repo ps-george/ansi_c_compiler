@@ -54,6 +54,7 @@ public:
   };
   CompoundStatement(const List *_d, const List *_s) : declars(_d), stats(_s){};
   virtual std::string getNodeType() const override;
+  virtual std::vector<const Node *> getChildren() const override;
   virtual void print_xml() const override;
   virtual void print_c() const override;
 };

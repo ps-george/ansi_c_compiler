@@ -14,7 +14,6 @@ public:
   virtual void print_xml() const override;
   virtual void print_c() const override;
   std::vector<const Node *> getChildren() const { return {child}; }
-  
 };
 
 //! Init declarator
@@ -54,6 +53,11 @@ private:
 public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   virtual std::string getNodeType() const override;
+  virtual std::vector<const Node *> getChildren() const override;
+  virtual std::vector<std::string> getChildDefs() const override;
+  // For each of the declarators in the dlist, add an entry to childDefs
+  virtual void setChildDefs() const override;
+  
   virtual void print_xml() const override;
   virtual void print_c() const override;
 };

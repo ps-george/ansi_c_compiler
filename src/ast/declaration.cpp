@@ -19,6 +19,25 @@ std::vector<const Node *> InitDeclarator::getChildren() const {
   return v;
 }
 
+std::vector<const Node *> Declaration::getChildren () const {
+  // for each item in dlist
+  std::cerr << "Finding children of declaration" << std::endl;
+  return dlist->getChildren();
+}
+
+void Declaration::setChildDefs() const {
+  // For each of then declarators that are children of this
+  for (auto &it : getChildren()){
+    // Get the name of the thing being declared
+    std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
+    childDefs.push_back(it->getId());
+  }
+}
+
+std::vector<std::string> Declaration::getChildDefs() const {
+ return childDefs;
+}
+
 /* PRINT XML FUNCTIONS */
 void Declarator::print_xml() const{
   tab();

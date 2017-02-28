@@ -20,12 +20,20 @@ std::string Node::getFooter() const { return "</" + getNodeType() + ">"; };
 std::string Node::getId() const { return getNodeType();}
 
 //! Populate metadata vectors with the declarations held by the children
-void Node::getChildDefs() const {
+void Node::setChildDefs() const {
   // Get all the children
   for (auto &it : getChildren()){
-  // For each of the children, get the result of their getChildDefs and apppend them together
+    // For each of the children, get the result of their getChildDefs and apppend them together
+    std::cerr << "Child: " << it->getNodeType() << std::endl;
+    it->setChildDefs();
+    std::vector<std::string> tmp = it->getChildDefs(); // Sets the metadata by getting the childDefs of it's children
+    childDefs.insert(childDefs.end(), tmp.begin(), tmp.end());
   }
+}
 
+//! Populate metadata vectors with the declarations held by the children
+std::vector<std::string> Node::getChildDefs() const {
+  return childDefs;
 }
 
 void Node::tab(bool open){

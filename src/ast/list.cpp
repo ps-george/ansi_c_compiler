@@ -14,7 +14,12 @@ std::string DeclarationList::getNodeType() const { return "DeclarationList"; }
 std::string ParameterList::getNodeType() const { return "ParameterList"; }
 
 /* COMMON FUNCTIONS */
-std::vector<const Node *> List::getChildren() const { return children; };
+std::vector<const Node *> List::getChildren() const { 
+  if (!children.size()){
+    std::cerr << "No children" << std::endl;
+  }
+  return children; 
+};
 
 List::~List() {
   for (auto &it : children)

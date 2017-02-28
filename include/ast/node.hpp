@@ -11,6 +11,7 @@ class Node {
 private:
   static int tabcount;
   static int changed;
+protected:
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs
   // mutable std::vector<std::string> childUses; //! and child uses are more useful and easier to implement
@@ -30,10 +31,11 @@ public:
   virtual std::string getFooter() const;        //! Return the xml footer for the node
   virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
-  
-  virtual void getChildDefs() const; //! Child defs is the most useful, especially for functions
+  virtual std::vector<std::string> getChildDefs() const; //! Child defs is the most useful, especially for functions
   // virtual void childUses() const;
   
+  //! Recursive setter:
+  virtual void setChildDefs() const;
   //! Printers
   virtual void print_xml() const;    //! Print xml implicit recursive function
   virtual void print_c() const;      //! Print cpp implicit recursive function

@@ -1,0 +1,7 @@
+# Function main
+main:
+	.frame $fp,f# vars=4 , regs= 1/0, args= 0, gp= 0
+	.mask = 0x40000000,-4
+	addiu $sp, $sp,-12 #(insert vars + 8)
+	sw $fp,8($sp)
+	move $fp, $sp

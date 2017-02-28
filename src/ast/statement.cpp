@@ -9,6 +9,10 @@
 std::string Statement::getNodeType() const { return "Statement"; }
 std::string CompoundStatement::getNodeType() const { return "CompoundStatement"; };
 
+std::vector<const Node *> CompoundStatement::getChildren() const {
+  return {declars, stats};
+}
+
 void ConditionalStatement::print_xml() const {
   tab();
   std::cout << getHeader() << std::endl;
