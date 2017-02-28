@@ -34,7 +34,7 @@ public:
   virtual std::string getNodeType() const { return "ConditionalStatement"; };
   virtual void print_xml() const;
   virtual void print_c() const;
-  virtual const Expression *getCondition() const = 0;
+  virtual std::vector<const Expression *>getConditions() const = 0;
   virtual const Statement *getBody() const { return stat1; };
 };
 

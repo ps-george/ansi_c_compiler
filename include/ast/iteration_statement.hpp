@@ -12,7 +12,7 @@ class IterationStatement : public ConditionalStatement {
 public:
   virtual ~IterationStatement(){};
   virtual std::string getNodeType() const;
-  virtual std::vector<const Expression*> getConditions() const = 0;
+  // virtual std::vector<const Expression*> getConditions() const = 0;
   virtual void print_c() const;
   IterationStatement(const Statement *s)
       : ConditionalStatement(s) {}
@@ -34,7 +34,6 @@ public:
   };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
-  virtual const Expression * getCondition() const;
 };
 
 class ForStatement : public IterationStatement {
@@ -48,51 +47,64 @@ public:
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1};
   };
-  virtual const Expression * getCondition() const { return (const Expression *)cond1;};
 };
 
-class EEForStatement : public ForStatement {
+class EEForStatement : public IterationStatement {
 private:
+  const ExpressionStatement *cond1;
   const ExpressionStatement *cond2;
-
 public:
   EEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                  const Statement *s1)
-      : ForStatement(c1, s1), cond2(c2) {};
-      
-  virtual const Expression * getCondition() const { return (const Expression *)cond2;};
+      : IterationStatement(s1), cond1(c1), cond2(c2) {};
+  
+  virtual std::vector<const Expression*> getConditions() const override {
+    return {(const Expression*)cond1,(const Expression*)cond2};
+  };
 };
 
-class EEEForStatement : public EEForStatement {
+class EEEForStatement : public IterationStatement {
 private:
+  const ExpressionStatement *cond1;
+  const ExpressionStatement *cond2;
   const Expression *cond3;
-
 public:
   EEEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                   const Expression *c3, const Statement *s1)
-      : EEForStatement(c1, c2, s1), cond3(c3)  {};
-  virtual const Expression * getCondition() const override { return (const Expression *)cond3;};
+      : IterationStatement(s1), cond1(c1), cond2(c2), cond3(c3)  {}
+  ;
+  virtual std::vector<const Expression*> getConditions() const override {
+    return {(const Expression*)cond1,(const Expression*)cond2, cond3};
+  };
 };
 
-class DEForStatement : public ForStatement {
+class DEForStatement : public IterationStatement {
 private:
   const Declaration *dec;
-
+  const ExpressionStatement *cond1; 
 public:
   DEForStatement(const Declaration *d, const ExpressionStatement *c1,
                  const Statement *s1)
-      :  ForStatement(c1, s1), dec(d)  {};
-  virtual const Expression * getCondition() const override { return nullptr;};
+      :  IterationStatement(s1), dec(d), cond1(c1)  {};
+  ;
+  virtual std::vector<const Expression*> getConditions() const override {
+    return {(const Expression*)cond1};
+  };
 };
 
-class DEEForStatement : public DEForStatement {
+class DEEForStatement : public IterationStatement {
 private:
+  const Declaration *dec;
+  const ExpressionStatement *cond1;
   const Expression *cond2;
 public:
   DEEForStatement(const Declaration *d, const ExpressionStatement *c1,
                   const Expression *c2, const Statement *s1)
-      : DEForStatement(d, c1, s1), cond2(c2)  {};
-  virtual const Expression * getCondition() const override { return (const Expression *)cond2;};
+      : IterationStatement(s1), dec(d), cond1(c1), cond2(c2)  {};
+  ;
+  virtual std::vector<const Expression*> getConditions() const override {
+    return {(const Expression*)cond1,cond2};
+  };
 };
 
 /**

@@ -16,6 +16,7 @@ public:
       : ConditionalStatement(s), cond(c) {}
   virtual std::string getNodeType() const { return "SelectionStatement"; };
   virtual const Expression *getCondition() const;
+  virtual std::vector<const Expression *>getConditions() const;
 };
 
 /**

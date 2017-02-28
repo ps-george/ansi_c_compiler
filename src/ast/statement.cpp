@@ -37,7 +37,9 @@ void Statement::print_c() const {
 void ConditionalStatement::print_c() const {
   tab();
   std::cout << "while(";
-  getCondition()->print_c();
+  for (auto &it : getConditions()){
+    it->print_c();
+  }
   std::cout << ")\n";
   tab_incr();
   stat1->print_c();

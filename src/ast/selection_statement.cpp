@@ -6,7 +6,11 @@
 
 #include "ast/selection_statement.hpp"
 
-const Expression *SelectionStatement::getCondition() const { return cond; };
+const Expression *SelectionStatement::getCondition() const { return getConditions()[0]; };
+
+std::vector<const Expression *>SelectionStatement::getConditions() const {
+  return {cond};
+}
 
 void IfElseStatement::print_xml() const {
   IfStatement::print_xml();
