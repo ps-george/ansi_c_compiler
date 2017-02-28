@@ -5,3 +5,13 @@ main:
 	addiu $sp, $sp,-8 #(insert vars + 8)
 	sw $fp,4($sp)
 	move $fp, $sp
+# printing asm for Function
+# child is FunctionDeclarator
+# printing asm for FunctionDeclarator
+# child is Variable
+# printing asm for Variable
+# child is CompoundStatement
+# printing asm for CompoundStatement
+# child is List
+# child is List
+# printing asm for JumpStatement

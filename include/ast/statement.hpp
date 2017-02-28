@@ -13,6 +13,8 @@ private:
 public:
   ExpressionStatement(const Expression *e) : expr(e){};
   ~ExpressionStatement(){};
+  virtual std::string getNodeType() const { return "ExpressionStatement"; };
+  virtual std::vector<const Node *> getChildren() { return {expr}; }
 };
 
 /*!

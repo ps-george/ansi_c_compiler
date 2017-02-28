@@ -21,6 +21,7 @@ public:
   
   virtual std::vector<const Node *> getChildren() const {return {this};}
   virtual void print_c() const;
+  virtual void print_asm(Context& ctxt) const; 
 };
 
 class StringLiteral : public Constant {

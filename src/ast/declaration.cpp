@@ -18,13 +18,12 @@ std::string Declaration::getNodeType() const { return "Declaration"; };
 // Something has been declared
 void Declaration::print_asm(Context& ctxt) const{
   //! \todo What if variable has already been assigned and we want to 'shadow'
-  ctxt.ss() << "# Declaration, with type: " << type->getTypename();
+  ctxt.ss() << "# Declaration, with type '" << type->getTypename() << "' of: ";
   for (auto &it : dlist->getChildren()){
     ctxt.ss() << it->getId() << ", ";
     ctxt.assignVariable(it->getId(), type->getTypename());
   }
   ctxt.ss() << std::endl;
-  
 }
 
 /*

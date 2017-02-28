@@ -11,6 +11,7 @@ class JumpStatement : public Statement {
 public:
   JumpStatement(){};
   virtual ~JumpStatement(){};
+  virtual std::string getNodeType() const { return "JumpStatement"; };
 };
 /*!
 Constraints

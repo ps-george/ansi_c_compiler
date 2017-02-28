@@ -62,6 +62,10 @@ void List::print_asm(Context& ctxt) const {
   print_children_asm(ctxt);
 }
 
+void ExpressionList::print_asm(Context& ctxt) const {
+  List::print_children_asm(ctxt);
+}
+
 void TabbedList::print_xml() const {
   if (getChildren().size() != 0) {
     tab();

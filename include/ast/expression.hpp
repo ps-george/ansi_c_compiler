@@ -12,8 +12,8 @@
 class Statement : public Node {
 public:
   virtual ~Statement(){};
-  virtual std::string getNodeType() const override;
-  virtual void print_c() const override;
+  virtual std::string getNodeType() const = 0;
+  virtual void print_c() const;
 };
 
 //! Abstract base class for expressions
@@ -22,7 +22,6 @@ public:
   virtual ~Expression(){};
   virtual std::string getNodeType() const override;
   virtual const Expression * add(const Expression * child) const {(void)child; return this;};
-  
 };
 
 class EmptyExpression : public Expression {

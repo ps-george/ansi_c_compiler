@@ -57,4 +57,5 @@ void Function::print_asm(Context& ctxt) const{
   << "\taddiu $sp, $sp,-" << vars_size+8 << " #(insert vars + 8)" << std::endl
   << "\tsw $fp,"<< vars_size+4 << "($sp)" << std::endl
   << "\tmove $fp, $sp" << std::endl;
+  Node::print_asm(ctxt);
 }

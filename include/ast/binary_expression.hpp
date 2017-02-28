@@ -13,6 +13,8 @@ public:
   BinaryExpression(const Expression * l, const Expression * r, std::string * _op);
   std::string getOp() const;
   virtual std::vector<const Node *> getChildren() const;
+  const Expression * getLeft() const { return left;};
+  const Expression * getRight()const { return right;};
   void print_c() const;
   virtual void print_asm(Context& ctxt) const;
 };
@@ -22,7 +24,7 @@ public:
 class AssignmentExpression : public BinaryExpression {
 public:
   using BinaryExpression::BinaryExpression;
-  virtual void print_asm(Context& ctxt) const;
+  virtual void print_asm(Context& ctxt) const override;
 };
 
 #endif

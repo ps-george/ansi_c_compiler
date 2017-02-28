@@ -36,3 +36,7 @@ void Constant::print_c() const {
   Node::print_c();
   std::cout << getNodeType() << " " << getValue() << std::endl;
 }
+
+void Constant::print_asm(Context& ctxt) const {
+  ctxt.ss() << "li $2, " << getValue() << " # Load constant into active register" << std::endl;
+}

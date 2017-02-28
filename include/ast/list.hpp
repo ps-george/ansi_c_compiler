@@ -93,11 +93,12 @@ public:
 };
 
 //! Points to any number of expressions separated by commas
-class ExpressionList : public Expression, public List {
+class ExpressionList : public List, public Expression {
   //! Contains a vector of pointers to ast nodes
 public:
   virtual ~ExpressionList(){};
   ExpressionList(std::vector<const Node *> _children) : List(_children) {}
+  void print_asm(Context& ctxt) const;
 };
 
 #endif
