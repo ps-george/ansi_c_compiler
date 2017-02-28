@@ -12,19 +12,21 @@
 struct Var {
   // A variable has an address, a register value if it's in a register, dirty flag if it shouldn't be spilled,
   int reg;
-  uint32_t address;
-  bool dirty;
+  std::string type;
+  int offset;
+  // bool dirty
 };
 
 class Context {
 private:
   std::map<std::string, Var> bindings;
   std::ostream *out;
+  int offset = 0;
 public:
   Context(std::ostream *stream) { out = stream; };
   std::ostream& ss();
-  std::string getVariable(std::string id);
-  void assignVariable(std::string id, std::string type, int value = 0);
+  int getVariable(std::string id);
+  void assignVariable(std::string id, std::string type);
   
 };
 

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include "codegen_helpers.hpp"
 
 //! Abstract base class for ast node
@@ -13,8 +14,8 @@ private:
   static int changed;
 protected:
   // metadata;
-  mutable std::vector<std::string> childDefs; //! Child defs
-  // mutable std::vector<std::string> childUses; //! and child uses are more useful and easier to implement
+  mutable std::vector<std::string> childDefs; //! Child defs and
+  //mutable std::map<std::string, int> childUses; //! Child uses are more useful and easier to implement
   // std::vector<std::string> parentDefs; -> need pointer to parent on each node, effort.
   
   // A list of:
@@ -32,6 +33,7 @@ public:
   virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
   virtual std::vector<std::string> getChildDefs() const; //! Child defs is the most useful, especially for functions
+  //virtual std::map<std::string> childUses() const;
   // virtual void childUses() const;
   
   //! Recursive setter:

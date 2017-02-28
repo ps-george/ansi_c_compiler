@@ -15,9 +15,13 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
   return {left, right};
 }
 
-void AssignmentExpression::compile() const {
-  if (op == "=") {
+void BinaryExpression::print_asm(Context& ctxt) const {
+  
+}
 
+void AssignmentExpression::print_asm(Context& ctxt) const {
+  if (op == "=") {
+    
   } else if (op == "*=") {
 
   } else if (op == "/=") {

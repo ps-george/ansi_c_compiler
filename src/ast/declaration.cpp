@@ -12,6 +12,25 @@ std::string ArrayDeclarator::getNodeType() const { return "ArrayDeclarator"; };
 std::string FunctionDeclarator::getNodeType() const { return "FunctionDeclarator"; };
 std::string Declaration::getNodeType() const { return "Declaration"; };
 
+/*
+ * PRINT_ASM
+ */
+// Something has been declared
+void Declaration::print_asm(Context& ctxt) const{
+  //! \todo What if variable has already been assigned and we want to 'shadow'
+  ctxt.ss() << "# Declaration, with type: " << type->getTypename();
+  for (auto &it : dlist->getChildren()){
+    ctxt.ss() << it->getId() << ", ";
+    ctxt.assignVariable(it->getId(), type->getTypename());
+  }
+  ctxt.ss() << std::endl;
+  
+}
+
+/*
+ *
+ * 
+ */
 
 std::vector<const Node *> InitDeclarator::getChildren() const {
   std::vector<const Node *> v = Declarator::getChildren();

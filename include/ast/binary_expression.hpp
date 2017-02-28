@@ -14,6 +14,7 @@ public:
   std::string getOp() const;
   virtual std::vector<const Node *> getChildren() const;
   void print_c() const;
+  virtual void print_asm(Context& ctxt) const;
 };
 
 
@@ -21,7 +22,7 @@ public:
 class AssignmentExpression : public BinaryExpression {
 public:
   using BinaryExpression::BinaryExpression;
-  virtual void compile() const;
+  virtual void print_asm(Context& ctxt) const;
 };
 
 #endif

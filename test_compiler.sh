@@ -6,6 +6,7 @@ make bin/c_compiler
 
 # make test results directory
 mkdir -p test/compiler/out
+mkdir -p test/compiler/ref
 PASSED=0
 CHECKED=0
 
@@ -13,6 +14,8 @@ for i in test/compiler/in/*.c; do
   echo "==========================="
   echo "Input file : ${i}"
   BASENAME=$(basename $i .c);
+  mips-linux-gnu-gcc -S -O0 -static -o test/compiler/ref/$BASENAME $i
+  
   
   cat $i | ./bin/c_compiler > test/compiler/out/$BASENAME.mips
   

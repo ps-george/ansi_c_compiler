@@ -14,6 +14,7 @@ public:
   virtual void print_xml() const override;
   virtual void print_c() const override;
   std::vector<const Node *> getChildren() const { return {child}; }
+  //virtual void print_asm(Context& ctxt) const;
 };
 
 //! Init declarator
@@ -60,6 +61,7 @@ public:
   
   virtual void print_xml() const override;
   virtual void print_c() const override;
+  virtual void print_asm(Context& ctxt) const;
 };
 
 #endif

@@ -25,6 +25,8 @@ int Node::tabcount = 0;
 int main(int argc, char * argv[]) {
   // Parse the input into the AST
   const Node *ast=parseAST();
+  // Set metadata
+  ast->setChildDefs();
   // Print the output to cout
   std::ostream& out = std::cout;
   // Initialize context with cout as target
