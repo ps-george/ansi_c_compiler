@@ -15,6 +15,8 @@ public:
   ~ExpressionStatement(){};
   virtual std::string getNodeType() const { return "ExpressionStatement"; };
   virtual std::vector<const Node *> getChildren() { return {expr}; }
+  virtual void print_asm(Context& ctxt) {
+    ctxt.ss() << "Do u see me??" << std::endl;}
 };
 
 /*!

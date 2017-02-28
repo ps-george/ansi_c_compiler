@@ -1,3 +1,5 @@
+# printing asm for Program
+# child is Function
 # Function main
 main:
 	.frame $fp,f# vars=16 , regs= 1/0, args= 0, gp= 0
@@ -13,10 +15,18 @@ main:
 # child is CompoundStatement
 # printing asm for CompoundStatement
 # child is DeclarationList
+# printing asm for DeclarationList
+# child is Declaration
 # Declaration, with type 'int' of: i, j, k, l, 
 # child is List
+# printing asm for List
+# child is ExpressionStatement
 # printing asm for ExpressionStatement
+# child is ExpressionStatement
 # printing asm for ExpressionStatement
+# child is ExpressionStatement
 # printing asm for ExpressionStatement
+# child is ExpressionStatement
 # printing asm for ExpressionStatement
+# child is JumpStatement
 # printing asm for JumpStatement

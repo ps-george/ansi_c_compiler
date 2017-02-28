@@ -34,12 +34,10 @@ public:
   //! Printers
   virtual void print_xml() const;
   virtual void print_c() const;
-  virtual void print_asm(Context& ctxt) const;
   
   //! Printer helpers
   virtual void print_children_xml() const;
   virtual void print_children_cpp() const;
-  virtual void print_children_asm(Context& ctxt) const;
 };
 
 //! TabbedList is a node of the ast that can have any number of children
@@ -98,7 +96,6 @@ class ExpressionList : public List, public Expression {
 public:
   virtual ~ExpressionList(){};
   ExpressionList(std::vector<const Node *> _children) : List(_children) {}
-  void print_asm(Context& ctxt) const;
 };
 
 #endif

@@ -1,3 +1,5 @@
+# printing asm for Program
+# child is Function
 # Function main
 main:
 	.frame $fp,f# vars=0 , regs= 1/0, args= 0, gp= 0
@@ -13,5 +15,8 @@ main:
 # child is CompoundStatement
 # printing asm for CompoundStatement
 # child is List
+# printing asm for List
 # child is List
+# printing asm for List
+# child is JumpStatement
 # printing asm for JumpStatement

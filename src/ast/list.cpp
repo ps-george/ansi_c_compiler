@@ -39,12 +39,6 @@ void List::print_children_cpp() const {
   }
 }
 
-void List::print_children_asm(Context& ctxt) const {
-  for (auto &it : getChildren()) {
-    it->print_asm(ctxt);
-  }
-}
-
 const Node *List::add(const Node *child) const {
   children.push_back(child);
   return this;
@@ -56,14 +50,6 @@ const Node *List::add(const Node *child) const {
 
 void List::print_xml() const {
   print_children_xml();
-}
-
-void List::print_asm(Context& ctxt) const {
-  print_children_asm(ctxt);
-}
-
-void ExpressionList::print_asm(Context& ctxt) const {
-  List::print_children_asm(ctxt);
 }
 
 void TabbedList::print_xml() const {
