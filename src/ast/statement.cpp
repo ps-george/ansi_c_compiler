@@ -6,7 +6,6 @@
 
 #include "ast/statement.hpp"
 
-//std::string Statement::getNodeType() const { return "Statement"; }
 std::string CompoundStatement::getNodeType() const { return "CompoundStatement"; };
 
 std::vector<const Node *> CompoundStatement::getChildren() const {
