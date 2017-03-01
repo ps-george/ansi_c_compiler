@@ -13,10 +13,11 @@ private:
 public:
   ExpressionStatement(const Expression *e) : expr(e){};
   ~ExpressionStatement(){};
-  virtual std::string getNodeType() const { return "ExpressionStatement"; };
-  virtual std::vector<const Node *> getChildren() { return {expr}; }
-  virtual void print_asm(Context& ctxt) {
-    ctxt.ss() << "Do u see me??" << std::endl;}
+  virtual std::string getNodeType() const override { return "ExpressionStatement"; };
+  virtual std::vector<const Node *> getChildren() const override {std::cerr << "Finding children of ExpressionStatement" << std::endl; return {expr}; }
+  virtual void print_asm(Context& ctxt) const override {
+    expr->print_asm(ctxt);
+  }
 };
 
 /*!

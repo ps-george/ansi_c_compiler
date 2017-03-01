@@ -6,6 +6,13 @@
 
 #include "ast/binary_expression.hpp"
 
+std::string BinaryExpression::getNodeType() const {
+  return "BinaryExpression";
+}
+std::string AssignmentExpression::getNodeType() const {
+  return "AssignmentExpression";
+}
+
 BinaryExpression::BinaryExpression(const Expression *l, const Expression *r,
                                    std::string *_op)
     : left(l), right(r), op(*_op) {}
@@ -16,11 +23,11 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 }
 
 void BinaryExpression::print_asm(Context& ctxt) const {
-  
+  ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
 }
 
 void AssignmentExpression::print_asm(Context& ctxt) const {
-  ctxt.ss() << "# assigment expression with op: '"<<op<<"'"<<std::endl;
+  ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
   if (op == "=") {
     // Load the thing on the left.
     int offset = ctxt.getVariable(getLeft()->getId());

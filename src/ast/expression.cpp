@@ -6,7 +6,7 @@
 
 #include "ast/expression.hpp"
 
-std::string Expression::getNodeType() const { return "Statement"; };
+//std::string Expression::getNodeType() const { return "Expression"; };
 std::string EmptyExpression::getNodeType() const { return "EmptyExpression"; };
 std::string TrinaryExpression::getNodeType() const { return "TrinaryExpression"; };
 

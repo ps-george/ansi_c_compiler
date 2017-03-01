@@ -70,7 +70,6 @@ void FunctionDeclarator::print_xml() const {
 };
 
 void Declaration::print_xml() const{
-  std::cout << "/* "<< getNodeType() << "*/";
   dlist->print_xml();
 };
 

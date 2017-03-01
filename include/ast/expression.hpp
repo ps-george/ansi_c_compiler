@@ -17,10 +17,10 @@ public:
 };
 
 //! Abstract base class for expressions
-class Expression : public Statement {
+class Expression : public Node {
 public:
   virtual ~Expression(){};
-  virtual std::string getNodeType() const override;
+  virtual std::string getNodeType() const =0;
   virtual const Expression * add(const Expression * child) const {(void)child; return this;};
 };
 
@@ -29,7 +29,7 @@ public:
   virtual ~EmptyExpression(){};
   virtual std::string getNodeType() const override;
   EmptyExpression(){};
-  virtual std::vector<const Node *> getChildren() const { return {};}
+  virtual std::vector<const Node *> getChildren() const override { return {};}
 };
 
 //! 
@@ -48,7 +48,7 @@ public:
   virtual void print_c() const override;
   TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
-  virtual std::vector<const Node *> getChildren() const;
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
 //! Primary expression points to identifier, constant, StringLiteral or (expression)

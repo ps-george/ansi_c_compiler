@@ -16,6 +16,7 @@ public:
   UnaryExpression(const Expression * c) : child(c) {
     op = "";
   };
+  virtual std::string getNodeType() const override;
   virtual void print_c() const;
 };
 

@@ -25,6 +25,7 @@ int Node::tabcount = 0;
 int main(int argc, char * argv[]) {
   // Parse the input into the AST
   const Node *ast=parseAST();
+  //ast->print_xml();
   // Set metadata
   ast->setChildDefs();
   // Print the output to cout

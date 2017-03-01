@@ -38,5 +38,5 @@ void Constant::print_c() const {
 }
 
 void Constant::print_asm(Context& ctxt) const {
-  ctxt.ss() << "li $2, " << getValue() << " # Load constant into active register" << std::endl;
+  ctxt.ss() << "\tli $2, " << getValue() << " # Load constant into active register" << std::endl;
 }

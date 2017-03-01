@@ -162,7 +162,7 @@ expression
   
 assignment-expression
   : conditional-expression { $$ = $1; }
-  | prefix-expression assignment-op assignment-expression { $$ = new BinaryExpression($1, $3, $2); }
+  | prefix-expression assignment-op assignment-expression { $$ = new AssignmentExpression($1, $3, $2); }
 
 conditional-expression
   : LOR-expression { $$ = $1; }

@@ -12,6 +12,15 @@ std::string TabbedList::getNodeType() const { return "Scope"; }
 std::string Program::getNodeType() const { return "Program"; }
 std::string DeclarationList::getNodeType() const { return "DeclarationList"; }
 std::string ParameterList::getNodeType() const { return "ParameterList"; }
+std::string ExpressionList::getNodeType() const { return "ExpressionList"; }
+
+void ExpressionList::print_asm(Context& ctxt) const{
+  ctxt.ss() << "# printing asm for " << getNodeType() << std::endl;
+  for (auto &it : List::getChildren()){
+    ctxt.ss() << "# child is " << it->getNodeType() << std::endl;
+    it->print_asm(ctxt);
+  }
+} //! Print out mips assembly
 
 /* COMMON FUNCTIONS */
 std::vector<const Node *> List::getChildren() const { 

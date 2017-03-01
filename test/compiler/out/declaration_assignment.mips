@@ -21,12 +21,32 @@ main:
 # child is List
 # printing asm for List
 # child is ExpressionStatement
-# printing asm for ExpressionStatement
+# printing asm for ExpressionList
+# child is AssignmentExpression
+# assignment expression with op: '='
+	lw	$2,0($fp) # load left hand side into a register.
+	li $2, 1 # Load constant into active register
+	sw  $2,0($fp) # store back in the same place
 # child is ExpressionStatement
-# printing asm for ExpressionStatement
+# printing asm for ExpressionList
+# child is AssignmentExpression
+# assignment expression with op: '='
+	lw	$2,4($fp) # load left hand side into a register.
+	li $2, 2 # Load constant into active register
+	sw  $2,4($fp) # store back in the same place
 # child is ExpressionStatement
-# printing asm for ExpressionStatement
+# printing asm for ExpressionList
+# child is AssignmentExpression
+# assignment expression with op: '='
+	lw	$2,8($fp) # load left hand side into a register.
+	li $2, 3 # Load constant into active register
+	sw  $2,8($fp) # store back in the same place
 # child is ExpressionStatement
-# printing asm for ExpressionStatement
+# printing asm for ExpressionList
+# child is AssignmentExpression
+# assignment expression with op: '='
+	lw	$2,12($fp) # load left hand side into a register.
+	li $2, 4 # Load constant into active register
+	sw  $2,12($fp) # store back in the same place
 # child is JumpStatement
 # printing asm for JumpStatement

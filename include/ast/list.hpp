@@ -96,6 +96,9 @@ class ExpressionList : public List, public Expression {
 public:
   virtual ~ExpressionList(){};
   ExpressionList(std::vector<const Node *> _children) : List(_children) {}
+  //! Getters
+  virtual std::string getNodeType() const override;
+  virtual void print_asm(Context& ctxt) const override; //! Print out mips assembly
 };
 
 #endif
