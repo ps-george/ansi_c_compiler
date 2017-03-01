@@ -1,5 +1,3 @@
-# printing asm for Program
-# child is Function
 # Function main
 main:
 	.frame $fp,f# vars=16 , regs= 1/0, args= 0, gp= 0
@@ -7,46 +5,30 @@ main:
 	addiu $sp, $sp,-24 #(insert vars + 8)
 	sw $fp,20($sp)
 	move $fp, $sp
-# printing asm for Function
-# child is FunctionDeclarator
-# printing asm for FunctionDeclarator
-# child is Variable
-# printing asm for Variable
-# child is CompoundStatement
-# printing asm for CompoundStatement
-# child is DeclarationList
-# printing asm for DeclarationList
-# child is Declaration
 # Declaration, with type 'int' of: i, j, k, l, 
-# child is List
-# printing asm for List
-# child is ExpressionStatement
 # printing asm for ExpressionList
 # child is AssignmentExpression
 # assignment expression with op: '='
 	lw	$2,0($fp) # load left hand side into a register.
 	li $2, 1 # Load constant into active register
 	sw  $2,0($fp) # store back in the same place
-# child is ExpressionStatement
 # printing asm for ExpressionList
 # child is AssignmentExpression
 # assignment expression with op: '='
 	lw	$2,4($fp) # load left hand side into a register.
 	li $2, 2 # Load constant into active register
 	sw  $2,4($fp) # store back in the same place
-# child is ExpressionStatement
 # printing asm for ExpressionList
 # child is AssignmentExpression
 # assignment expression with op: '='
 	lw	$2,8($fp) # load left hand side into a register.
 	li $2, 3 # Load constant into active register
 	sw  $2,8($fp) # store back in the same place
-# child is ExpressionStatement
 # printing asm for ExpressionList
 # child is AssignmentExpression
 # assignment expression with op: '='
 	lw	$2,12($fp) # load left hand side into a register.
 	li $2, 4 # Load constant into active register
 	sw  $2,12($fp) # store back in the same place
-# child is JumpStatement
-# printing asm for JumpStatement
+# printing asm for ExpressionList
+# child is Variable

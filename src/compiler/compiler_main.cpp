@@ -29,7 +29,10 @@ int main(int argc, char * argv[]) {
   // Set metadata
   ast->setChildDefs();
   // Print the output to cout
+  fprintf(stderr,"<?xml version=\"1.0\"?>\n");
+  std::ostream& err = std::cerr;
   std::ostream& out = std::cout;
+  ast->print_xml(err);
   // Initialize context with cout as target
   Context ctxt(&out);
   // Print assembly

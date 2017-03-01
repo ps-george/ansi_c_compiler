@@ -11,7 +11,7 @@ class JumpStatement : public Statement {
 public:
   JumpStatement(){};
   virtual ~JumpStatement(){};
-  virtual std::string getNodeType() const { return "JumpStatement"; };
+  virtual std::string getNodeType() const override;
 };
 /*!
 Constraints
@@ -31,6 +31,7 @@ private:
 public:
   GotoStatement(const std::string l) : label(l){};
   virtual ~GotoStatement(){};
+  virtual std::string getNodeType() const override;
 };
 
 /*!
@@ -48,6 +49,7 @@ class ContinueStatement : public JumpStatement {
 public:
   ContinueStatement(){};
   virtual ~ContinueStatement(){};
+  virtual std::string getNodeType() const override;
 };
 
 /*! \brief BreakStatement
@@ -62,6 +64,7 @@ class BreakStatement : public JumpStatement {
 public:
   BreakStatement(){};
   virtual ~BreakStatement(){};
+  virtual std::string getNodeType() const override;
 };
 
 /*!
@@ -93,6 +96,8 @@ private:
 
 public:
   ReturnStatement(const ExpressionStatement *e) : expr(e){};
+  virtual std::string getNodeType() const override;
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
 #endif

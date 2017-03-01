@@ -32,11 +32,16 @@ std::string IntConstant::getNodeType() const { return "IntConstant"; }
 std::string EnumConstant::getNodeType() const { return "EnumConstant"; }
 std::string CharConstant::getNodeType() const { return "CharConstant"; }
 
-void Constant::print_c() const {
-  Node::print_c();
-  std::cout << getNodeType() << " " << getValue() << std::endl;
-}
+// void Constant::print_c() const { 
+//  Node::print_c();
+//  std::cout << getNodeType() << " " << getValue() << std::endl;
+//}
 
 void Constant::print_asm(Context& ctxt) const {
   ctxt.ss() << "\tli $2, " << getValue() << " # Load constant into active register" << std::endl;
+}
+
+void Constant::print_xml(std::ostream &stream) const {
+  tab(stream);
+  stream << getHeader() << std::endl;
 }

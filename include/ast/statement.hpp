@@ -14,7 +14,7 @@ public:
   ExpressionStatement(const Expression *e) : expr(e){};
   ~ExpressionStatement(){};
   virtual std::string getNodeType() const override { return "ExpressionStatement"; };
-  virtual std::vector<const Node *> getChildren() const override {std::cerr << "Finding children of ExpressionStatement" << std::endl; return {expr}; }
+  virtual std::vector<const Node *> getChildren() const override { return {expr}; }
   virtual void print_asm(Context& ctxt) const override {
     expr->print_asm(ctxt);
   }
@@ -37,8 +37,8 @@ public:
   ConditionalStatement(const Statement *s)
       : stat1(s) {}
   virtual std::string getNodeType() const { return "ConditionalStatement"; };
-  virtual void print_xml() const;
-  virtual void print_c() const;
+  virtual void print_xml(std::ostream &stream) const;
+  // virtual void print_c() const;
   virtual std::vector<const Expression *>getConditions() const = 0;
   virtual const Statement *getBody() const { return stat1; };
 };
@@ -60,8 +60,8 @@ public:
   CompoundStatement(const List *_d, const List *_s) : declars(_d), stats(_s){};
   virtual std::string getNodeType() const override;
   virtual std::vector<const Node *> getChildren() const override;
-  virtual void print_xml() const override;
-  virtual void print_c() const override;
+  virtual void print_xml(std::ostream &stream) const override;
+  // virtual void print_c() const override;
 };
 
 #endif

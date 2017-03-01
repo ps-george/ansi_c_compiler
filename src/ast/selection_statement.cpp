@@ -12,15 +12,14 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
   return {cond};
 }
 
-void IfElseStatement::print_xml() const {
-  IfStatement::print_xml();
-  tab();
-  std::cout << getHeader() << std::endl;
-  tab();
-  std::cout << "<!-- Else -->" << std::endl;
+void IfElseStatement::print_xml(std::ostream &stream) const {
+  IfStatement::print_xml(stream);
+  tab(stream);
+  stream << getHeader() << std::endl;
+  tab(stream);
+  stream << "<!-- Else -->" << std::endl;
   tab_incr();
-  // cond1->print_xml();
-  stat2->print_xml();
-  tab(false);
-  std::cout << getFooter() << std::endl;
+  stat2->print_xml(stream);
+  tab(stream,false);
+  stream << getFooter() << std::endl;
 }

@@ -66,8 +66,8 @@ void AssignmentExpression::print_asm(Context& ctxt) const {
   }
 }
 
-void BinaryExpression::print_c() const {
-  left->print_c();
-  std::cout << " " << getOp() << " ";
-  right->print_c();
-}
+// void BinaryExpression::print_c() const { 
+//  left->print_c();
+//  std::cout << " " << getOp() << " ";
+//  right->print_c();
+//}

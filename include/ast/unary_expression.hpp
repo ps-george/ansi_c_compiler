@@ -17,7 +17,7 @@ public:
     op = "";
   };
   virtual std::string getNodeType() const override;
-  virtual void print_c() const;
+  // virtual void print_c() const;
 };
 
 //! PostfixExpression

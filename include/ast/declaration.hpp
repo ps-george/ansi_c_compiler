@@ -11,8 +11,8 @@ public:
   Declarator(const Node * _child) : child(_child) {};
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override { return child->getId(); };
-  virtual void print_xml() const override;
-  virtual void print_c() const override;
+  virtual void print_xml(std::ostream &stream) const override;
+  // virtual void print_c() const override;
   std::vector<const Node *> getChildren() const { return {child}; }
   //virtual void print_asm(Context& ctxt) const;
 };
@@ -40,8 +40,8 @@ const List * p; //! Parameter list/indentifier list for old-style functions
 public:
   FunctionDeclarator(const Node * _child, const List * _p) : Declarator(_child), p(_p) {};
   virtual std::string getNodeType() const override;
-  virtual void print_xml() const override;
-  virtual void print_c() const override;
+  virtual void print_xml(std::ostream &stream) const override;
+  // virtual void print_c() const override;
 };
 
 //! \brief A declaration of a variable
@@ -59,8 +59,8 @@ public:
   // For each of the declarators in the dlist, add an entry to childDefs
   virtual void setChildDefs() const override;
   
-  virtual void print_xml() const override;
-  virtual void print_c() const override;
+  virtual void print_xml(std::ostream &streams) const override;
+  // virtual void print_c() const override;
   virtual void print_asm(Context& ctxt) const;
 };
 

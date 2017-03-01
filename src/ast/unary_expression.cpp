@@ -8,6 +8,6 @@
 
 std::string UnaryExpression::getNodeType() const { return "UnaryExpression";}
 
-void UnaryExpression::print_c() const {
-  child->print_c(); 
-}
+// void UnaryExpression::print_c() const { 
+//  child->print_c(); 
+//}

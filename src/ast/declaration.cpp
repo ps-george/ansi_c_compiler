@@ -39,7 +39,7 @@ std::vector<const Node *> InitDeclarator::getChildren() const {
 
 std::vector<const Node *> Declaration::getChildren () const {
   // for each item in dlist
-  std::cerr << "Finding children of declaration" << std::endl;
+  // std::cerr << "Finding children of declaration" << std::endl;
   return dlist->getChildren();
 }
 
@@ -47,7 +47,7 @@ void Declaration::setChildDefs() const {
   // For each of then declarators that are children of this
   for (auto &it : getChildren()){
     // Get the name of the thing being declared
-    std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
+    // std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
     childDefs.push_back(it->getId());
   }
 }
@@ -57,52 +57,53 @@ std::vector<std::string> Declaration::getChildDefs() const {
 }
 
 /* PRINT XML FUNCTIONS */
-void Declarator::print_xml() const{
-  tab();
-  child->print_xml();
+void Declarator::print_xml(std::ostream &stream) const{
+  tab(stream);
+  child->print_xml(stream);
 }
 
-void FunctionDeclarator::print_xml() const {
+void FunctionDeclarator::print_xml(std::ostream &stream) const {
   // For each of the parameters, print out the parameter
   for (auto &it : p->getChildren()) {
-    it->print_xml();
+    it->print_xml(stream);
   }
 };
 
-void Declaration::print_xml() const{
-  dlist->print_xml();
+void Declaration::print_xml(std::ostream &stream) const{
+  dlist->print_xml(stream);
 };
 
 
-void Declarator::print_c() const{
-  child->print_c();
-}
+// void Declarator::print_c() const { 
+//  child->print_c();
+//}
 
-void FunctionDeclarator::print_c() const {
-  // For each of the parameters, print out the parameters
-  // std::cout << "/* "<< getNodeType() << "*/";
-  std::cout << getId() << "(";
-  bool first = true;
-  for (auto &it : p->getChildren()) {
-    if (!first){
-      std::cout << ", ";
-    }
-    first = false;
-    it->print_c();
-  }
-  std::cout << ")";
-};
-
-void Declaration::print_c() const{
-  tab();
-  std::cout << type->getTypename() << " ";
-  bool first = true;
-  for (auto &it : dlist->getChildren()) {
-    if (!first){
-      std::cout << ", ";
-    }
-    first = false;
-    it->print_c();
-  }
-  // std::cout << "/* "<< getNodeType() << "*/" << std::endl;
-};
+//void FunctionDeclarator::print_c() const {
+//  // For each of the parameters, print out the parameters
+//  // std::cout << "/* "<< getNodeType() << "*/";
+//  std::cout << getId() << "(";
+//  bool first = true;
+//  for (auto &it : p->getChildren()) {
+//    if (!first){
+//      std::cout << ", ";
+//    }
+//    first = false;
+//    it->print_c();
+//  }
+//  std::cout << ")";
+//};
+//
+//void Declaration::print_c() const{
+//  tab();
+//  std::cout << type->getTypename() << " ";
+//  bool first = true;
+//  for (auto &it : dlist->getChildren()) {
+//    if (!first){
+//      std::cout << ", ";
+//    }
+//    first = false;
+//    it->print_c();
+//  }
+//  // std::cout << "/* "<< getNodeType() << "*/" << std::endl;
+//};
+//

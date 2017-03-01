@@ -47,7 +47,7 @@ public:
   IfElseStatement(const Expression *c, const Statement *s1, const Statement *s2)
       : IfStatement(c, s1), stat2(s2) {}
   virtual std::string getNodeType() const { return "IfElse"; };
-  virtual void print_xml() const;
+  virtual void print_xml(std::ostream &stream) const;
 };
 
 

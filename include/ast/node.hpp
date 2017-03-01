@@ -12,6 +12,8 @@ class Node {
 private:
   static int tabcount;
   static int changed;
+  int sourceline;
+  int sourcecol;
 protected:
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs and
@@ -25,9 +27,10 @@ protected:
   // def-use analysis
 public:
   virtual ~Node(){};
-  
+  Node();
   //! Getters
   virtual std::string getNodeType() const;  //! Return the type of the node
+  virtual std::string getDeets() const;
   virtual std::string getHeader() const;        //! Return the xml header for the node
   virtual std::string getFooter() const;        //! Return the xml footer for the node
   virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
@@ -39,16 +42,16 @@ public:
   //! Recursive setter:
   virtual void setChildDefs() const;
   //! Printers
-  virtual void print_xml() const;    //! Print xml implicit recursive function
-  virtual void print_c() const;      //! Print cpp implicit recursive function
+  virtual void print_xml(std::ostream &stream) const;    //! Print xml implicit recursive function
+  // virtual void print_c() const;      //! Print cpp implicit recursive function
   virtual void print_asm(Context& ctxt) const; //! Print out mips assembly
   // virtual void print_mips() const;   //! Print ast 
   
   //! Static functions for keeping xml indentation nice
-  static void tab(bool open);
+  static void tab(std::ostream &stream, bool open);
   static void tab_incr() { tabcount++; }
   static void tab_decr() { tabcount--; }
-  static void tab() { if (tabcount) std::cout << std::string(tabcount, '\t'); } //! Return   
+  static void tab(std::ostream &stream) { if (tabcount) stream << std::string(tabcount, '\t'); } //! Return   
   //! Return a vector containing all of the children of the node
   //virtual std::vector<const Node *> getChildren() const = 0;
   

@@ -14,7 +14,7 @@ public:
   virtual std::string getNodeType() const;
   // virtual std::vector<const Node *> getChildren() const;
   // virtual std::vector<const Expression*> getConditions() const = 0;
-  virtual void print_c() const;
+  // virtual void print_c() const;
   IterationStatement(const Statement *s)
       : ConditionalStatement(s) {}
 };

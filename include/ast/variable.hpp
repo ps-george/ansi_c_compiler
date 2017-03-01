@@ -21,8 +21,8 @@ public:
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override;
   virtual std::string getHeader() const override;
-  virtual void print_xml() const override;
-  virtual void print_c() const override;
+  virtual void print_xml(std::ostream &stream) const override;
+  // virtual void print_c() const override;
 };
 
 class Parameter : public Variable {

@@ -14,10 +14,10 @@ std::vector<const Node *> TrinaryExpression::getChildren() const{
   return {left,middle,right};
 }
 
-void TrinaryExpression::print_c() const {
-  left->print_c();
-  std::cout << " ? ";
-  middle->print_c();
-  std::cout << " : ";
-  right->print_c();
-}
+// void TrinaryExpression::print_c() const { 
+//  left->print_c();
+//  std::cout << " ? ";
+//  middle->print_c();
+//  std::cout << " : ";
+//  right->print_c();
+//}

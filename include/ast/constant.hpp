@@ -12,16 +12,17 @@ public:
   virtual ~Constant(){};
   Constant(const std::string &_valstr);
 
-  virtual std::string getNodeType() const;
+  virtual std::string getNodeType() const override;
 
   virtual std::string getValue() const { return valstr; };
-  virtual std::string getHeader() const {
-    return "<" + getNodeType() + " value=\"" + valstr + "\" />";
+  virtual std::string getHeader() const override {
+    return "<" + getNodeType() + " value=\"" + valstr + "\" " + getDeets() + " />";
   }
   
-  virtual std::vector<const Node *> getChildren() const {return {this};}
-  virtual void print_c() const;
+  virtual std::vector<const Node *> getChildren() const override {return {};}
+  // virtual void print_c() const override;
   virtual void print_asm(Context& ctxt) const override; 
+  virtual void print_xml(std::ostream &stream) const override;
 };
 
 class StringLiteral : public Constant {

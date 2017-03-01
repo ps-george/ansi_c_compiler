@@ -25,7 +25,7 @@ void ExpressionList::print_asm(Context& ctxt) const{
 /* COMMON FUNCTIONS */
 std::vector<const Node *> List::getChildren() const { 
   if (!children.size()){
-    std::cerr << "No children" << std::endl;
+    //std::cerr << "No children" << std::endl;
   }
   return children; 
 };
@@ -34,18 +34,6 @@ List::~List() {
   for (auto &it : children)
     delete it;
   children.clear();
-}
-
-void List::print_children_xml() const {
-  for (auto &it : getChildren()) {
-    it->print_xml();
-  }
-};
-
-void List::print_children_cpp() const {
-  for (auto &it : getChildren()) {
-    it->print_c();
-  }
 }
 
 const Node *List::add(const Node *child) const {
@@ -57,53 +45,59 @@ const Node *List::add(const Node *child) const {
 
 /* PRINT XML */
 
-void List::print_xml() const {
-  print_children_xml();
+void List::print_xml(std::ostream &stream) const {
+  for (auto &it : getChildren()){
+    it->print_xml(stream);
+  }
 }
 
-void TabbedList::print_xml() const {
+void TabbedList::print_xml(std::ostream &stream) const {
   if (getChildren().size() != 0) {
-    tab();
-    std::cout << getHeader() << std::endl;
+    tab(stream);
+    stream << getHeader() << std::endl;
     tab_incr();
     // Print out all children on the same level -> Using list to store lots
     // lists of things
-    print_children_xml();
-    tab(false);
-    std::cout << getFooter() << std::endl;
+    for (auto &it : getChildren()){
+      it->print_xml(stream);
+    }
+    tab(stream,false);
+    stream << getFooter() << std::endl;
   } else {
     tab_decr();
   }
 }
 
-void DeclarationList::print_xml() const{
-  List::print_xml();
+void DeclarationList::print_xml(std::ostream &stream) const{
+  List::print_xml(stream);
 };
 
-void ParameterList::print_xml() const{
+void ExpressionList::print_xml(std::ostream &stream) const{
+  List::print_xml(stream);
+};
+
+void ParameterList::print_xml(std::ostream &stream) const{
   for (auto &it : getChildren()) {
-    std::cout << "<Parameter id=\"" << it->getId() << "\" />" << std::endl;
+    stream << "<Parameter id=\"" << it->getId() << "\" />" << std::endl;
   }
 };
 
 /* PRINT C */
 
-void List::print_c() const {
-  print_children_cpp(); 
-}
+// void List::print_c() const { 
+//  for (auto &it : getChildren()){
+//    it->print_c();
+//  }
+//}
 
-void TabbedList::print_c() const {
-  print_children_cpp(); 
-}
-
-void Program::print_c() const {
-  if (getChildren().size() != 0) {
-    //tab_incr();
-    // Print out all children on the same level -> Using list to store lots
-    // lists of things
-    for (auto &it : getChildren()) {
-      it->print_c();
-      std::cout << ';' <<std::endl;
-    } 
-  }
-}
+//void Program::print_c() const {
+//  if (getChildren().size() != 0) {
+//    //tab_incr();
+//    // Print out all children on the same level -> Using list to store lots
+//    // lists of things
+//    for (auto &it : getChildren()) {
+//      it->print_c();
+//      std::cout << ';' <<std::endl;
+//    } 
+//  }
+//}

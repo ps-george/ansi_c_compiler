@@ -30,7 +30,8 @@ int main(int argc, char * argv[]) {
   }
   else {
     fprintf(stdout,"<?xml version=\"1.0\"?>\n");
-    ast->print_xml();
+    std::ostream& out = std::cout;
+    ast->print_xml(out);
   }
   return 0;
 }

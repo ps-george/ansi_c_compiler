@@ -18,14 +18,14 @@ std::string Variable::getHeader() const {
   return "<" + getNodeType() 
              + " id=\"" + getId() 
              + "\" type=\"" + getType()
-             + "\" />";
+             + "\" " + Node::getDeets() + "/>";
 }
 
-void Variable::print_xml() const {
-  tab();
-  std::cout << getHeader() << std::endl;
+void Variable::print_xml(std::ostream &stream) const {
+  tab(stream);
+  stream << getHeader() << std::endl;
 }
 
-void Variable::print_c() const {
-  std::cout << getId();
-}
+// void Variable::print_c() const { 
+//  std::cout << getId();
+//}

@@ -32,12 +32,8 @@ public:
   virtual std::vector<const Node *> getChildren() const;
   
   //! Printers
-  virtual void print_xml() const;
-  virtual void print_c() const;
-  
-  //! Printer helpers
-  virtual void print_children_xml() const;
-  virtual void print_children_cpp() const;
+  virtual void print_xml(std::ostream &stream) const;
+  // virtual void print_c() const;
 };
 
 //! TabbedList is a node of the ast that can have any number of children
@@ -52,8 +48,7 @@ public:
   virtual std::string getNodeType() const;
   
   //! Printers
-  virtual void print_xml() const;
-  virtual void print_c() const;
+  virtual void print_xml(std::ostream &stream) const;
 };
 
 
@@ -66,7 +61,7 @@ public:
   
   //! Getters
   virtual std::string getNodeType() const override;
-  virtual void print_c() const;
+  // virtual void print_c() const;
   //virtual void print_asm(Context& ctxt) const;
 };
 
@@ -77,7 +72,7 @@ public:
   //! Getters
   virtual std::string getNodeType() const override;
   //! Printers
-  virtual void print_xml() const override;
+  virtual void print_xml(std::ostream &stream) const override;
 };
 
 //! Functions have a parameter list.
@@ -87,7 +82,7 @@ public:
   //! Getters
   virtual std::string getNodeType() const override;
   //! Printers
-  virtual void print_xml() const override;
+  virtual void print_xml(std::ostream &stream) const override;
 };
 
 //! Points to any number of expressions separated by commas
@@ -99,6 +94,7 @@ public:
   //! Getters
   virtual std::string getNodeType() const override;
   virtual void print_asm(Context& ctxt) const override; //! Print out mips assembly
+  virtual void print_xml(std::ostream &stream) const override;
 };
 
 #endif
