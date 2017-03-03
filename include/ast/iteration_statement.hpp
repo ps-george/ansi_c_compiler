@@ -17,6 +17,7 @@ public:
   // virtual void print_c() const;
   IterationStatement(const Statement *s)
       : ConditionalStatement(s) {}
+  virtual std::vector<const Node *> getChildren() const = 0;
 };
 
 /*!
@@ -29,69 +30,84 @@ private:
   const Expression *cond;
 public:
   virtual ~WhileStatement(){};
-  virtual std::string getNodeType() const override { return "while"; };
+  virtual std::string getNodeType() const override;
   virtual std::vector<const Expression*> getConditions() const override {
     return {cond};
   };
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
-class ForStatement : public IterationStatement {
-private:
-  const ExpressionStatement *cond1;
 
+/**
+ * \brief DoWhileStatement
+ *
+ * do statement while ( expression )
+ */
+class DoWhileStatement : public WhileStatement {
 public:
-  virtual std::string getNodeType() const override { return "For"; };
+  virtual ~DoWhileStatement(){};
+  virtual std::string getNodeType() const override;
+  DoWhileStatement(const Statement *s, const Expression *c)
+      : WhileStatement(c, s) {}
+};
+
+
+class ForStatement : public IterationStatement {
+protected:
+  const ExpressionStatement *cond1;
+public:
+  virtual std::string getNodeType() const override;
   ForStatement(const ExpressionStatement *c1, const Statement *s1)
       : IterationStatement(s1), cond1(c1)  {};
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1};
   };
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
-class EEForStatement : public IterationStatement {
-private:
-  const ExpressionStatement *cond1;
+class EEForStatement : public ForStatement {
+protected:
   const ExpressionStatement *cond2;
 public:
   EEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                  const Statement *s1)
-      : IterationStatement(s1), cond1(c1), cond2(c2) {};
+      : ForStatement(c1,s1), cond2(c2) {};
   
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1,(const Expression*)cond2};
   };
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
-class EEEForStatement : public IterationStatement {
+class EEEForStatement : public EEForStatement {
 private:
-  const ExpressionStatement *cond1;
-  const ExpressionStatement *cond2;
   const Expression *cond3;
 public:
   EEEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                   const Expression *c3, const Statement *s1)
-      : IterationStatement(s1), cond1(c1), cond2(c2), cond3(c3)  {}
+      : EEForStatement(c1,c2,s1), cond3(c3)  {}
   ;
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1,(const Expression*)cond2, cond3};
   };
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
-class DEForStatement : public IterationStatement {
+class DEForStatement : public ForStatement {
 protected:
   const Declaration *dec;
-  const ExpressionStatement *cond1; 
 public:
   DEForStatement(const Declaration *d, const ExpressionStatement *c1,
                  const Statement *s1)
-      :  IterationStatement(s1), dec(d), cond1(c1)  {};
+      :  ForStatement(c1,s1), dec(d)  {};
   ;
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1};
   };
-  virtual void print_xml(std::ostream& stream) const override;
+  virtual std::vector<const Node *> getChildren() const override;
+  //virtual void print_xml(std::ostream& stream) const override;
 };
 
 class DEEForStatement : public DEForStatement {
@@ -105,19 +121,7 @@ public:
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1,cond2};
   };
-};
-
-/**
- * \brief DoWhileStatement
- *
- * do statement while ( expression )
- */
-class DoWhileStatement : public WhileStatement {
-public:
-  virtual ~DoWhileStatement(){};
-  virtual std::string getNodeType() const { return "DoWhile"; };
-  DoWhileStatement(const Statement *s, const Expression *c)
-      : WhileStatement(c, s) {}
+  virtual std::vector<const Node *> getChildren() const override;
 };
 
 #endif

@@ -12,11 +12,11 @@ protected:
 public:
   BinaryExpression(const Expression * l, const Expression * r, std::string * _op);
   virtual std::string getNodeType() const override;
+  virtual std::string getDeets() const override;
   std::string getOp() const;
   virtual std::vector<const Node *> getChildren() const;
   const Expression * getLeft() const { return left;};
   const Expression * getRight()const { return right;};
-  void print_c() const;
   virtual void print_asm(Context& ctxt) const override;
 };
 

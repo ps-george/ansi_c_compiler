@@ -7,10 +7,13 @@
 #include "ast/binary_expression.hpp"
 
 std::string BinaryExpression::getNodeType() const {
-  return "BinaryExpression";
+  return "BinaryExpression"; 
 }
-std::string AssignmentExpression::getNodeType() const {
-  return "AssignmentExpression";
+std::string AssignmentExpression::getNodeType() const { 
+  return "AssignmentExpression"; 
+}
+std::string BinaryExpression::getDeets() const {
+   return " op=\"" + getOp() + "\" " + Node::getDeets();
 }
 
 BinaryExpression::BinaryExpression(const Expression *l, const Expression *r,

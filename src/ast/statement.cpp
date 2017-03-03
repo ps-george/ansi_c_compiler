@@ -13,13 +13,14 @@ std::vector<const Node *> CompoundStatement::getChildren() const {
 }
 
 void ConditionalStatement::print_xml(std::ostream &stream) const {
-  tab(stream);
-  stream << getHeader() << std::endl;
-  tab_incr();
-  // cond1->print_xml();
-  stat1->print_xml(stream);
-  tab(stream,false);
-  stream << getFooter() << std::endl;
+  Node::print_xml(stream);
+  //tab(stream);
+  //stream << getHeader() << std::endl;
+  //tab_incr();
+  //// cond1->print_xml();
+  //stat1->print_xml(stream);
+  //tab(stream,false);
+  //stream << getFooter() << std::endl;
 }
 
 void CompoundStatement::print_xml(std::ostream &stream) const {
