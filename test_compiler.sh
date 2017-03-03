@@ -2,7 +2,6 @@
 
 # Make compiler
 make clean
-
 make -B bin/c_compiler
 
 # make test results directory
