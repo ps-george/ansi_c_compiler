@@ -20,7 +20,7 @@ letter [a-zA-Z_]
 alphanum [a-zA-Z0-9_]
 digit [0-9]
 num [1-9]
-decimal {digit}+(\.){digit}+
+decimal {digit}*(\.){digit}+
 hex 0[xX][a-fA-F0-9]+
 oct 0[1-7]+
 float (({decimal})([eE][+-]?{digit}+)?)|{num}+[eE][+-]?{digit}+
@@ -64,9 +64,9 @@ signed    { col_inc(); store(yytext); return SIGNED; }
 sizeof    { col_inc(); store(yytext); return SIZEOF; }
 static    { col_inc(); store(yytext); return STATIC; }
 
-{float}{constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
-({num}{digit}*|{hex}|{oct}|0){constsuffix}? { col_inc(); store(yytext); return CONSTANT; }
-L?'(\\.|[^\\'])+' { col_inc(); store(yytext); return CONSTANT; }
+{float}{constsuffix}? { col_inc(); store(yytext); return F_CONSTANT; }
+({num}{digit}*|{hex}|{oct}|0){constsuffix}? { col_inc(); store(yytext); return I_CONSTANT; }
+L?'(\\.|[^\\'])+' { col_inc(); store(yytext); return C_CONSTANT; }
 
 {letter}{alphanum}* {/*fprintf(stderr, "Identifier\n");*/ col_inc(); store(yytext); return ID; }
 

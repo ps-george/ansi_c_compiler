@@ -34,7 +34,7 @@
 
 %token Invalid
 %token ID STRING SIZEOF
-%token CONSTANT
+%token F_CONSTANT I_CONSTANT C_CONSTANT
 
 %token INT DOUBLE FLOAT CHAR VOID
 %token LONG SHORT SIGNED UNSIGNED CONST VOLATILE
@@ -81,7 +81,7 @@
 %type <expression> relational-expression shift-expression additive-expression multiplicative-expression 
 %type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
-%type <raw> INT FLOAT STRING ID CONSTANT SIZEOF
+%type <raw> INT FLOAT STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF
 %type <raw> assignment-op
 
 //%right ';'
@@ -311,7 +311,9 @@ direct-declarator
 
 var_const
   : ID { $$ = new Variable($1); }
-  | CONSTANT { $$ = new Constant(*$1); }
+  | I_CONSTANT { $$ = new IntConstant(*$1); }
+  | F_CONSTANT { $$ = new FloatConstant(*$1); }
+  | C_CONSTANT { $$ = new CharConstant(*$1); }
 
 identifier-list
 	: ID { $$ = new List({new Variable($1)}); }

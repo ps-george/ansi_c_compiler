@@ -147,7 +147,12 @@ std::string classname(yytokentype t){
     case '{':
     case '}': return "Operator";
     /* Constants */
-    case CONSTANT: return "Constant";
+    case I_CONSTANT:
+    case C_CONSTANT: return "Constant";
+    case F_CONSTANT: 
+      // If it is .x replace with 0.x, if it is x. replace with x.0
+      
+      return "Constant";
     /* StringLiterals */
     case STRING: return "StringLiteral";
     //  Unncessary
