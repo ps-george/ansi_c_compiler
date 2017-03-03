@@ -58,8 +58,11 @@ std::vector<std::string> Declaration::getChildDefs() const {
 
 /* PRINT XML FUNCTIONS */
 void Declarator::print_xml(std::ostream &stream) const{
-  tab(stream);
+  tab(stream,true);
+  stream << getHeader() << std::endl;
   child->print_xml(stream);
+  tab(stream,false);
+  stream << getFooter() << std::endl; 
 }
 
 void FunctionDeclarator::print_xml(std::ostream &stream) const {
@@ -70,7 +73,11 @@ void FunctionDeclarator::print_xml(std::ostream &stream) const {
 };
 
 void Declaration::print_xml(std::ostream &stream) const{
+  tab(stream,true);
+  stream << getHeader() << std::endl;
   dlist->print_xml(stream);
+  tab(stream,false);
+  stream << getFooter() << std::endl; 
 };
 
 

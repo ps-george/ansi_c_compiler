@@ -80,7 +80,7 @@ public:
 };
 
 class DEForStatement : public IterationStatement {
-private:
+protected:
   const Declaration *dec;
   const ExpressionStatement *cond1; 
 public:
@@ -91,17 +91,16 @@ public:
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1};
   };
+  virtual void print_xml(std::ostream& stream) const override;
 };
 
-class DEEForStatement : public IterationStatement {
+class DEEForStatement : public DEForStatement {
 private:
-  const Declaration *dec;
-  const ExpressionStatement *cond1;
   const Expression *cond2;
 public:
   DEEForStatement(const Declaration *d, const ExpressionStatement *c1,
                   const Expression *c2, const Statement *s1)
-      : IterationStatement(s1), dec(d), cond1(c1), cond2(c2)  {};
+      : DEForStatement(d, c1, s1), cond2(c2)  {};
   ;
   virtual std::vector<const Expression*> getConditions() const override {
     return {(const Expression*)cond1,cond2};

@@ -51,12 +51,13 @@ std::vector<std::string> Node::getChildDefs() const {
 }
 
 void Node::tab(std::ostream &stream, bool open){
- if (open) {
-   tabcount++;
- } else {
+ if (!open) {
    tabcount--;
+   stream << std::string(tabcount, '\t');
+ } else {
+   stream << std::string(tabcount, '\t');
+   tabcount++;
  }
- stream << std::string(tabcount, '\t');
 }
 
 void Node::print_asm(Context& ctxt) const {
