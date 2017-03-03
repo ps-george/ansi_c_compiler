@@ -57,7 +57,7 @@ private:
   double val;
 public:
   virtual ~DoubleConstant(){};
-  DoubleConstant(const std::string &_valstr);;
+  DoubleConstant(const std::string &_valstr);
   virtual std::string getNodeType() const override;
 };
 
@@ -69,7 +69,11 @@ class EnumConstant : public Constant {
 };
 
 class CharConstant : public Constant {
+private:
+  char val;
+public:
   virtual ~CharConstant(){};
+  CharConstant(const std::string &_valstr);;
   virtual std::string getNodeType() const override;
 };
 

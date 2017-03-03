@@ -22,16 +22,10 @@ int Node::tabcount = 0;
 int main(int argc, char * argv[]) {
   
   const Node *ast=parseAST();
-  if (argc>1){
-    std::string arg(argv[1]);
-    if (arg=="c"){
-      ast->print_c();
-    }
-  }
-  else {
-    fprintf(stdout,"<?xml version=\"1.0\"?>\n");
-    std::ostream& out = std::cout;
-    ast->print_xml(out);
-  }
+  
+  fprintf(stdout,"<?xml version=\"1.0\"?>\n");
+  std::ostream& out = std::cout;
+  ast->print_xml(out);
+  
   return 0;
 }

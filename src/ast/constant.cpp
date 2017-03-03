@@ -14,6 +14,10 @@ IntConstant::IntConstant(const std::string &_valstr) : Constant(_valstr) {
   val = std::stoi(_valstr);
 };
 
+CharConstant::CharConstant(const std::string &_valstr) : Constant(_valstr) {
+  val = _valstr[0];
+}
+
 FloatConstant::FloatConstant(const std::string &_valstr) : Constant(_valstr) {
   val = std::stof(_valstr);
 };
