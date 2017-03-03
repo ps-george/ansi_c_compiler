@@ -23,8 +23,11 @@ String:
 \n
 \t
 
+Char and String - not sure if will bother fixing, could have been a JSON specific error.
+I do store \n and \t, the only question is whether I need to store \\n and \\t, but for
+compilation I think \n and \t is correct?
 
-Float:
+Float - fixed:
 .0
 0.
 .44
