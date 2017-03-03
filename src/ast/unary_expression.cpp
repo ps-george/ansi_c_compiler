@@ -10,7 +10,7 @@
 std::string UnaryExpression::getNodeType() const { return "UnaryExpression";}
 
 
-/* END OF GETTERS
+/* END OF GETTERS */
 
 
 

@@ -73,9 +73,9 @@ void Node::tab(std::ostream &stream, bool open){
  */
 
 void Node::print_asm(Context& ctxt) const {
-  ctxt.ss() << "# printing asm for " << getNodeType() << std::endl;
+  ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : getChildren()){
-    //ctxt.ss() << "# child is " << it->getNodeType() << std::endl;
+    // ctxt.ss() << "# hi " << it->getNodeType() << std::endl;
     it->print_asm(ctxt);
   }
   // ctxt.ss() << "# " << getNodeType() << " not implemented yet" << std::endl;

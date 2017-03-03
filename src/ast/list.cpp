@@ -50,10 +50,11 @@ const Node *List::add(const Node *child) const {
  * PRINT ASM
  */
 
+//! Need to override this because it's an ambiguous base
 void ExpressionList::print_asm(Context& ctxt) const{
-  // ctxt.ss() << "# printing asm for " << getNodeType() << std::endl;
+  ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : List::getChildren()){
-    // ctxt.ss() << "# child is " << it->getNodeType() << std::endl;
+    // ctxt.ss() << "# " << it->getNodeType() << std::endl;
     it->print_asm(ctxt);
   }
 } //! Print out mips assembly
