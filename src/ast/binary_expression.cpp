@@ -6,6 +6,13 @@
 
 #include "ast/binary_expression.hpp"
 
+/* CONSTRUCTOR */
+BinaryExpression::BinaryExpression(const Expression *l, const Expression *r,
+                                   std::string *_op)
+    : left(l), right(r), op(*_op) {}
+
+/* GETTERS */
+
 std::string BinaryExpression::getNodeType() const {
   return "BinaryExpression"; 
 }
@@ -16,15 +23,13 @@ std::string BinaryExpression::getDeets() const {
    return " op=\"" + getOp() + "\" " + Node::getDeets();
 }
 
-BinaryExpression::BinaryExpression(const Expression *l, const Expression *r,
-                                   std::string *_op)
-    : left(l), right(r), op(*_op) {}
-
 std::string BinaryExpression::getOp() const { return op; };
 std::vector<const Node *> BinaryExpression::getChildren() const {
   return {left, right};
 }
 
+
+/* PRINT ASM */
 void BinaryExpression::print_asm(Context& ctxt) const {
   ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
 }
@@ -69,6 +74,23 @@ void AssignmentExpression::print_asm(Context& ctxt) const {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* PRINT C */
 // void BinaryExpression::print_c() const { 
 //  left->print_c();
 //  std::cout << " " << getOp() << " ";

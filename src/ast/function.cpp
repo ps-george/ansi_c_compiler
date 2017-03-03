@@ -6,12 +6,15 @@
 
 #include "ast/function.hpp"
 
+//! Constructor
 Function::Function(const Node *_type, const Node *_dec, const Node *_s)
     : type((const Type *)_type),
       declarator((const Declarator *)_dec), // Declarator contains the params
       stat((const CompoundStatement *)_s) {};
 
-
+/*
+ * GETTERS
+ */
 std::vector<const Node *> Function::getChildren() const{
   //  std::cerr << "Finding children of " << declarator->getId() << ":" << std::endl;
   return {declarator, stat};
@@ -26,22 +29,11 @@ std::string Function::getHeader() const {
              + "\">";
 }
 
-void Function::print_xml(std::ostream &stream) const {
-  tab(stream);
-  stream << getHeader() << std::endl;
-  tab_incr();
-  declarator->print_xml(stream);
-  stat->print_xml(stream);
-  tab(stream,false);
-  stream << getFooter() << std::endl;
-}
+/*
+ * END OF GETTERS
+ */
 
-// void Function::print_c() const { 
-//  std::cout << getType() << " ";
-//  declarator->print_c();
-//  std::cout << "\n";
-//  stat->print_c();
-//}
+/* PRINT ASM */
 
 void Function::print_asm(Context& ctxt) const{
   std::vector<std::string> vars = getChildDefs();
@@ -59,3 +51,23 @@ void Function::print_asm(Context& ctxt) const{
   << "\tmove $fp, $sp" << std::endl;
   Node::print_asm(ctxt);
 }
+
+/* PRINT XML */
+void Function::print_xml(std::ostream &stream) const {
+  tab(stream);
+  stream << getHeader() << std::endl;
+  tab_incr();
+  declarator->print_xml(stream);
+  stat->print_xml(stream);
+  tab(stream,false);
+  stream << getFooter() << std::endl;
+}
+
+
+/* PRINT C */
+// void Function::print_c() const { 
+//  std::cout << getType() << " ";
+//  declarator->print_c();
+//  std::cout << "\n";
+//  stat->print_c();
+//}

@@ -6,6 +6,9 @@
 
 #include "ast/list.hpp"
 
+/*
+ * GETTERS
+ */
 
 std::string List::getNodeType() const { return "List"; };
 std::string TabbedList::getNodeType() const { return "Scope"; }
@@ -14,21 +17,19 @@ std::string DeclarationList::getNodeType() const { return "DeclarationList"; }
 std::string ParameterList::getNodeType() const { return "ParameterList"; }
 std::string ExpressionList::getNodeType() const { return "ExpressionList"; }
 
-void ExpressionList::print_asm(Context& ctxt) const{
-  ctxt.ss() << "# printing asm for " << getNodeType() << std::endl;
-  for (auto &it : List::getChildren()){
-    ctxt.ss() << "# child is " << it->getNodeType() << std::endl;
-    it->print_asm(ctxt);
-  }
-} //! Print out mips assembly
-
-/* COMMON FUNCTIONS */
 std::vector<const Node *> List::getChildren() const { 
   if (!children.size()){
     //std::cerr << "No children" << std::endl;
   }
   return children; 
 };
+/*
+ * END OF GETTERS
+ */
+
+/*
+ *  COMMON FUNCTIONS
+ */
 
 List::~List() {
   for (auto &it : children)
@@ -41,9 +42,25 @@ const Node *List::add(const Node *child) const {
   return this;
 };
 
-/* END OF COMMON FUNCTIONS */
+/*
+ *  END OF COMMON FUNCTIONS
+ */
 
-/* PRINT XML */
+/*
+ * PRINT ASM
+ */
+
+void ExpressionList::print_asm(Context& ctxt) const{
+  // ctxt.ss() << "# printing asm for " << getNodeType() << std::endl;
+  for (auto &it : List::getChildren()){
+    // ctxt.ss() << "# child is " << it->getNodeType() << std::endl;
+    it->print_asm(ctxt);
+  }
+} //! Print out mips assembly
+
+/*
+ *  PRINT XML
+ */
 
 void List::print_xml(std::ostream &stream) const {
   for (auto &it : getChildren()){
@@ -81,6 +98,10 @@ void ParameterList::print_xml(std::ostream &stream) const{
     stream << "<Parameter id=\"" << it->getId() << "\" />" << std::endl;
   }
 };
+
+/*
+ * END OF PRINT XML
+ */
 
 /* PRINT C */
 

@@ -84,5 +84,6 @@ clean:
 	rm -f src/compiler/*.yy.*
 	rm -f src/ast/*.o
 	rm -f src/ast/*.d
+	rm -f test/compiler/out/*
 
 .PHONY: clean

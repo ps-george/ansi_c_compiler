@@ -6,15 +6,53 @@
 
 #include "ast/declaration.hpp"
 
+/*
+ * GETTERS
+ */
 std::string Declarator::getNodeType() const { return "Declarator"; };
 std::string InitDeclarator::getNodeType() const { return "InitDeclarator"; };
 std::string ArrayDeclarator::getNodeType() const { return "ArrayDeclarator"; };
 std::string FunctionDeclarator::getNodeType() const { return "FunctionDeclarator"; };
 std::string Declaration::getNodeType() const { return "Declaration"; };
 
+//!
+std::vector<const Node *> InitDeclarator::getChildren() const {
+  std::vector<const Node *> v = Declarator::getChildren();
+  v.push_back(e);
+  return v;
+}
+
+//! Cut out the middle man
+std::vector<const Node *> Declaration::getChildren () const {
+  // for each item in dlist
+  // std::cerr << "Finding children of declaration" << std::endl;
+  return dlist->getChildren();
+}
+
+std::vector<std::string> Declaration::getChildDefs() const {
+ return childDefs;
+}
+
+/*
+ *  END OF GETTERS
+ */
+
+//! Setter
+void Declaration::setChildDefs() const {
+  // For each of then declarators that are children of this
+  for (auto &it : getChildren()){
+    // Get the name of the thing being declared
+    // std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
+    childDefs.push_back(it->getId());
+  }
+}
+
+
+
 /*
  * PRINT_ASM
  */
+
 // Something has been declared
 void Declaration::print_asm(Context& ctxt) const{
   //! \todo What if variable has already been assigned and we want to 'shadow'
@@ -26,37 +64,7 @@ void Declaration::print_asm(Context& ctxt) const{
   ctxt.ss() << std::endl;
 }
 
-/*
- *
- * 
- */
-
-std::vector<const Node *> InitDeclarator::getChildren() const {
-  std::vector<const Node *> v = Declarator::getChildren();
-  v.push_back(e);
-  return v;
-}
-
-std::vector<const Node *> Declaration::getChildren () const {
-  // for each item in dlist
-  // std::cerr << "Finding children of declaration" << std::endl;
-  return dlist->getChildren();
-}
-
-void Declaration::setChildDefs() const {
-  // For each of then declarators that are children of this
-  for (auto &it : getChildren()){
-    // Get the name of the thing being declared
-    // std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
-    childDefs.push_back(it->getId());
-  }
-}
-
-std::vector<std::string> Declaration::getChildDefs() const {
- return childDefs;
-}
-
-/* PRINT XML FUNCTIONS */
+/* PRINT XML */
 void Declarator::print_xml(std::ostream &stream) const{
   tab(stream,true);
   stream << getHeader() << std::endl;
@@ -79,8 +87,20 @@ void Declaration::print_xml(std::ostream &stream) const{
   tab(stream,false);
   stream << getFooter() << std::endl; 
 };
+/* END OF PRINT XML */
 
 
+
+
+
+
+
+
+
+
+
+
+/* PRINT C */
 // void Declarator::print_c() const { 
 //  child->print_c();
 //}

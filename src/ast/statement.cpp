@@ -6,11 +6,23 @@
 
 #include "ast/statement.hpp"
 
+/*
+ * GETTERS
+ */
+
 std::string CompoundStatement::getNodeType() const { return "CompoundStatement"; };
 
 std::vector<const Node *> CompoundStatement::getChildren() const {
   return {declars, stats};
 }
+
+/*
+ * END OF GETTERS
+ */
+
+/*
+ * PRINTERS
+ */
 
 void ConditionalStatement::print_xml(std::ostream &stream) const {
   Node::print_xml(stream);

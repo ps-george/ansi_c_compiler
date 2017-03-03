@@ -7,6 +7,7 @@
 
 #include "ast/type.hpp"
 
+/* GETTERS */
 std::string TypeSpecifier::getName() const {
   return name;
 }
@@ -23,3 +24,5 @@ std::string Type::getTypename() const {
   }
   return ss.str(); 
 }
+
+/* END OF GETTERS */
