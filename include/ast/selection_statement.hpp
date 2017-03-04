@@ -30,8 +30,7 @@ public:
   virtual std::string getNodeType() const { return "If"; };
   IfStatement(const Expression *c, const Statement *s)
       : SelectionStatement(c, s) {}
-      
-  
+  virtual void print_xml(std::ostream &stream) const;
 };
 
 /**

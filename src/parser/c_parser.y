@@ -70,7 +70,7 @@
 
 %type <function> function-definition
 
-%type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list 
+%type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list  argument-expression-list
 
 %type <statement> statement compound-statement iteration-statement selection-statement jump-statement
 %type <expressionstatement> expression-statement
@@ -229,12 +229,17 @@ prefix-expression
 
 postfix-expression
   : primary-expression { $$ = $1; }
-  | postfix-expression '[' expression ']' { $$ = new PostfixExpression($1); }
-//  | postfix-expression '(' argument-expression-list ')' { $$ = new PostfixExpression($1); }
-  | postfix-expression '.' ID { $$ = new PostfixExpression($1); }
-  | postfix-expression ARROW ID { $$ = new PostfixExpression($1); }
+  | postfix-expression '[' expression ']' { $$ = new SquareOperator($1, $3); }
+  | postfix-expression '(' ')' { $$ = new FunctionCall($1); }
+  | postfix-expression '(' argument-expression-list ')' { $$ = new FunctionCall($1, $3); }
+  | postfix-expression '.' ID { $$ = new DotOperator($1, $3); }
+  | postfix-expression ARROW ID { $$ = new ArrowOperator($1, $3); }
   | postfix-expression INCR { $$ = new PostfixExpression($1, $2); }
   | postfix-expression DECR { $$ = new PostfixExpression($1, $2); }
+
+argument-expression-list
+  : assignment-expression { $$ = new ExpressionList({$1}); }
+  | argument-expression-list ',' assignment-expression { $$->add($3); }
 
 primary-expression
   : var_const { $$ = $1; }
