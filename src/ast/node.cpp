@@ -32,16 +32,19 @@ std::vector<std::string> Node::getChildDefs() const {
 }
 
 std::string Node::getDeets() const { 
-  std::string defs = " childDefs=";
+  std::string defs = " childDefs=\"";
   if (childDefs.size()){
     for (auto &it : childDefs){
-      defs += it + " ";
+      defs += it + ",";
     }
+    // Get rid of trailing comma
+    defs = defs.substr(0, defs.size()-1);
+    defs += "\"";
   }
   else {
     defs = "";
   }
-  return "line=" + std::to_string(sourceline) + " col=" + std::to_string(sourcecol) + defs;
+  return "line=\"" + std::to_string(sourceline) + "\" col=\"" + std::to_string(sourcecol) + "\"" + defs;
 }
 
 /*
