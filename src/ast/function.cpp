@@ -54,7 +54,7 @@ void Function::print_asm(Context& ctxt) const{
   // .fmask has something to do with float size
   << "\t.fmask = 0x40000000,-4" << std::endl
   // Reserve space on the stack for the frame
-  << "\taddiu $sp,$sp,-" << vars_size+ << std::endl
+  << "\taddiu $sp,$sp,-" << vars_size+4 << std::endl
   // Store the previous frame pointer
   << "\tsw $fp,"<< vars_size+4 << "($sp)" << std::endl
   // Write new frame pointer as current stack pointer
