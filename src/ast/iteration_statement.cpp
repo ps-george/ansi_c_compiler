@@ -6,10 +6,22 @@
 
 #include "ast/iteration_statement.hpp"
 
-std::string IterationStatement::getNodeType() const { return "IterationStatement"; }
-std::string ForStatement::getNodeType() const { return "ForStatement"; }
-std::string WhileStatement::getNodeType() const { return "WhileStatement"; }
-std::string DoWhileStatement::getNodeType() const { return "DoWhileStatement"; }
+std::string IterationStatement::getNodeType() const { 
+  if (parser)
+    return "Scope";
+  return "IterationStatement"; }
+std::string ForStatement::getNodeType() const { 
+  if (parser)
+    return "Scope";
+  return "ForStatement"; }
+std::string WhileStatement::getNodeType() const { 
+  if (parser)
+    return "Scope";
+  return "WhileStatement"; }
+std::string DoWhileStatement::getNodeType() const { 
+  if (parser)    
+    return "Scope";
+  return "DoWhileStatement"; }
 
 /*
  * GETTERS

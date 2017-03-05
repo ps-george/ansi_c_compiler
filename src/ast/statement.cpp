@@ -10,7 +10,10 @@
  * GETTERS
  */
 
-std::string CompoundStatement::getNodeType() const { return "CompoundStatement"; };
+std::string CompoundStatement::getNodeType() const { 
+if (parser)
+  return "Scope";
+return "CompoundStatement"; };
 
 std::vector<const Node *> CompoundStatement::getChildren() const {
   return {declars, stats};
@@ -23,6 +26,11 @@ std::vector<const Node *> CompoundStatement::getChildren() const {
 /*
  * PRINTERS
  */
+
+void ExpressionStatement::print_xml(std::ostream& stream) const {
+if (!parser)
+  Node::print_xml(stream);
+}
 
 void ConditionalStatement::print_xml(std::ostream &stream) const {
   Node::print_xml(stream);

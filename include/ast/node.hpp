@@ -12,9 +12,11 @@ class Node {
 private:
   static int tabcount;
   static int changed;
+
   int sourceline;
   int sourcecol;
 protected:
+  static bool parser;
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs and
   //mutable std::map<std::string, int> childUses; //! Child uses are more useful and easier to implement

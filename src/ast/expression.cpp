@@ -20,3 +20,9 @@ std::vector<const Node *> TrinaryExpression::getChildren() const{
 /*
  * END OF GETTERS
  */
+
+void Expression::print_xml(std::ostream& stream) const {
+  if (!parser) {
+    Node::print_xml(stream);
+  }
+}

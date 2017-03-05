@@ -12,6 +12,7 @@ public:
   JumpStatement(){};
   virtual ~JumpStatement(){};
   virtual std::string getNodeType() const override;
+  virtual void print_xml(std::ostream& stream) const override;
 };
 /*!
 Constraints

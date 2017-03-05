@@ -18,6 +18,7 @@ public:
   virtual void print_asm(Context& ctxt) const override {
     expr->print_asm(ctxt);
   }
+  virtual void print_xml(std::ostream& stream) const override;
 };
 
 /*!

@@ -20,3 +20,9 @@ std::vector<const Node *> ReturnStatement::getChildren() const { return {expr}; 
 /*
  * END OF GETTERS
  */
+
+void JumpStatement::print_xml(std::ostream& stream) const {
+  if (!parser){
+    Node::print_xml(stream);
+  }
+}

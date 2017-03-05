@@ -17,7 +17,8 @@ int yylsourcelino = 1;
 
 // Used for xml print indentation, static member of ast
 int Node::tabcount = 0;
-//int Node::changed = 0;
+int Node::changed = 0;
+bool Node::parser = true;
 
 int main(int argc, char * argv[]) {
   

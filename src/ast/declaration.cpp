@@ -66,11 +66,15 @@ void Declaration::print_asm(Context& ctxt) const{
 
 /* PRINT XML */
 void Declarator::print_xml(std::ostream &stream) const{
-  tab(stream,true);
-  stream << getHeader() << std::endl;
+  if (!parser){
+    tab(stream,true);
+    stream << getHeader() << std::endl;
+  }
   child->print_xml(stream);
-  tab(stream,false);
-  stream << getFooter() << std::endl; 
+  if (!parser){
+    tab(stream,false);
+    stream << getFooter() << std::endl; 
+  }
 }
 
 void FunctionDeclarator::print_xml(std::ostream &stream) const {
@@ -81,11 +85,15 @@ void FunctionDeclarator::print_xml(std::ostream &stream) const {
 };
 
 void Declaration::print_xml(std::ostream &stream) const{
-  tab(stream,true);
-  stream << getHeader() << std::endl;
+  if (!parser){
+    tab(stream,true);
+    stream << getHeader() << std::endl;
+  }
   dlist->print_xml(stream);
-  tab(stream,false);
-  stream << getFooter() << std::endl; 
+  if (!parser){
+    tab(stream,false);
+    stream << getFooter() << std::endl; 
+  }
 };
 /* END OF PRINT XML */
 

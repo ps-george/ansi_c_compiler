@@ -27,7 +27,7 @@ public:
 class IfStatement : public SelectionStatement {
 public:
   virtual ~IfStatement(){};
-  virtual std::string getNodeType() const { return "If"; };
+  virtual std::string getNodeType() const override;
   IfStatement(const Expression *c, const Statement *s)
       : SelectionStatement(c, s) {}
   virtual void print_xml(std::ostream &stream) const;
@@ -45,7 +45,7 @@ private:
 public:
   IfElseStatement(const Expression *c, const Statement *s1, const Statement *s2)
       : IfStatement(c, s1), stat2(s2) {}
-  virtual std::string getNodeType() const { return "IfElse"; };
+  virtual std::string getNodeType() const override;
   virtual void print_xml(std::ostream &stream) const;
 };
 

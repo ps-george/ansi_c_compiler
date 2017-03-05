@@ -22,6 +22,7 @@ public:
   virtual ~Expression(){};
   virtual std::string getNodeType() const =0;
   virtual const Expression * add(const Expression * child) const {(void)child; return this;};
+  virtual void print_xml(std::ostream& stream) const override;
 };
 
 class EmptyExpression : public Expression {
