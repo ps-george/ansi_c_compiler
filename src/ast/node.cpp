@@ -44,7 +44,7 @@ std::string Node::getDeets() const {
   else {
     defs = "";
   }
-  return "line=\"" + std::to_string(sourceline) + "\" col=\"" + std::to_string(sourcecol) + "\"" + defs;
+  return "endline=\"" + std::to_string(sourceline) + "\" col=\"" + std::to_string(sourcecol) + "\"" + defs;
 }
 
 /*
