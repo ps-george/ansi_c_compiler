@@ -4,6 +4,7 @@
  *
  */
 
+#include "tokens.hpp"
 #include "ast/list.hpp"
 
 /*
@@ -38,6 +39,8 @@ List::~List() {
 }
 
 const Node *List::add(const Node *child) const {
+  sourceline = yylsourcelino;
+  sourcecol = yylcolno;
   children.push_back(child);
   return this;
 };

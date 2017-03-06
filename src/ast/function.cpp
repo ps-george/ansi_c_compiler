@@ -26,7 +26,8 @@ std::string Function::getHeader() const {
   return "<" + getNodeType() 
              + " id=\"" + declarator->getId() 
              + "\" type=\"" + getType()
-             + "\">";
+             + "\" " + getDeets()
+             + " >";
 }
 
 /*

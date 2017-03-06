@@ -12,10 +12,9 @@ class Node {
 private:
   static int tabcount;
   static int changed;
-  int startline;
-  int sourceline;
-  int sourcecol;
 protected:
+  mutable int sourceline;
+  mutable int sourcecol;
   static bool parser;
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs and
