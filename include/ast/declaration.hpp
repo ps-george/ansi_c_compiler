@@ -54,6 +54,7 @@ private:
 public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   virtual std::string getNodeType() const override;
+  virtual std::string getTypename() const;
   virtual std::vector<const Node *> getChildren() const override;
   virtual std::vector<std::string> getChildDefs() const override;
   // For each of the declarators in the dlist, add an entry to childDefs

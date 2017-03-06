@@ -12,7 +12,7 @@ class Node {
 private:
   static int tabcount;
   static int changed;
-
+  int startline;
   int sourceline;
   int sourcecol;
 protected:

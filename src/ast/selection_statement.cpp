@@ -41,6 +41,7 @@ void IfStatement::print_xml(std::ostream &stream) const {
   tab(stream,true);
   stream << getHeader() << std::endl;
   if (!parser){
+    tab(stream);
     stream << " <!-- If -->" << std::endl;
     tab(stream,true);
       stream << "<Condition>" << std::endl;
@@ -65,6 +66,7 @@ void IfElseStatement::print_xml(std::ostream &stream) const {
   stream << getHeader() << std::endl;
   
   if (!parser){
+    tab(stream);
     stream << " <!-- Else -->" << std::endl;
   }
   tab_incr();

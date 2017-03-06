@@ -15,6 +15,10 @@ std::string ArrayDeclarator::getNodeType() const { return "ArrayDeclarator"; };
 std::string FunctionDeclarator::getNodeType() const { return "FunctionDeclarator"; };
 std::string Declaration::getNodeType() const { return "Declaration"; };
 
+std::string Declaration::getTypename() const {
+  return type->getTypename();
+};
+
 //!
 std::vector<const Node *> InitDeclarator::getChildren() const {
   std::vector<const Node *> v = Declarator::getChildren();
@@ -80,7 +84,15 @@ void Declarator::print_xml(std::ostream &stream) const{
 void FunctionDeclarator::print_xml(std::ostream &stream) const {
   // For each of the parameters, print out the parameter
   for (auto &it : p->getChildren()) {
-    it->print_xml(stream);
+    if (parser){
+      for (auto &d : it->getChildren()) {
+        tab(stream);
+        stream << "<Parameter id=\"" << d->getId() << "\" type=\"" << ((const Declaration *)it)->getTypename() << "\" " << d->getDeets() << " />" << std::endl;
+      }
+    }
+    else {
+      it->print_xml(stream);
+    }
   }
 };
 
