@@ -1,0 +1,120 @@
+gsp14 : Cloning repo
+Cloning into 'gsp14'...
+gsp14 : Fetching repo
+gsp14 : Checking out branch soft-2017-03-05 if it exists...
+error: pathspec 'soft-2017-03-05' did not match any file(s) known to git.
+gsp14 : Checking out specified hash and creating new branch soft-2017-03-05
+Switched to a new branch 'soft-2017-03-05'
+Already on 'soft-2017-03-05'
+gsp14 : Checking we're on the right hash c31847f25494c3a5174fb4f9da6f4865da14c7ba...
+cd ${REPOS}/$U && git rev-parse $RUN
+gsp14 : Checking we're on branch soft-2017-03-05
+cd ${REPOS}/$U && git rev-parse --abbrev-ref HEAD
+
+log_msg "########################################################"
+gsp14 : ########################################################
+log_msg "## Building"
+gsp14 : ## Building
+
+log_msg "Cleaning"
+gsp14 : Cleaning
+(cd $REPO && rm bin/c_parser)
+rm: cannot remove 'bin/c_parser': No such file or directory
+(cd $REPO && make clean)
+make: Warning: File 'makefile' has modification time 2.6 s in the future
+rm -f bin/*
+rm -f src/lexer/*.o
+rm -f src/lexer/*.d
+rm -f include/*.tab.*
+rm -f src/parser/*.o
+rm -f src/parser/*.d
+rm -f src/parser/*.tab.*
+rm -f src/parser/*.yy.*
+rm -f src/compiler/*.o
+rm -f src/compiler/*.d
+rm -f src/compiler/*.tab.*
+rm -f src/compiler/*.yy.*
+rm -f src/ast/*.o
+rm -f src/ast/*.d
+rm -f test/compiler/out/*
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+log_msg "Building"
+gsp14 : Building
+(cd $REPO && make bin/c_parser)
+make: Warning: File 'makefile' has modification time 2.5 s in the future
+bison -d -o include/c_parser.tab.c src/parser/c_parser.y
+mv include/c_parser.tab.c src/parser/
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/parser/parser_main.o src/parser/parser_main.cpp
+src/parser/parser_main.cpp:23:14: warning: unused parameter ‘argc’ [-Wunused-parameter]
+ int main(int argc, char * argv[]) {
+              ^
+src/parser/parser_main.cpp:23:32: warning: unused parameter ‘argv’ [-Wunused-parameter]
+ int main(int argc, char * argv[]) {
+                                ^
+flex -o src/lexer/flexer.yy.cpp src/lexer/flexer.flex include/c_parser.tab.h 
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/lexer/flexer.yy.o src/lexer/flexer.yy.cpp
+src/lexer/flexer.yy.cpp: In function ‘int yy_get_next_buffer()’:
+src/lexer/flexer.yy.cpp:1661:44: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  if ((int) ((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+                                            ^
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/variable.o src/ast/variable.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/expression.o src/ast/expression.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/iteration_statement.o src/ast/iteration_statement.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/statement.o src/ast/statement.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/list.o src/ast/list.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/declaration.o src/ast/declaration.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/type.o src/ast/type.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/binary_expression.o src/ast/binary_expression.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/node.o src/ast/node.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/constant.o src/ast/constant.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/codegen_helpers.o src/ast/codegen_helpers.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/function.o src/ast/function.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/selection_statement.o src/ast/selection_statement.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/unary_expression.o src/ast/unary_expression.cpp
+g++ -std=c++11 -W -Wall -g -MMD -Iinclude  -c -o src/ast/jump_statement.o src/ast/jump_statement.cpp
+mkdir -p bin
+g++ -MMD -Iinclude -std=c++11 -W -Wall -g -o bin/c_parser src/parser/parser_main.o src/lexer/flexer.yy.o src/parser/c_parser.tab.c src/ast/variable.o src/ast/expression.o src/ast/iteration_statement.o src/ast/statement.o src/ast/list.o src/ast/declaration.o src/ast/type.o src/ast/binary_expression.o src/ast/node.o src/ast/constant.o src/ast/codegen_helpers.o src/ast/function.o src/ast/selection_statement.o src/ast/unary_expression.o src/ast/jump_statement.o
+make: warning:  Clock skew detected.  Your build may be incomplete.
+rm src/lexer/flexer.yy.cpp
+
+if [[ ! -f $REPO/bin/c_parser ]]; then
+    log_msg "No executable build"
+    exit 0;
+fi
+
+log_msg "########################################################"
+gsp14 : ########################################################
+log_msg "## Executing"
+gsp14 : ## Executing
+
+log_msg "Generating input"
+gsp14 : Generating input
+echo -e 'int f(int x){ int y=x; return y; }' > $LOGDIR/in.c
+cat $LOGDIR/in.c
+int f(int x){ int y=x; return y; }
+
+log_msg "Running parser"
+gsp14 : Running parser
+cat $LOGDIR/in.c | (cd $REPO && bin/c_parser) > $LOGDIR/out.xml
+
+log_msg "Checking XML formatting"
+gsp14 : Checking XML formatting
+cp scripts/cw3-soft-xml.py $LOGDIR/cw3-soft-xml.py
+cat $LOGDIR/out.xml | python3 $LOGDIR/cw3-soft-xml.py | tee $LOGDIR/out-pretty.xml
+
+Doing some basic checks.
+
+WARNING: did not understand element Variable as a child of Function
+Finished checks.
+
+<?xml version="1.0" ?>
+<Program col="34" endline="1">
+  <Function id="f" type="int">
+    <Variable col="11" endline="1" id="x" type="int"/>
+    <Scope col="34" endline="1">
+      <Variable col="19" endline="1" id="y" type="int"/>
+    </Scope>
+  </Function>
+</Program>
+gsp14 : Test Complete

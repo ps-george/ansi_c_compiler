@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<Program col="34" endline="1">
+  <Function id="f" type="int">
+    <Variable col="11" endline="1" id="x" type="int"/>
+    <Scope col="34" endline="1">
+      <Variable col="19" endline="1" id="y" type="int"/>
+    </Scope>
+  </Function>
+</Program>
