@@ -27,6 +27,16 @@ std::vector<const Node *> CompoundStatement::getChildren() const {
  * PRINTERS
  */
 
+void CompoundStatement::print_asm(Context& ctxt) const {
+  declars->print_asm(ctxt);
+  for (auto it: stats->getChildren()){
+    it->print_asm(ctxt);
+  }
+}
+
+
+
+
 void ExpressionStatement::print_xml(std::ostream& stream) const {
 if (!parser)
   Node::print_xml(stream);

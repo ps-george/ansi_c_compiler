@@ -15,6 +15,10 @@ std::string ArrayDeclarator::getNodeType() const { return "ArrayDeclarator"; };
 std::string FunctionDeclarator::getNodeType() const { return "FunctionDeclarator"; };
 std::string Declaration::getNodeType() const { return "Declaration"; };
 
+std::string Declaration::getId() const {
+  return dlist->getChildren()[0]->getId();
+}
+
 std::string Declaration::getTypename() const {
   return type->getTypename();
 };
@@ -67,6 +71,10 @@ void Declaration::print_asm(Context& ctxt) const{
   }
   ctxt.ss() << std::endl;
 }
+
+//void Declarator::print_asm(Context& ctxt) const {
+//
+//}
 
 /* PRINT XML */
 void Declarator::print_xml(std::ostream &stream) const{

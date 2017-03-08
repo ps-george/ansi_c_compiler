@@ -62,7 +62,7 @@ public:
   virtual std::string getNodeType() const override;
   virtual std::vector<const Node *> getChildren() const override;
   virtual void print_xml(std::ostream &stream) const override;
-  // virtual void print_c() const override;
+  virtual void print_asm(Context& ctxt) const override;
 };
 
 #endif

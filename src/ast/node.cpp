@@ -6,6 +6,7 @@
 
 #include "ast/node.hpp"
 #include "tokens.hpp"
+#include "ast/jump_statement.hpp"
 
 Node::Node() : sourceline(yylsourcelino), sourcecol(yylcolno) {};
 
@@ -78,7 +79,11 @@ void Node::tab(std::ostream &stream, bool open){
 void Node::print_asm(Context& ctxt) const {
   ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : getChildren()){
-    // ctxt.ss() << "# hi " << it->getNodeType() << std::endl;
+    ctxt.ss() << "# hi " << it->getNodeType() << std::endl;
+    // This needs a lot of work
+    if (it->getNodeType() == "JumpStatement")
+      break;
+      
     it->print_asm(ctxt);
   }
   // ctxt.ss() << "# " << getNodeType() << " not implemented yet" << std::endl;

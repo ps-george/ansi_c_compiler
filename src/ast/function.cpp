@@ -8,8 +8,7 @@
 
 //! Constructor
 Function::Function(const Node *_type, const Node *_dec, const Node *_s)
-    : type((const Type *)_type),
-      declarator((const Declarator *)_dec), // Declarator contains the params
+    : declarator(new Declaration((const Type *)_type, (const List *)_dec))  ,
       stat((const CompoundStatement *)_s) {};
 
 /*
@@ -20,7 +19,7 @@ std::vector<const Node *> Function::getChildren() const{
   return {declarator, stat};
 }
 
-std::string Function::getType() const { return type->getTypename(); }
+std::string Function::getType() const { return declarator->getTypename(); }
 
 std::string Function::getHeader() const {
   return "<" + getNodeType() 
@@ -66,6 +65,7 @@ void Function::print_asm(Context& ctxt) const{
   Node::print_asm(ctxt);
   
   /* POSTAMBLE */
+  // When we hit a jump statement
   ctxt.ss() << "### Postamble" << std::endl;
   // Move the frame pointer to stack pointer
   ctxt.ss() << "\tmove $sp,$fp" << std::endl
@@ -80,9 +80,9 @@ void Function::print_asm(Context& ctxt) const{
 
 /* PRINT XML */
 void Function::print_xml(std::ostream &stream) const {
-  tab(stream);
+  tab(stream,true);
   stream << getHeader() << std::endl;
-  tab_incr();
+  tab(stream); stream << "<!-- Function declarator -->" << std::endl;
   declarator->print_xml(stream);
   stat->print_xml(stream);
   tab(stream,false);

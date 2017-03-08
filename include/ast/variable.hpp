@@ -22,6 +22,7 @@ public:
   virtual std::string getId() const override;
   virtual std::string getHeader() const override;
   virtual void print_xml(std::ostream &stream) const override;
+  virtual void print_asm(Context& ctxt) const override;
   // virtual void print_c() const override;
 };
 

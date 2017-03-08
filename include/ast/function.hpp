@@ -8,8 +8,7 @@
 //! It also needs to print out it's id
 class Function : public Node {
 private:
-  const Type *type;
-  const Declarator *declarator;
+  const Declaration * declarator;
   const CompoundStatement *stat;
 
 public:

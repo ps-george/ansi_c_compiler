@@ -25,7 +25,9 @@ std::string Variable::getHeader() const {
 }
 
 /* PRNT ASM */
-
+void Variable::print_asm(Context& ctxt) const {
+  ctxt.ss() << "\tlw $2," << ctxt.getVariable(id) << "($fp)" << " # load variable from fp" << std::endl; 
+}
 
 
 /* PRINT XML */

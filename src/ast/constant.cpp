@@ -38,7 +38,7 @@ std::string CharConstant::getNodeType() const { return "CharConstant"; }
 
 /* PRINT ASM */
 void Constant::print_asm(Context& ctxt) const {
-  ctxt.ss() << "\tli $2, " << getValue() << " # Load constant into active register" << std::endl;
+  ctxt.ss() << "\tli $2," << getValue() << " # Load constant into active register" << std::endl;
 }
 
 /* PRINT XML */
