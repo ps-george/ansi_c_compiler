@@ -22,12 +22,15 @@ private:
   std::map<std::string, Var> bindings;
   std::ostream *out;
   int offset = 0;
+  //int unique = 0;
+  std::string f;
 public:
   Context(std::ostream *stream) { out = stream; };
   std::ostream& ss();
   int getVariable(std::string id);
   void assignVariable(std::string id, std::string type);
-  
+  std::string getF(){ return f; }
+  void setF(std::string fname){ f = fname; }
 };
 
 // For a scope:

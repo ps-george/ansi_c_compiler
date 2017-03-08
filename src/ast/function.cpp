@@ -41,6 +41,8 @@ void Function::print_asm(Context& ctxt) const{
   // std::cerr << vars_size << std::endl;
   // Indicated that we're printing out a function
   ctxt.ss() << "# Function " << declarator->getId() << std::endl;
+  ctxt.setF(declarator->getId());
+  
   ctxt.ss() << "### Preamble" << std::endl;
   // Stack grows upwards
   /* Preamble */
@@ -67,6 +69,7 @@ void Function::print_asm(Context& ctxt) const{
   /* POSTAMBLE */
   // When we hit a jump statement
   ctxt.ss() << "### Postamble" << std::endl;
+  ctxt.ss() << declarator->getId() << "postamble:" << std::endl;
   // Move the frame pointer to stack pointer
   ctxt.ss() << "\tmove $sp,$fp" << std::endl
   // Load the previous frame pointer (unwind)

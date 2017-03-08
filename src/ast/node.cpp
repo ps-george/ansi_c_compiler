@@ -80,9 +80,6 @@ void Node::print_asm(Context& ctxt) const {
   ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : getChildren()){
     ctxt.ss() << "# hi " << it->getNodeType() << std::endl;
-    // This needs a lot of work
-    if (it->getNodeType() == "JumpStatement")
-      break;
       
     it->print_asm(ctxt);
   }

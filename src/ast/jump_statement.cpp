@@ -25,23 +25,15 @@ std::vector<const Node *> ReturnStatement::getChildren() const { return {expr}; 
  * PRINT ASM
  */
 
-/*
-void JumpStatement::print_asm(Context& ctxt, int vars) const {
-  // Move the frame pointer to stack pointer
-  ctxt.ss() << "\tmove $sp,$fp" << std::endl
-  // Load the previous frame pointer (unwind)
-  << "\tlw $fp," << vars+4 <<"($sp)" << std::endl
-  // Unallocate the frame we were in
-  << "\taddiu $sp,$sp," << vars+8 << std::endl
-  // Return
-  << "\tj $31\n\tnop" << std::endl;
-}*/
-/*
-void ReturnStatement::print_asm(Context& ctxt, int vars) const{
+
+//void JumpStatement::print_asm(Context& ctxt) const {
+//}
+
+void ReturnStatement::print_asm(Context& ctxt) const{
   expr->print_asm(ctxt);
-  JumpStatement::print_asm(ctxt,vars);
+  ctxt.ss() << "\tj " << ctxt.getF() << "postamble # jump to postamble of current function" << std::endl;
 }
-*/
+
 
 /*
  * PRINT XML
