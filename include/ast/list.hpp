@@ -62,7 +62,7 @@ public:
   //! Getters
   virtual std::string getNodeType() const override;
   // virtual void print_c() const;
-  //virtual void print_asm(Context& ctxt) const;
+  virtual void print_asm(Context& ctxt) const override;
 };
 
 //! Scopes have a declaration list

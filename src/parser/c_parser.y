@@ -10,6 +10,7 @@
   int yylex(void);
   void yyerror(const char *);
   
+  extern FILE * yyin;
   // NOTE: Structure of bison file is fairly well specified, but construction of ast is not.
 }
 

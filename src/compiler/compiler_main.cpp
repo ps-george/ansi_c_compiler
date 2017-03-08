@@ -5,14 +5,13 @@
 #include <iomanip>
 #include <string.h>
 #include <iostream>
+#include <stdio.h>
 
 // Define the instance of the variable that is declared in the header
 //YYSTYPE yylval;
 
-
-// Used for file name
 std::string yylfile;
-
+extern FILE * yyin;
 // Used for column number calculations
 int len;
 int yylcolno = 1;
@@ -24,6 +23,9 @@ bool Node::parser = 0;
 //int Node::changed = 0;
 
 int main(int argc, char * argv[]) {
+  std::string filename = argv[1];
+  FILE * myfile = fopen(filename.c_str(), "r");
+  yyin = myfile;
   // Parse the input into the AST
   const Node *ast=parseAST();
   //ast->print_xml();
@@ -37,6 +39,7 @@ int main(int argc, char * argv[]) {
   // Initialize context with cout as target
   Context ctxt(&out);
   // Print assembly
+  out << "\t.file 1 \"" << filename << "\"" << std::endl;
   ast->print_asm(ctxt);
   return 0;
 }

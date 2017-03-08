@@ -17,7 +17,7 @@ for i in test/compiler/in/*.c; do
   mips-linux-gnu-gcc -S -O0 -static -o test/compiler/ref/$BASENAME $i
   
   
-  cat $i | ./bin/c_compiler > test/compiler/out/$BASENAME.mips 2> test/compiler/out/$BASENAME.stderr.txt
+  ./bin/c_compiler $i > test/compiler/out/$BASENAME.s 2> test/compiler/out/$BASENAME.stderr.txt
   
   if [[ "$?" -ne "0" ]]; then
       echo -e "\nERROR"

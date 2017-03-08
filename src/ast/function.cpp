@@ -40,21 +40,23 @@ void Function::print_asm(Context& ctxt) const{
   int vars_size = vars.size()*4;
   // std::cerr << vars_size << std::endl;
   // Indicated that we're printing out a function
-  ctxt.ss() << "# Function " << declarator->getId() << std::endl;
-  ctxt.setF(declarator->getId());
-  
+  std::string fname = declarator->getId();
+  ctxt.ss() << "# Function " << fname << std::endl;
   ctxt.ss() << "### Preamble" << std::endl;
+  ctxt.ss() << "\n\t.globl  " << fname	<< "\n\t.set	nomips16\n\t.set	nomicromips\n\t.ent " << fname	<< "\n\t.type	" << fname <<", @function\n";
+  ctxt.setF(fname);
+  
   // Stack grows upwards
   /* Preamble */
   // Label for the function
-  ctxt.ss() << declarator->getId() << ":" << std::endl
+  ctxt.ss() << fname << ":" << std::endl
   // Print the frame: we need vars+8 as frame size because
   // we store the previous frame pointer and return address
   << "\t.frame $fp,"<< vars_size+8 << ",$31\t# vars="<< vars_size <<" , regs= 1/0, args= 0, gp= 0" << std::endl
   // .mask has something to do with int size
-  << "\t.mask = 0x40000000,-4" << std::endl
+  //<< "\t.mask = 0x40000000,-4" << std::endl
   // .fmask has something to do with float size
-  << "\t.fmask = 0x40000000,-4" << std::endl
+  //<< "\t.fmask = 0x40000000,-4" << std::endl
   // Reserve space on the stack for the frame
   << "\taddiu $sp,$sp,-" << vars_size+4 << std::endl
   // Store the previous frame pointer
@@ -78,6 +80,8 @@ void Function::print_asm(Context& ctxt) const{
   << "\taddiu $sp,$sp," << vars_size+8 << std::endl
   // Return
   << "\tj $31\n\tnop" << std::endl;
+  
+  ctxt.ss() << "\t.set	macro\n\t.set	reorder\n\t.end	" << fname << "\n\t.size " <<	fname << ", .-" << fname << std::endl;
   ctxt.ss() << "### End of postamble" << std::endl;
 }
 

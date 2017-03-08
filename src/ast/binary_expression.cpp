@@ -36,7 +36,7 @@ void BinaryExpression::print_asm(Context& ctxt) const {
   // Compile the right into a specific register i.e. $3. 
   getRight()->print_asm(ctxt);
   // Right now everything goes to $3, so need to move to $3 first
-  ctxt.ss() << "\tmov $3,$2" << " # move results of right hand side into $3 for addition" << std::endl;
+  ctxt.ss() << "\tmove $3,$2" << " # move results of right hand side into $3 for addition" << std::endl;
   // Compile the left into a specific register i.e. $2
   getLeft()->print_asm(ctxt);
   
