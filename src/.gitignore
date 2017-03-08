@@ -2,3 +2,4 @@ bin
 *.txt
 *.d
 *.o
+*.swp
