@@ -14,13 +14,23 @@ for i in test/compiler/in/*.c; do
   echo "==========================="
   echo "Input file : ${i}"
   BASENAME=$(basename $i .c);
-  mips-linux-gnu-gcc -S -O0 -static -o test/compiler/ref/$BASENAME $i
+  mips-linux-gnu-gcc -S -o test/compiler/ref/$BASENAME.s $i
   
   
   ./bin/c_compiler $i > test/compiler/out/$BASENAME.s 2> test/compiler/out/$BASENAME.stderr.txt
   
-  if [[ "$?" -ne "0" ]]; then
-      echo -e "\nERROR"
+  mips-linux-gnu-gcc -static test/compiler/out/$BASENAME.s -o test/compiler/out/$BASENAME
+  mips-linux-gnu-gcc -static test/compiler/ref/$BASENAME.s -o test/compiler/ref/$BASENAME
+  
+  ./test/compiler/out/$BASENAME
+  RESULT=$?
+  
+  ./test/compiler/ref/$BASENAME
+  REF=$?
+  
+  
+  if [[ $REF -ne $RESULT ]]; then
+      echo -e "\nERROR, expecting $REF but got $RESULT."
   else
       PASSED=$(( ${PASSED}+1 ));
   fi

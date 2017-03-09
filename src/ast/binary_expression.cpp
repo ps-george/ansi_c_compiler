@@ -31,21 +31,21 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 
 /* PRINT ASM */
 void BinaryExpression::print_asm(Context& ctxt) const {
-  ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
+  // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
   
   // Compile the right into a specific register i.e. $3. 
   getRight()->print_asm(ctxt);
   // Right now everything goes to $3, so need to move to $3 first
-  ctxt.ss() << "\tmove $3,$2" << " # move results of right hand side into $3 for addition" << std::endl;
+  ctxt.ss() << "\tmove\t$3,$2" << " # move results of right hand side into $3 for addition" << std::endl;
   // Compile the left into a specific register i.e. $2
   getLeft()->print_asm(ctxt);
   
   // Add the two results
-  ctxt.ss() << "\tadd $2,$2,$3" << " # add $2 and $3" << std::endl;
+  ctxt.ss() << "\tadd\t$2,$2,$3" << " # add $2 and $3" << std::endl;
 }
 
 void AssignmentExpression::print_asm(Context& ctxt) const {
-  ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
+  //ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
   if (op == "=") {
     // Load the offset of the thing on the left.
     int offset = ctxt.getVariable(getLeft()->getId());
@@ -54,7 +54,7 @@ void AssignmentExpression::print_asm(Context& ctxt) const {
     getRight()->print_asm(ctxt);
     
     // Store it back in the same place
-    ctxt.ss() << "\tsw  $2," << offset << "($fp)" << " # store back in the same place" << std::endl;
+    ctxt.ss() << "\tsw\t$2," << offset << "($fp)" << " # store back in the same place" << std::endl;
   } else if (op == "*=") {
 
   } else if (op == "/=") {

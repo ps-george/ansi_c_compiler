@@ -6,6 +6,7 @@
 #include <string.h>
 #include <iostream>
 #include <stdio.h>
+#include <libgen.h>
 
 // Define the instance of the variable that is declared in the header
 //YYSTYPE yylval;
@@ -23,8 +24,8 @@ bool Node::parser = 0;
 //int Node::changed = 0;
 
 int main(int argc, char * argv[]) {
-  std::string filename = argv[1];
-  FILE * myfile = fopen(filename.c_str(), "r");
+  char* filename = argv[1];
+  FILE * myfile = fopen(filename, "r");
   yyin = myfile;
   // Parse the input into the AST
   const Node *ast=parseAST();
@@ -39,7 +40,7 @@ int main(int argc, char * argv[]) {
   // Initialize context with cout as target
   Context ctxt(&out);
   // Print assembly
-  out << "\t.file 1 \"" << filename << "\"" << std::endl;
+  out << "\t.file\t1 \"" << basename(filename) << "\"" << std::endl;
   ast->print_asm(ctxt);
   return 0;
 }

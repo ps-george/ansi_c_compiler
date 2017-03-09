@@ -1,5 +1,5 @@
 *.txt
 *.swp
 *.stdout.*
-*.s
+out/*.s
 */out/*

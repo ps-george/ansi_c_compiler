@@ -14,6 +14,11 @@ std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 
 /* END OF GETTERS */
 
+void FunctionCall::print_asm(Context& ctxt) const {
+  ctxt.ss() << "\t .option\tpic0" << std::endl
+  << "\tjal\t" << getId() << std::endl
+  << "\tnop" << std::endl << std::endl << "\t.option\tpic2" << std::endl;
+}
 
 
 

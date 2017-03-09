@@ -62,7 +62,7 @@ void Program::print_asm(Context& ctxt) const {
 
 //! Need to override this because it's an ambiguous base
 void ExpressionList::print_asm(Context& ctxt) const{
-  ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
+  //ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : List::getChildren()){
     // ctxt.ss() << "# " << it->getNodeType() << std::endl;
     it->print_asm(ctxt);
