@@ -13,7 +13,7 @@ public:
   virtual ~JumpStatement(){};
   virtual std::string getNodeType() const override;
   virtual void print_xml(std::ostream& stream) const override;
-  //virtual void print_asm(Context& ctxt, int vars) const;
+  //virtual void print_asm(Context ctxt, int vars) const;
 };
 /*!
 Constraints
@@ -100,7 +100,7 @@ public:
   ReturnStatement(const ExpressionStatement *e) : expr(e){};
   virtual std::string getNodeType() const override;
   virtual std::vector<const Node *> getChildren() const override;
-  virtual void print_asm(Context& ctxt) const override;
+  virtual void print_asm(Context ctxt) const override;
 };
 
 #endif

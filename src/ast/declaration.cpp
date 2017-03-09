@@ -62,7 +62,7 @@ void Declaration::setChildDefs() const {
  */
 
 // Something has been declared
-void Declaration::print_asm(Context& ctxt) const{
+void Declaration::print_asm(Context ctxt) const{
   //! \todo What if variable has already been assigned and we want to 'shadow'
   //ctxt.ss() << "# Declaration, with type '" << type->getTypename() << "' of: ";
   for (auto &it : dlist->getChildren()){
@@ -72,7 +72,7 @@ void Declaration::print_asm(Context& ctxt) const{
   // ctxt.ss() << std::endl;
 }
 
-//void Declarator::print_asm(Context& ctxt) const {
+//void Declarator::print_asm(Context ctxt) const {
 //
 //}
 

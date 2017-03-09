@@ -35,7 +35,7 @@ std::string Function::getHeader() const {
 
 /* PRINT ASM */
 
-void Function::print_asm(Context& ctxt) const{
+void Function::print_asm(Context ctxt) const{
   std::vector<std::string> vars = getChildDefs();
   int vars_size = vars.size()*4;
   // std::cerr << vars_size << std::endl;

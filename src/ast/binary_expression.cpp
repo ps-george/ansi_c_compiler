@@ -30,7 +30,7 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 
 
 /* PRINT ASM */
-void BinaryExpression::print_asm(Context& ctxt) const {
+void BinaryExpression::print_asm(Context ctxt) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
   
   // Compile the right into a specific register i.e. $3. 
@@ -44,7 +44,7 @@ void BinaryExpression::print_asm(Context& ctxt) const {
   ctxt.ss() << "\tadd\t$2,$2,$3" << " # add $2 and $3" << std::endl;
 }
 
-void AssignmentExpression::print_asm(Context& ctxt) const {
+void AssignmentExpression::print_asm(Context ctxt) const {
   //ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
   if (op == "=") {
     // Load the offset of the thing on the left.

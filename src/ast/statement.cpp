@@ -27,7 +27,7 @@ std::vector<const Node *> CompoundStatement::getChildren() const {
  * PRINTERS
  */
 
-void CompoundStatement::print_asm(Context& ctxt) const {
+void CompoundStatement::print_asm(Context ctxt) const {
   declars->print_asm(ctxt);
   for (auto it: stats->getChildren()){
     it->print_asm(ctxt);
