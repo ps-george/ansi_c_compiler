@@ -2,5 +2,5 @@ int ffff();
 
 int main()
 {
-    return ffff()==10;
+    return !( ffff()==10 );
 }

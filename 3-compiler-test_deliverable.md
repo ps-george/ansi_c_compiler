@@ -19,10 +19,23 @@ In order to do regression testing, you need two things:
 2 - An automated system for running the test-cases.
 
 A simple version of the latter will be developed in the
-lecture, then committed here. Your job is to develop five
-test cases for five language features. There is no requirement
-that your compiler implements these features, only that
-your test-cases try to test them.
+lecture, then committed here. Your job is to develop ten
+test cases looking for different functionality. There is
+no requirement that your compiler implements these features, only
+that your test-cases try to test them.
+
+The testing process shown in the lecture has been captured
+as an automated script in `run_test_deliverable.sh`. You
+can test your compiler simply by doing:
+````
+run_test_deliverable.sh
+````
+or you can test against a different compiler by doing:
+````
+run_test_deliverable.sh path_to_your_compiler
+````
+Any compiler under test must support the same IO as yours (i.e.
+C comes in over stdin, assembly goes out over stdout).
 
 Test case format
 ----------------
@@ -51,6 +64,8 @@ The testing process for a test-case is then:
 
 If any of these steps fail, then either the test-case is malformed,
 or the compiler under test is not generating correct code.
+
+There are a number of basic test-cases already included.
 
 Required tests
 --------------
@@ -91,4 +106,14 @@ Your tests cases should be included in a folder called
 
     test_deliverable/test_cases
 
-and follow the name convention in the example files.
+and follow the naming convention in the example files.
+
+Notes on additional testing
+---------------------------
+
+- You are not required to use this testbench, as it has pretty
+  limited functionality.
+
+- The only required deliverables are the test-case files. You
+  can modify the script if you wish.
+  
