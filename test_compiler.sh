@@ -33,6 +33,7 @@ for i in test/compiler/in/*.c; do
       echo -e "\nERROR, expecting $REF but got $RESULT."
   else
       PASSED=$(( ${PASSED}+1 ));
+      echo -e "\nPASS, expecting $REF and got $RESULT."
   fi
   CHECKED=$(( ${CHECKED}+1 ));
   
