@@ -60,7 +60,7 @@ The testing process for a test-case is then:
 
 4 - Run the executable under QEMU
 
-5 - If the executable returns 1 (via `$?` in the shell), then the test-case has passed.
+5 - If the executable returns 0 (via `$?` in the shell), then the test-case has passed.
 
 If any of these steps fail, then either the test-case is malformed,
 or the compiler under test is not generating correct code.
