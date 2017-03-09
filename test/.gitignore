@@ -3,3 +3,4 @@
 *.stdout.*
 out/*.s
 */out/*
+compiler/ref/*
