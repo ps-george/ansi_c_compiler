@@ -16,7 +16,7 @@ Function::Function(const Node *_type, const Node *_dec, const Node *_s)
  */
 std::vector<const Node *> Function::getChildren() const{
   //  std::cerr << "Finding children of " << declarator->getId() << ":" << std::endl;
-  return {declarator, stat};
+  return {stat};
 }
 
 std::string Function::getType() const { return declarator->getTypename(); }
@@ -65,8 +65,13 @@ Context Function::print_asm(Context ctxt) const{
   
   // Reserve space on the stack for the frame
   << "\taddiu\t$sp,$sp,-" << vars_size+8 << std::endl
+  
+  // Store the previous return address
+  << "\tsw\t$31,"<< vars_size+4 << "($sp)" << std::endl
+  
   // Store the previous frame pointer
-  << "\tsw\t$fp,"<< vars_size+4 << "($sp)" << std::endl
+  << "\tsw\t$fp,"<< vars_size << "($sp)" << std::endl
+  
   // Write new frame pointer as current stack pointer
   << "\tmove\t$fp,$sp" << std::endl;
   // ctxt.ss() << "### End of preamble" << std::endl;
@@ -80,8 +85,11 @@ Context Function::print_asm(Context ctxt) const{
   ctxt.ss() << declarator->getId() << "postamble:" << std::endl;
   // Move the frame pointer to stack pointer
   ctxt.ss() << "\tmove $sp,$fp" << std::endl
+  
+  // Load the previous return address
+  << "\tlw\t$31," << vars_size+4 <<"($sp)" << std::endl
   // Load the previous frame pointer (unwind)
-  << "\tlw\t$fp," << vars_size+4 <<"($sp)" << std::endl
+  << "\tlw\t$fp," << vars_size <<"($sp)" << std::endl
   // Unallocate the frame we were in
   << "\taddiu\t$sp,$sp," << vars_size+8 << std::endl
   // Return

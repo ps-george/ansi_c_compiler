@@ -31,7 +31,8 @@ std::vector<const Node *> ReturnStatement::getChildren() const { return {expr}; 
 
 Context ReturnStatement::print_asm(Context ctxt) const{
   ctxt = expr->print_asm(ctxt);
-  ctxt.ss() << "\tj " << ctxt.getF() << "postamble # jump to postamble of current function" << std::endl;
+  ctxt.ss() << "\tj " << ctxt.getF() << "postamble # jump to postamble of current function" << std::endl
+  << "\tnop\n";
   return ctxt;
 }
 

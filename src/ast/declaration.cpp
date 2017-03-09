@@ -65,18 +65,19 @@ void Declaration::setChildDefs() const {
 // Something has been declared
 Context Declaration::print_asm(Context ctxt) const{
   // This works for shadowing, but not for InitDeclarators
-  for (auto &it : dlist->getChildren()){
-    ctxt.assignVariable(it->getId(), type->getTypename());
-    it->print_asm(ctxt);
+  // ctxt.ss() << "## " << getNodeType() << std::endl;
+  if (dlist->getChildren().size()){
+    for (auto &it : dlist->getChildren()){
+      // ctxt.ss() << "## " << it->getNodeType() << std::endl;
+      ctxt.assignVariable(it->getId(), type->getTypename());
+      it->print_asm(ctxt);
+    }
   }
-  // For InitDeclarator, a child inside dlist
-  
-  dlist->print_asm(ctxt);
-  
   return ctxt;
 }
 
 Context Declarator::print_asm(Context ctxt) const{
+  // ctxt.ss() << "## " << getNodeType() << std::endl;
   return ctxt;
 }
 

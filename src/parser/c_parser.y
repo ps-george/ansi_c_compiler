@@ -306,13 +306,14 @@ declarator
   : direct-declarator { $$ = $1; }
 
 direct-declarator 
-  : ID { $$ = new Variable($1); }
-  | '(' declarator ')' { $$ = $2; } // declarator can be surrounded by any number of brackets 
+  : 
+   '(' declarator ')' { $$ = $2; } // declarator can be surrounded by any number of brackets 
   | direct-declarator '[' constant-expression ']' { $$ = new ArrayDeclarator($1, $3); } // Array with fixed size
   | direct-declarator '[' ']' { $$ = new ArrayDeclarator($1, new Constant("-1")); }   // Array without size specified
   | direct-declarator '(' ')' { $$ = new FunctionDeclarator($1, new List({})); }                // Function with no arguments
   | direct-declarator '(' parameter-list ')' { $$ = new FunctionDeclarator($1,$3); } // Function declaration with parameter list
   | direct-declarator '(' identifier-list ')' { $$ = new FunctionDeclarator($1,$3); } // Function declaration with id list, must be followed by weird declaration list following definition
+  | ID { $$ = new Variable($1); }
                                               // e.g. int max(a,b) int a,b; {}
 
 

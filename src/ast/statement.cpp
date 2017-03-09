@@ -29,6 +29,7 @@ std::vector<const Node *> CompoundStatement::getChildren() const {
 
 Context CompoundStatement::print_asm(Context ctxt) const {
   // Print the asm for a declaration, also update context
+  //  ctxt.ss() << "## Print declars for " << getNodeType() << std::endl;
   ctxt = declars->print_asm(ctxt);
   for (auto it: stats->getChildren()){
     
