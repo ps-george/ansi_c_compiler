@@ -33,8 +33,26 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
  * END OF GETTERS
  */
 
+ /*
+  * PRINT ASM
+  */
+
+Context IfElseStatement::print_asm(Context ctxt) const {
+  ctxt.ss() << "## " << getNodeType() << std::endl;
+  // If condition evaluates to true
+  
+  // Do statement 1 and jump to endl
+  
+  
+  
+  // otherwise jump to statement 2 and then go to end
+  
+  return ctxt;
+}
+
+
 /*
- * PRINTERS
+ * PRINT XML
  */
 
 void IfStatement::print_xml(std::ostream &stream) const {

@@ -70,7 +70,11 @@ Context Declaration::print_asm(Context ctxt) const{
     for (auto &it : dlist->getChildren()){
       // ctxt.ss() << "## " << it->getNodeType() << std::endl;
       ctxt.assignVariable(it->getId(), type->getTypename());
-      it->print_asm(ctxt);
+      
+      //! \todo this is a hack to get InitDeclarator to work, could be more graceful
+      if (it->getNodeType()=="InitDeclarator"){
+        it->print_asm(ctxt);
+      }
     }
   }
   return ctxt;
