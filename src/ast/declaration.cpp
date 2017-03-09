@@ -4,6 +4,7 @@
  *
  */
 
+#include "codegen_helpers.hpp"
 #include "ast/declaration.hpp"
 
 /*
@@ -62,17 +63,30 @@ void Declaration::setChildDefs() const {
  */
 
 // Something has been declared
-void Declaration::print_asm(Context ctxt) const{
-  //! \todo What if variable has already been assigned and we want to 'shadow'
-  //ctxt.ss() << "# Declaration, with type '" << type->getTypename() << "' of: ";
+Context Declaration::print_asm(Context ctxt) const{
+  // This works for shadowing, but not for InitDeclarators
   for (auto &it : dlist->getChildren()){
-    //ctxt.ss() << it->getId() << ", ";
     ctxt.assignVariable(it->getId(), type->getTypename());
+    it->print_asm(ctxt);
   }
-  // ctxt.ss() << std::endl;
+  // For InitDeclarator, a child inside dlist
+  
+  dlist->print_asm(ctxt);
+  
+  return ctxt;
 }
 
-//void Declarator::print_asm(Context ctxt) const {
+Context Declarator::print_asm(Context ctxt) const{
+  return ctxt;
+}
+
+Context InitDeclarator::print_asm(Context ctxt) const{
+  e->print_asm(ctxt);
+  store(ctxt, getId());
+  return ctxt;
+}
+
+//Context Declarator::print_asm(Context ctxt) const {
 //
 //}
 

@@ -25,7 +25,7 @@ public:
   //! print functions
   virtual void print_xml(std::ostream &stream) const;
   // virtual void print_c() const;
-  virtual void print_asm(Context ctxt) const; //! Print out mips assembly
+  virtual Context print_asm(Context ctxt) const; //! Print out mips assembly
 };
 
 #endif

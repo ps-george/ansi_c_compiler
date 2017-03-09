@@ -35,7 +35,7 @@ std::string Function::getHeader() const {
 
 /* PRINT ASM */
 
-void Function::print_asm(Context ctxt) const{
+Context Function::print_asm(Context ctxt) const{
   std::vector<std::string> vars = getChildDefs();
   int vars_size = vars.size()*4;
   // std::cerr << vars_size << std::endl;
@@ -72,7 +72,7 @@ void Function::print_asm(Context ctxt) const{
   // ctxt.ss() << "### End of preamble" << std::endl;
   /* Print asm for the function */
   // Remember to set return register ($2) to return value
-  Node::print_asm(ctxt);
+  ctxt = Node::print_asm(ctxt);
   
   /* POSTAMBLE */
   // When we hit a jump statement
@@ -89,6 +89,7 @@ void Function::print_asm(Context ctxt) const{
   
   ctxt.ss() << "\t.set\tmacro\n\t.set\treorder\n\t.end\t" << fname << "\n\t.size\t" <<	fname << ", .-" << fname << std::endl;
   // ctxt.ss() << "### End of postamble" << std::endl;
+  return ctxt;
 }
 
 /* PRINT XML */

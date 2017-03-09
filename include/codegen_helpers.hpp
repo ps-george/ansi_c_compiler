@@ -33,6 +33,9 @@ public:
   void setF(std::string fname){ f = fname; }
 };
 
+
+int store(Context& ctxt, std::string id);
+
 // For a scope:
 // 1. Set up a frame pointer for the function
 // # vars = n initalisations * 4

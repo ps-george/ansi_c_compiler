@@ -76,13 +76,14 @@ void Node::tab(std::ostream &stream, bool open){
  * PRINTERS
  */
 
-void Node::print_asm(Context ctxt) const {
+Context Node::print_asm(Context ctxt) const {
   //ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : getChildren()){
     //ctxt.ss() << "# hi " << it->getNodeType() << std::endl;
-      
-    it->print_asm(ctxt);
+    // If we are passing by value, siblings aren't away of context changes
+    ctxt = it->print_asm(ctxt);
   }
+  return ctxt;
   // ctxt.ss() << "# " << getNodeType() << " not implemented yet" << std::endl;
 }
 

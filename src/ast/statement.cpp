@@ -27,14 +27,22 @@ std::vector<const Node *> CompoundStatement::getChildren() const {
  * PRINTERS
  */
 
-void CompoundStatement::print_asm(Context ctxt) const {
-  declars->print_asm(ctxt);
+Context CompoundStatement::print_asm(Context ctxt) const {
+  // Print the asm for a declaration, also update context
+  ctxt = declars->print_asm(ctxt);
   for (auto it: stats->getChildren()){
+    
+    // Each of the children has no effect on context afterwards.
+    // This ensures when exciting child scope, declarations are unshadowed.
     it->print_asm(ctxt);
   }
+  return ctxt;
 }
 
-
+Context ExpressionStatement::print_asm(Context ctxt) const {
+  expr->print_asm(ctxt);
+  return ctxt;
+}
 
 
 void ExpressionStatement::print_xml(std::ostream& stream) const {

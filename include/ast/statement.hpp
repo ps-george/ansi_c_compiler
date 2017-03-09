@@ -15,9 +15,7 @@ public:
   ~ExpressionStatement(){};
   virtual std::string getNodeType() const override { return "ExpressionStatement"; };
   virtual std::vector<const Node *> getChildren() const override { return {expr}; }
-  virtual void print_asm(Context ctxt) const override {
-    expr->print_asm(ctxt);
-  }
+  virtual Context print_asm(Context ctxt) const override;
   virtual void print_xml(std::ostream& stream) const override;
 };
 
@@ -62,7 +60,7 @@ public:
   virtual std::string getNodeType() const override;
   virtual std::vector<const Node *> getChildren() const override;
   virtual void print_xml(std::ostream &stream) const override;
-  virtual void print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt) const override;
 };
 
 #endif

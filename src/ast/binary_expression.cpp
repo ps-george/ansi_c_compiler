@@ -4,6 +4,7 @@
  *
  */
 
+#include "codegen_helpers.hpp"
 #include "ast/binary_expression.hpp"
 
 /* CONSTRUCTOR */
@@ -30,7 +31,7 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 
 
 /* PRINT ASM */
-void BinaryExpression::print_asm(Context ctxt) const {
+Context BinaryExpression::print_asm(Context ctxt) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
   
   // Compile the right into a specific register i.e. $3. 
@@ -42,19 +43,20 @@ void BinaryExpression::print_asm(Context ctxt) const {
   
   // Add the two results
   ctxt.ss() << "\tadd\t$2,$2,$3" << " # add $2 and $3" << std::endl;
+  return ctxt;
 }
 
-void AssignmentExpression::print_asm(Context ctxt) const {
+Context AssignmentExpression::print_asm(Context ctxt) const {
   //ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
   if (op == "=") {
     // Load the offset of the thing on the left.
-    int offset = ctxt.getVariable(getLeft()->getId());
+    //int offset = ctxt.getVariable(getLeft()->getId());
     
     // Compile the right hand side into the register that we'll be saving
     getRight()->print_asm(ctxt);
     
     // Store it back in the same place
-    ctxt.ss() << "\tsw\t$2," << offset << "($fp)" << " # store back in the same place" << std::endl;
+    store(ctxt, getLeft()->getId());
   } else if (op == "*=") {
 
   } else if (op == "/=") {
@@ -78,6 +80,7 @@ void AssignmentExpression::print_asm(Context ctxt) const {
   } else {
     throw std::runtime_error("Unknown construct '" + op + "'");
   }
+  return ctxt;
 }
 
 

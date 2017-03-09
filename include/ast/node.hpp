@@ -45,7 +45,7 @@ public:
   //! Printers
   virtual void print_xml(std::ostream &stream) const;    //! Print xml implicit recursive function
   // virtual void print_c() const;      //! Print cpp implicit recursive function
-  virtual void print_asm(Context ctxt) const; //! Print out mips assembly
+  virtual Context print_asm(Context ctxt) const; //! Print out mips assembly
   // virtual void print_mips() const;   //! Print ast 
   
   //! Static functions for keeping xml indentation nice

@@ -21,7 +21,7 @@ public:
   
   virtual std::vector<const Node *> getChildren() const override {return {};}
   // virtual void print_c() const override;
-  virtual void print_asm(Context ctxt) const override; 
+  virtual Context print_asm(Context ctxt) const override; 
   virtual void print_xml(std::ostream &stream) const override;
 };
 

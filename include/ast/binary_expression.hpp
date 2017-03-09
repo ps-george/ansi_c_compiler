@@ -17,7 +17,7 @@ public:
   virtual std::vector<const Node *> getChildren() const;
   const Expression * getLeft() const { return left;};
   const Expression * getRight()const { return right;};
-  virtual void print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt) const override;
 };
 
 
@@ -26,7 +26,7 @@ class AssignmentExpression : public BinaryExpression {
 public:
   using BinaryExpression::BinaryExpression;
   virtual std::string getNodeType() const override;
-  virtual void print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt) const override;
 };
 
 #endif

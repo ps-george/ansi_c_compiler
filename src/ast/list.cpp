@@ -54,19 +54,21 @@ const Node *List::add(const Node *child) const {
  */
 
 
-void Program::print_asm(Context ctxt) const {
+Context Program::print_asm(Context ctxt) const {
   ctxt.ss() <<
   "\t.section .mdebug.abi32\n\t.previous\n\t.nan	legacy\n\t.module	fp=xx\n\t.module	nooddspreg\n\t.abicalls\n\t.text\n\t.align	2\n";
-  Node::print_asm(ctxt);
+  ctxt = Node::print_asm(ctxt);
+  return ctxt;
 }
 
 //! Need to override this because it's an ambiguous base
-void ExpressionList::print_asm(Context ctxt) const{
+Context ExpressionList::print_asm(Context ctxt) const{
   //ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : List::getChildren()){
     // ctxt.ss() << "# " << it->getNodeType() << std::endl;
     it->print_asm(ctxt);
   }
+  return ctxt;
 } //! Print out mips assembly
 
 /*
