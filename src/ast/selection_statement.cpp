@@ -41,19 +41,20 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
 Context IfElseStatement::print_asm(Context ctxt) const {
   ctxt.ss() << "## " << getNodeType() << std::endl;
   std::string uq_num = getUnq();
-  std::string ifend = "ifend" + uq_num;
-  std::string elsestart = "elsestart" + uq_num;
+  std::string ifend = "$ifend" + uq_num;
+  std::string ifstart = "$ifstart" + uq_num;
   
-  // Set $2 to 1 if 2>0, else $2=0
-  ctxt.ss() << "\tslt $2,$0,$2" << std::endl;
-  // If $2 is 0, do else condition
-  ctxt.ss() << "\tbeq $2,$0," << elsestart << std::endl;
-  // Do statement 1 and jump to endl
-  ctxt = stat1->print_asm(ctxt);
-  ctxt.ss() << "\tj " << ifend << std::endl
-  << elsestart << ":" << std::endl;
+  getCondition()->print_asm(ctxt);
+  ctxt.ss() << "\tbne $2,$0," << ifstart << std::endl;
+  ctxt.ss() << "\tnop" << std::endl;
+  // Do statement 2 and jump to endl
   ctxt = stat2->print_asm(ctxt);
-  // otherwise jump to statement 2 and then go to end
+  ctxt.ss() << "\tb " << ifend << std::endl;
+  ctxt.ss() << "\tnop" << std::endl;
+
+  // do statement 1
+  ctxt.ss() << ifstart << ":" << std::endl;
+  ctxt = stat1->print_asm(ctxt);
   ctxt.ss() << ifend << ":" << std::endl;
   return ctxt;
 }

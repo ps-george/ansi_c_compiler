@@ -37,18 +37,18 @@ Context BinaryExpression::print_asm(Context ctxt) const {
   // Compile the left into a specific register i.e. $3
   getLeft()->print_asm(ctxt);
   // Everything on left goes to $2, so need to move to $3 first 
-  ctxt.ss() << "\tmove\t$3,$2" << " # move results of left hand side into $3 for operation" << std::endl;
+  ctxt.ss() << "\tmove\t$3,$2" << " # move results of left hand side into $3 for " << op << std::endl;
   
   // Compile the right into a specific register i.e. $2. 
   getRight()->print_asm(ctxt);
   
   if (op == "+"){
     // Add the two results
-    ctxt.ss() << "\tadd\t$2,$3,$2" << " # add $2 and $3" << std::endl;
+    ctxt.ss() << "\tadd\t$2,$3,$2" << " # add $3 and $2" << std::endl;
   } else if (op=="-"){
-    ctxt.ss() << "\tsub\t$2,$3,$2" << " # sub $2-$3" << std::endl;
+    ctxt.ss() << "\tsub\t$2,$3,$2" << " # sub $3-$2" << std::endl;
   } else if (op=="=="){
-    ctxt.ss() << "\txor\t $2,$3,$2" << " # xor left with right" << std::endl;
+    ctxt.ss() << "\txor\t $3,$3,$2" << " # xor left with right" << std::endl;
     ctxt.ss() << "\tsltu\t $2,$3,1" << " # check if it is less than 1" << std::endl;
     //ctxt.ss() << "\tandi $2,$2,0x00ff" << " # not sure this is necessary" << std::endl; 
   } else {

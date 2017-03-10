@@ -94,7 +94,7 @@ Context Function::print_asm(Context ctxt) const{
   int args_size = args.size()*4;
   int vars_size = vars.size()*4;
   
-  int total_size = (args_size+vars_size);
+  int total_size = (args_size+vars_size) + 4;
   
   // std::cerr << total_size << std::endl;
   // Indicated that we're printing out a function
@@ -133,6 +133,9 @@ Context Function::print_asm(Context ctxt) const{
   // Store the previous frame pointer
   << "\tsw\t$fp,"<< total_size << "($sp)" << std::endl
   
+  // Store the previous result
+  << "\tsw\t$16,"<< total_size-4 << "($sp)" << std::endl
+  
   // Write new frame pointer as current stack pointer
   << "\tmove\t$fp,$sp" << std::endl;
   
@@ -165,6 +168,8 @@ Context Function::print_asm(Context ctxt) const{
   << "\tlw\t$31," << total_size+4 <<"($sp)" << std::endl
   // Load the previous frame pointer (unwind)
   << "\tlw\t$fp," << total_size <<"($sp)" << std::endl
+  // Load the previous value in $16
+  << "\tlw\t$16," << total_size-4 <<"($sp)" << std::endl
   // Unallocate the frame we were in
   << "\taddiu\t$sp,$sp," << total_size+8 << std::endl
   // Return

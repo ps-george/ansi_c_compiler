@@ -16,6 +16,8 @@ std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 
 Context FunctionCall::print_asm(Context ctxt) const {
   // If there is an expression in the functioncall, evaluate and move to $4
+  // Want $3 to be preserved
+  ctxt.ss() << "\tmove $16,$3" << " # want to preserve $3 across calls" << std::endl;
   int i = 4;
   for (auto it: args->getChildren()){
     if (i<8){
@@ -30,6 +32,7 @@ Context FunctionCall::print_asm(Context ctxt) const {
   
   << "\tjal\t" << getId() << std::endl
   << "\tnop" << std::endl << std::endl << "\t.option\tpic2" << std::endl;
+  ctxt.ss() << "\tmove $3,$16" << " # want to preserve $3 across calls" << std::endl;
   return ctxt;
 }
 
