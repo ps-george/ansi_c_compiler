@@ -6,6 +6,8 @@
 #ifndef CODEGEN_HELPERS_HPP_
 #define CODEGEN_HELPERS_HPP_
 
+extern int UNIQ_GEN;
+
 #include <map>
 #include <stdio.h>
 
@@ -33,6 +35,7 @@ public:
   void setF(std::string fname){ f = fname; }
 };
 
+std::string makeLabel(std::string base);
 
 int store(Context& ctxt, std::string id);
 

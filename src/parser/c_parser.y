@@ -134,13 +134,13 @@ jump-statement
   | RETURN expression-statement { $$ = new ReturnStatement($2); }
 
 selection-statement
-  : IF '(' expression ')' statement { $$ = new IfStatement($3, $5); }
+  : IF '(' expression ')' statement { $$ = new IfElseStatement($3, $5, new CompoundStatement()); }
   // SHIFT/REDUCE CONFLICT
   | IF '(' expression ')' statement ELSE statement { $$ = new IfElseStatement($3, $5, $7); } 
 
 // COMPOUND STATEMENT
 compound-statement
-  : '{' '}' { $$ = new CompoundStatement(new List({}), new List({})); }
+  : '{' '}' { $$ = new CompoundStatement(); }
   | '{' statement-list '}' { $$ = new CompoundStatement(new List({}), $2); }
   | '{' declaration-seq '}' { $$ = new CompoundStatement($2,new List({})); } 
   | '{' declaration-seq statement-list '}' { $$ = new CompoundStatement($2, $3); }   // declarations must come before statements

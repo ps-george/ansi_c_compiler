@@ -5,6 +5,7 @@
  */
 
 #include "ast/selection_statement.hpp"
+#include "codegen_helpers.hpp"
 
 /*
  * GETTERS
@@ -39,14 +40,20 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
 
 Context IfElseStatement::print_asm(Context ctxt) const {
   ctxt.ss() << "## " << getNodeType() << std::endl;
-  // If condition evaluates to true
+  std::string ifend = makeLabel("ifend");
+  std::string elsestart = makeLabel("elsestart");
   
+  // Set $2 to 1 if 2>0, else $2=0
+  ctxt.ss() << "\tslt $2,$0,$2" << std::endl;
+  // If $2 is 0, do else condition
+  ctxt.ss() << "\tbeq $2,$0," << elsestart << std::endl;
   // Do statement 1 and jump to endl
-  
-  
-  
+  ctxt = stat1->print_asm(ctxt);
+  ctxt.ss() << "\tj " << ifend << std::endl
+  << elsestart << ":" << std::endl;
+  ctxt = stat2->print_asm(ctxt);
   // otherwise jump to statement 2 and then go to end
-  
+  ctxt.ss() << ifend << ":" << std::endl;
   return ctxt;
 }
 

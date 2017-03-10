@@ -2,6 +2,7 @@
 #include "iostream"
 #include "stdexcept"
 
+int UNIQ_GEN = 0;
 
 int Context::getVariable(std::string id){
   return bindings.at(id).offset;
@@ -28,4 +29,9 @@ int store(Context& ctxt, std::string id){
     return 1;
   }
   return 0;
+}
+
+std::string makeLabel(std::string base){
+  base = base + std::to_string(UNIQ_GEN++);
+  return base;
 }
