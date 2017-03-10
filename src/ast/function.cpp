@@ -7,9 +7,16 @@
 #include "ast/function.hpp"
 
 //! Constructor
+//! 
+// std::string id; //! Can get from declarator->getId()
+// const List * params; //! Can get from declarator->getParams()
+// 
 Function::Function(const Node *_type, const Node *_dec, const Node *_s)
-    : declarator(new Declaration((const Type *)_type, (const List *)_dec))  ,
-      stat((const CompoundStatement *)_s) {};
+    : type((const Type *)_type),
+      declarator((const FunctionDeclarator *)_dec),
+      stat((const CompoundStatement *)_s) {
+        id = declarator->getId(); //! Returns id of first child, won't have declaration lists of functions
+      };
 
 /*
  * GETTERS
@@ -19,19 +26,54 @@ std::vector<const Node *> Function::getChildren() const{
   return {stat};
 }
 
-std::string Function::getType() const { return declarator->getTypename(); }
+std::string Function::getType() const { return type->getTypename(); }
 
 std::string Function::getHeader() const {
   return "<" + getNodeType() 
-             + " id=\"" + declarator->getId() 
-             + "\" type=\"" + getType()
+             + " id=\"" + id 
+             + "\" type=\"" + type->getTypename()
              + "\" " + getDeets()
              + " >";
+}
+
+std::string Function::getDeets() const {
+  std::string params = getParamString();
+  if (params!=""){
+    params = "params=\"" + params + "\" ";
+  }
+  return params + Node::getDeets();
+}
+
+std::vector<std::string> Function::getParams() const {
+  std::vector<std::string> out;
+  for (auto it: declarator->getParams()->getChildren()){
+    out.push_back(it->getId());
+  }
+  return out;
+}
+
+std::string Function::getParamString() const {
+  std::string out;
+  for (auto it: getParams()){
+    out += it + ",";
+  }
+  if (out!=""){
+    out = out.substr(0, out.size()-1);
+  }
+  return out;
 }
 
 /*
  * END OF GETTERS
  */
+
+void Function::setChildDefs() const {
+  Node::setChildDefs();
+  //! Add params as child defs, could not do this and deal with parameters separately
+  for (auto it: getParams()){
+    childDefs.push_back(it);
+  }
+}
 
 /* PRINT ASM */
 
@@ -40,7 +82,7 @@ Context Function::print_asm(Context ctxt) const{
   int vars_size = vars.size()*4;
   // std::cerr << vars_size << std::endl;
   // Indicated that we're printing out a function
-  std::string fname = declarator->getId();
+  std::string fname = id;
   //ctxt.ss() << "# Function " << fname << std::endl;
   //ctxt.ss() << "### Preamble" << std::endl;
   ctxt.ss() << "\t.globl\t" << fname	<< "\n\t.set	nomips16\n\t.set	nomicromips\n\t.ent\t" << fname	<< "\n\t.type\t" << fname <<", @function\n";
@@ -82,7 +124,7 @@ Context Function::print_asm(Context ctxt) const{
   /* POSTAMBLE */
   // When we hit a jump statement
   // ctxt.ss() << "### Postamble" << std::endl;
-  ctxt.ss() << declarator->getId() << "postamble:" << std::endl;
+  ctxt.ss() << fname << "postamble:" << std::endl;
   // Move the frame pointer to stack pointer
   ctxt.ss() << "\tmove $sp,$fp" << std::endl
   
@@ -105,7 +147,6 @@ void Function::print_xml(std::ostream &stream) const {
   tab(stream,true);
   stream << getHeader() << std::endl;
   tab(stream); stream << "<!-- Function declarator -->" << std::endl;
-  declarator->print_xml(stream);
   stat->print_xml(stream);
   tab(stream,false);
   stream << getFooter() << std::endl;

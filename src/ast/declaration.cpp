@@ -42,6 +42,10 @@ std::vector<std::string> Declaration::getChildDefs() const {
  return childDefs;
 }
 
+const List * FunctionDeclarator::getParams() const {
+  return p;
+}
+
 /*
  *  END OF GETTERS
  */

@@ -13,7 +13,8 @@ public:
   virtual std::string getId() const override { return child->getId(); };
   virtual void print_xml(std::ostream &stream) const override;
   // virtual void print_c() const override;
-  std::vector<const Node *> getChildren() const { return {child}; }
+  virtual std::vector<const Node *> getChildren() const override { return {child}; }
+  virtual const List * getParams() const { return new List({}); }
   virtual Context print_asm(Context ctxt) const override;
 };
 
@@ -41,6 +42,7 @@ const List * p; //! Parameter list/indentifier list for old-style functions
 public:
   FunctionDeclarator(const Node * _child, const List * _p) : Declarator(_child), p(_p) {};
   virtual std::string getNodeType() const override;
+  virtual const List * getParams() const override;
   virtual void print_xml(std::ostream &stream) const override;
   // virtual void print_c() const override;
 };
@@ -56,6 +58,7 @@ public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   virtual std::string getNodeType() const override;
   virtual std::string getTypename() const;
+  virtual const Type * getType() const { return type; };
   virtual std::string getId() const;
   virtual std::vector<const Node *> getChildren() const override;
   virtual std::vector<std::string> getChildDefs() const override;
