@@ -83,9 +83,13 @@ Context Function::print_asm(Context ctxt) const{
   
   // Deal with parameters
   // Add parameters to context
+  
   for (auto &it : getParams()){
     ctxt.assignVariable(it, "int");
   }
+  
+  
+  
   std::vector<std::string> args = getParams();
   int args_size = args.size()*4;
   int vars_size = vars.size()*4;
@@ -134,11 +138,15 @@ Context Function::print_asm(Context ctxt) const{
   
   // Store parameters in the frame
   
-  // For $4 and $5 we get from input
   int i = 4;
   for (auto &it : getParams()){
-    ctxt.ss() << "\tmove $2,$" << std::to_string(i++) << std::endl;
-    store(ctxt, it);
+    if (i<8){
+      // For $4 and $5 we get from input
+      ctxt.ss() << "\tmove $2,$" << std::to_string(i++) << std::endl;
+      store(ctxt, it);
+    }
+    // For the rest of the input parameters, they will be on the stack
+    // So we need to get them from the stack one by one and 
   }
   
   // ctxt.ss() << "### End of preamble" << std::endl;
