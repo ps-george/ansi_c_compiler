@@ -100,7 +100,7 @@ public:
   ReturnStatement(const ExpressionStatement *e) : expr(e){};
   virtual std::string getNodeType() const override;
   virtual std::vector<const Node *> getChildren() const override;
-  virtual Context print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 #endif

@@ -26,10 +26,10 @@ std::vector<const Node *> ReturnStatement::getChildren() const { return {expr}; 
  */
 
 
-//Context JumpStatement::print_asm(Context ctxt) const {
+//Context JumpStatement::print_asm(Context ctxt, int d) const {
 //}
 
-Context ReturnStatement::print_asm(Context ctxt) const{
+Context ReturnStatement::print_asm(Context ctxt, int d) const{
   ctxt = expr->print_asm(ctxt);
   ctxt.ss() << "\tj " << ctxt.getF() << "postamble # jump to postamble of current function" << std::endl
   << "\tnop\n";

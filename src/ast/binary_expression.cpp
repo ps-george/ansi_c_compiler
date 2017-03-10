@@ -31,15 +31,17 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 
 
 /* PRINT ASM */
-Context BinaryExpression::print_asm(Context ctxt) const {
+Context BinaryExpression::print_asm(Context ctxt, int d) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
   
-  // Compile the left into a specific register i.e. $3
+  // Compile the left into a specific register, without changing anything else
   getLeft()->print_asm(ctxt);
   // Everything on left goes to $2, so need to move to $3 first 
   ctxt.ss() << "\tmove\t$3,$2" << " # move results of left hand side into $3 for " << op << std::endl;
   
-  // Compile the right into a specific register i.e. $2. 
+  // Compile the right into a specific register, without changing anything else
+  // If RHS is a not a constant, we override the previous result
+  
   getRight()->print_asm(ctxt);
   
   if (op == "+"){
@@ -58,7 +60,7 @@ Context BinaryExpression::print_asm(Context ctxt) const {
   return ctxt;
 }
 
-Context AssignmentExpression::print_asm(Context ctxt) const {
+Context AssignmentExpression::print_asm(Context ctxt, int d) const {
   //ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
   if (op == "=") {
     // Load the offset of the thing on the left.
@@ -95,19 +97,25 @@ Context AssignmentExpression::print_asm(Context ctxt) const {
   return ctxt;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void BinaryExpression::print_xml(std::ostream &stream) const {
+  tab(stream);
+  stream << getHeader() << std::endl;
+  tab_incr();
+  tab(stream,true);
+  stream << "<!-- Left -->" << std::endl;
+  left->print_xml(stream);
+  tab(stream,false);
+  stream << "<!-- Left /-->" << std::endl;
+  tab(stream,true);
+  stream << "<!-- Right -->" << std::endl;
+  right->print_xml(stream);
+  tab(stream,false);
+  stream << "<!-- Right /-->" << std::endl;
+  
+  tab_decr();
+  tab(stream);
+  stream << getFooter() << std::endl;
+};
 
 
 

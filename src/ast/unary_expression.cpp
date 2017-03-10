@@ -14,7 +14,7 @@ std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 
 /* END OF GETTERS */
 
-Context FunctionCall::print_asm(Context ctxt) const {
+Context FunctionCall::print_asm(Context ctxt, int d) const {
   // If there is an expression in the functioncall, evaluate and move to $4
   // Want $3 to be preserved
   ctxt.ss() << "\tmove $16,$3" << " # want to preserve $3 across calls" << std::endl;

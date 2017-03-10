@@ -67,7 +67,7 @@ void Declaration::setChildDefs() const {
  */
 
 // Something has been declared
-Context Declaration::print_asm(Context ctxt) const{
+Context Declaration::print_asm(Context ctxt, int d) const{
   // This works for shadowing, but not for InitDeclarators
   // ctxt.ss() << "## " << getNodeType() << std::endl;
   if (dlist->getChildren().size()){
@@ -84,18 +84,18 @@ Context Declaration::print_asm(Context ctxt) const{
   return ctxt;
 }
 
-Context Declarator::print_asm(Context ctxt) const{
+Context Declarator::print_asm(Context ctxt, int d) const{
   // ctxt.ss() << "## " << getNodeType() << std::endl;
   return ctxt;
 }
 
-Context InitDeclarator::print_asm(Context ctxt) const{
+Context InitDeclarator::print_asm(Context ctxt, int d) const{
   e->print_asm(ctxt);
   store(ctxt, getId());
   return ctxt;
 }
 
-//Context Declarator::print_asm(Context ctxt) const {
+//Context Declarator::print_asm(Context ctxt, int d) const {
 //
 //}
 

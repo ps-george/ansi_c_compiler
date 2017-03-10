@@ -20,7 +20,7 @@ for i in test/compiler/in/*.c; do
   ./bin/c_compiler $i > test/compiler/out/$BASENAME.s 2> test/compiler/out/$BASENAME.stderr.txt
   
   mips-linux-gnu-gcc -static test/compiler/out/$BASENAME.s -o test/compiler/out/$BASENAME
-  mips-linux-gnu-gcc -static test/compiler/ref/$BASENAME.s -o test/compiler/ref/$BASENAME
+  mips-linux-gnu-gcc -static -O0 test/compiler/ref/$BASENAME.s -o test/compiler/ref/$BASENAME
   
   ./test/compiler/out/$BASENAME
   RESULT=$?

@@ -37,7 +37,7 @@ std::string EnumConstant::getNodeType() const { return "EnumConstant"; }
 std::string CharConstant::getNodeType() const { return "CharConstant"; }
 
 /* PRINT ASM */
-Context Constant::print_asm(Context ctxt) const {
+Context Constant::print_asm(Context ctxt, int d) const {
   ctxt.ss() << "\tli $2," << getValue() << " # Load constant into active register" << std::endl;
   return ctxt;
 }

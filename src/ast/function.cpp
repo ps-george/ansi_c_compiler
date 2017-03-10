@@ -77,7 +77,7 @@ void Function::setChildDefs() const {
 
 /* PRINT ASM */
 
-Context Function::print_asm(Context ctxt) const{
+Context Function::print_asm(Context ctxt, int d) const{
   Context s_ctxt = ctxt;
   std::vector<std::string> vars = getChildDefs();
   

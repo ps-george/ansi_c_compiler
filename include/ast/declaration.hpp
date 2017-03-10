@@ -15,7 +15,7 @@ public:
   // virtual void print_c() const override;
   virtual std::vector<const Node *> getChildren() const override { return {child}; }
   virtual const List * getParams() const { return new List({}); }
-  virtual Context print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 //! Init declarator
@@ -25,7 +25,7 @@ public:
   InitDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {};
   virtual std::string getNodeType() const override;
   std::vector<const Node *> getChildren() const;
-  virtual Context print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 //! Array declarator
@@ -67,7 +67,7 @@ public:
   
   virtual void print_xml(std::ostream &streams) const override;
   // virtual void print_c() const override;
-  virtual Context print_asm(Context ctxt) const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 #endif

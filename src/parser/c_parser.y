@@ -208,8 +208,8 @@ shift-expression
 
 additive-expression
   : multiplicative-expression { $$ = $1; }
-  | additive-expression '+' multiplicative-expression { $$ = new BinaryExpression($1,$3, $2); }
-  | additive-expression '-' multiplicative-expression { $$ = new BinaryExpression($1,$3, $2); }
+  | additive-expression '+' multiplicative-expression { $$ = new BinaryExpression($1, $3, $2); }
+  | additive-expression '-' multiplicative-expression { $$ = new BinaryExpression($1, $3, $2); }
 
 multiplicative-expression
   : cast-expression { $$ = $1; }

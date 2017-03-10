@@ -38,7 +38,7 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
   * PRINT ASM
   */
 
-Context IfElseStatement::print_asm(Context ctxt) const {
+Context IfElseStatement::print_asm(Context ctxt, int d) const {
   ctxt.ss() << "## " << getNodeType() << std::endl;
   std::string uq_num = getUnq();
   std::string ifend = "$ifend" + uq_num;
