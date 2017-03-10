@@ -1,9 +1,7 @@
 int test(){
-  return 1;
+  return 13;
 }
 
 int main(){
-  int i = 0;
-  i = test();
-  return i;
+  return test();
 }

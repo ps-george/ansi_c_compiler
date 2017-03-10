@@ -44,7 +44,7 @@ class FunctionCall : public PostfixExpression {
 private:
   const ExpressionList * args;
 public:
-  FunctionCall(const Expression * _expr) : PostfixExpression(_expr) {};
+  FunctionCall(const Expression * _expr) : PostfixExpression(_expr), args(new ExpressionList({})) {};
   FunctionCall(const Expression * _expr, const List * _args) : PostfixExpression(_expr), args((const ExpressionList *)_args) {};
   virtual std::string getNodeType() const override;
   virtual std::string getId() const { return child->getId(); };

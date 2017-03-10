@@ -36,6 +36,7 @@ public:
 };
 
 std::string makeLabel(std::string base);
+std::string getUnq();
 
 int store(Context& ctxt, std::string id);
 

@@ -24,6 +24,10 @@ std::vector<const Node *> List::getChildren() const {
   }
   return children; 
 };
+
+std::vector<const Node *> ExpressionList::getChildren() const {
+  return List::getChildren();
+}
 /*
  * END OF GETTERS
  */

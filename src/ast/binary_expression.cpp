@@ -44,12 +44,14 @@ Context BinaryExpression::print_asm(Context ctxt) const {
   if (op == "+"){
     // Add the two results
     ctxt.ss() << "\tadd\t$2,$2,$3" << " # add $2 and $3" << std::endl;
+  } else if (op=="-"){
+    ctxt.ss() << "\tsub\t$2,$2,$3" << " # sub $2-$3" << std::endl;
   } else if (op=="=="){
     ctxt.ss() << "\txor\t $2,$2,$3" << " # xor left with right" << std::endl;
     ctxt.ss() << "\tsltu\t $2,$2,1" << " # check if it is less than 1" << std::endl;
     //ctxt.ss() << "\tandi $2,$2,0x00ff" << " # not sure this is necessary" << std::endl; 
   } else {
-    ctxt.ss() << "### BINARY OPERATOR NOT IMPLEMENTED YET" << std::endl;
+    ctxt.ss() << "### BINARY OPERATOR\'" << op << "\' NOT IMPLEMENTED YET" << std::endl;
   }
   
   return ctxt;

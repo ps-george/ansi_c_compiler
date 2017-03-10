@@ -93,6 +93,7 @@ public:
   ExpressionList(std::vector<const Node *> _children) : List(_children) {}
   //! Getters
   virtual std::string getNodeType() const override;
+  virtual std::vector<const Node *> getChildren() const override;
   virtual Context print_asm(Context ctxt) const override;
   virtual void print_xml(std::ostream &stream) const override;
 };

@@ -15,7 +15,15 @@ std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 /* END OF GETTERS */
 
 Context FunctionCall::print_asm(Context ctxt) const {
-  ctxt.ss() << "\t .option\tpic0" << std::endl
+  // If there is an expression in the functioncall, evaluate and move to $4
+  for (auto it: args->getChildren()){
+    it->print_asm(ctxt);
+    // For now only consider functions of one variable
+    ctxt.ss() << "\tmove $4,$2" << std::endl;
+  }
+  
+  
+  ctxt.ss() << "\t.option\tpic0" << std::endl
   
   << "\tjal\t" << getId() << std::endl
   << "\tnop" << std::endl << std::endl << "\t.option\tpic2" << std::endl;

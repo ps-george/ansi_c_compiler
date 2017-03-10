@@ -40,8 +40,9 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
 
 Context IfElseStatement::print_asm(Context ctxt) const {
   ctxt.ss() << "## " << getNodeType() << std::endl;
-  std::string ifend = makeLabel("ifend");
-  std::string elsestart = makeLabel("elsestart");
+  std::string uq_num = getUnq();
+  std::string ifend = "ifend" + uq_num;
+  std::string elsestart = "elsestart" + uq_num;
   
   // Set $2 to 1 if 2>0, else $2=0
   ctxt.ss() << "\tslt $2,$0,$2" << std::endl;

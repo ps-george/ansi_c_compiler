@@ -79,10 +79,20 @@ void Function::setChildDefs() const {
 
 Context Function::print_asm(Context ctxt) const{
   std::vector<std::string> vars = getChildDefs();
-  int vars_size = vars.size()*4;
+  
+  // Deal with parameters
+  // Add parameters to context
+  for (auto &it : getParams()){
+    ctxt.assignVariable(it, "int");
+  }
+  
+  int vars_size = vars.size()*4 ;
   // std::cerr << vars_size << std::endl;
   // Indicated that we're printing out a function
   std::string fname = id;
+  
+  
+  
   //ctxt.ss() << "# Function " << fname << std::endl;
   //ctxt.ss() << "### Preamble" << std::endl;
   ctxt.ss() << "\t.globl\t" << fname	<< "\n\t.set	nomips16\n\t.set	nomicromips\n\t.ent\t" << fname	<< "\n\t.type\t" << fname <<", @function\n";
@@ -116,6 +126,16 @@ Context Function::print_asm(Context ctxt) const{
   
   // Write new frame pointer as current stack pointer
   << "\tmove\t$fp,$sp" << std::endl;
+  
+  // Store parameters in the frame
+  
+  // For $4 and $5 we get from input
+  int i = 4;
+  for (auto &it : getParams()){
+    ctxt.ss() << "\tmove $2,$" << std::to_string(i++) << std::endl;
+    store(ctxt, it);
+  }
+  
   // ctxt.ss() << "### End of preamble" << std::endl;
   /* Print asm for the function */
   // Remember to set return register ($2) to return value

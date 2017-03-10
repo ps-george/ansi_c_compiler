@@ -35,3 +35,7 @@ std::string makeLabel(std::string base){
   base = base + std::to_string(UNIQ_GEN++);
   return base;
 }
+
+std::string getUnq() {
+  return std::to_string(UNIQ_GEN++);
+}
