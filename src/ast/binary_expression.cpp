@@ -33,25 +33,24 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 /* PRINT ASM */
 Context BinaryExpression::print_asm(Context ctxt, int d) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
-  
+  ctxt.ss() << "## Binary expression, dest =" << d << std::endl;
   // Compile the left into a specific register, without changing anything else
-  getLeft()->print_asm(ctxt);
-  // Everything on left goes to $2, so need to move to $3 first 
-  ctxt.ss() << "\tmove\t$3,$2" << " # move results of left hand side into $3 for " << op << std::endl;
-  
-  // Compile the right into a specific register, without changing anything else
-  // If RHS is a not a constant, we override the previous result
-  
-  getRight()->print_asm(ctxt);
+  getLeft()->print_asm(ctxt,3);
+  // Need to save and restore previous value of 3
+  // Store 3 on the stack
+  // reserve space
+  ctxt.push(3);
+  getRight()->print_asm(ctxt,2);
+  ctxt.pop(3);
   
   if (op == "+"){
     // Add the two results
-    ctxt.ss() << "\tadd\t$2,$3,$2" << " # add $3 and $2" << std::endl;
+    ctxt.ss() << "\tadd\t$" << d << ",$3,$2" << " # add $3 and $2" << std::endl;
   } else if (op=="-"){
-    ctxt.ss() << "\tsub\t$2,$3,$2" << " # sub $3-$2" << std::endl;
+    ctxt.ss() << "\tsub\t$"<< d << ",$3,$2" << " # sub $3-$2" << std::endl;
   } else if (op=="=="){
     ctxt.ss() << "\txor\t $3,$3,$2" << " # xor left with right" << std::endl;
-    ctxt.ss() << "\tsltu\t $2,$3,1" << " # check if it is less than 1" << std::endl;
+    ctxt.ss() << "\tsltu\t $" << d << ",$3,1" << " # check if it is less than 1" << std::endl;
     //ctxt.ss() << "\tandi $2,$2,0x00ff" << " # not sure this is necessary" << std::endl; 
   } else {
     ctxt.ss() << "### BINARY OPERATOR\'" << op << "\' NOT IMPLEMENTED YET" << std::endl;

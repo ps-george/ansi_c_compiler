@@ -39,3 +39,13 @@ std::string makeLabel(std::string base){
 std::string getUnq() {
   return std::to_string(UNIQ_GEN++);
 }
+
+void Context::push(int reg){
+  ss() <<"### PUSH\n\taddi\t$sp,$sp,-4" << std::endl;
+  ss() << "\tsw\t$" <<reg <<",0($sp)\n" << std::endl;
+}
+
+void Context::pop(int reg){
+  ss() << "### POP\n\tlw\t$" <<reg<< ",0($sp)" << std::endl;
+  ss() <<"\taddi\t$sp,$sp,4\n" << std::endl;
+}

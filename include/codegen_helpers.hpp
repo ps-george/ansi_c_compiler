@@ -33,6 +33,8 @@ public:
   void assignVariable(std::string id, std::string type);
   std::string getF(){ return f; }
   void setF(std::string fname){ f = fname; }
+  void push(int reg);
+  void pop(int reg);
 };
 
 std::string makeLabel(std::string base);

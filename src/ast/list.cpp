@@ -70,7 +70,7 @@ Context ExpressionList::print_asm(Context ctxt, int d) const{
   //ctxt.ss() << "# print asm for " << getNodeType() << "'s children" << std::endl;
   for (auto &it : List::getChildren()){
     // ctxt.ss() << "# " << it->getNodeType() << std::endl;
-    it->print_asm(ctxt);
+    it->print_asm(ctxt,d);
   }
   return ctxt;
 } //! Print out mips assembly

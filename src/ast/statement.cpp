@@ -35,13 +35,13 @@ Context CompoundStatement::print_asm(Context ctxt, int d) const {
     
     // Each of the children has no effect on context afterwards.
     // This ensures when exciting child scope, declarations are unshadowed.
-    it->print_asm(ctxt);
+    it->print_asm(ctxt,d);
   }
   return ctxt;
 }
 
 Context ExpressionStatement::print_asm(Context ctxt, int d) const {
-  expr->print_asm(ctxt);
+  expr->print_asm(ctxt,d);
   return ctxt;
 }
 

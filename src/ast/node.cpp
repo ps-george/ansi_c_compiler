@@ -81,7 +81,7 @@ Context Node::print_asm(Context ctxt, int d) const {
   for (auto &it : getChildren()){
     //ctxt.ss() << "# hi " << it->getNodeType() << std::endl;
     // If we are passing by value, siblings aren't away of context changes
-    ctxt = it->print_asm(ctxt);
+    ctxt = it->print_asm(ctxt, d);
   }
   return ctxt;
   // ctxt.ss() << "# " << getNodeType() << " not implemented yet" << std::endl;

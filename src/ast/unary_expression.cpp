@@ -33,6 +33,7 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
   << "\tjal\t" << getId() << std::endl
   << "\tnop" << std::endl << std::endl << "\t.option\tpic2" << std::endl;
   ctxt.ss() << "\tmove $3,$16" << " # want to preserve $3 across calls" << std::endl;
+  ctxt.ss() << "\tmove $" << d << ",$2" <<std::endl;
   return ctxt;
 }
 
