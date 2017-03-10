@@ -78,6 +78,7 @@ void Function::setChildDefs() const {
 /* PRINT ASM */
 
 Context Function::print_asm(Context ctxt) const{
+  Context s_ctxt = ctxt;
   std::vector<std::string> vars = getChildDefs();
   
   // Deal with parameters
@@ -85,9 +86,13 @@ Context Function::print_asm(Context ctxt) const{
   for (auto &it : getParams()){
     ctxt.assignVariable(it, "int");
   }
+  std::vector<std::string> args = getParams();
+  int args_size = args.size()*4;
+  int vars_size = vars.size()*4;
   
-  int vars_size = vars.size()*4 ;
-  // std::cerr << vars_size << std::endl;
+  int total_size = (args_size+vars_size);
+  
+  // std::cerr << total_size << std::endl;
   // Indicated that we're printing out a function
   std::string fname = id;
   
@@ -104,7 +109,7 @@ Context Function::print_asm(Context ctxt) const{
   ctxt.ss() << fname << ":" << std::endl
   // Print the frame: we need vars+8 as frame size because
   // we store the previous frame pointer and return address
-  << "\t.frame\t$fp,"<< vars_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= 0, gp= 0" << std::endl
+  << "\t.frame\t$fp,"<< total_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= " << args_size << ", gp= 0" << std::endl
   
   // If there are function calls with the function, have to do preamble differently
   // .mask has something to do with int size
@@ -116,13 +121,13 @@ Context Function::print_asm(Context ctxt) const{
   << "\t.set\tnomacro" << std::endl
   
   // Reserve space on the stack for the frame
-  << "\taddiu\t$sp,$sp,-" << vars_size+8 << std::endl
+  << "\taddiu\t$sp,$sp,-" << total_size+8 << std::endl
   
   // Store the previous return address
-  << "\tsw\t$31,"<< vars_size+4 << "($sp)" << std::endl
+  << "\tsw\t$31,"<< total_size+4 << "($sp)" << std::endl
   
   // Store the previous frame pointer
-  << "\tsw\t$fp,"<< vars_size << "($sp)" << std::endl
+  << "\tsw\t$fp,"<< total_size << "($sp)" << std::endl
   
   // Write new frame pointer as current stack pointer
   << "\tmove\t$fp,$sp" << std::endl;
@@ -149,17 +154,17 @@ Context Function::print_asm(Context ctxt) const{
   ctxt.ss() << "\tmove $sp,$fp" << std::endl
   
   // Load the previous return address
-  << "\tlw\t$31," << vars_size+4 <<"($sp)" << std::endl
+  << "\tlw\t$31," << total_size+4 <<"($sp)" << std::endl
   // Load the previous frame pointer (unwind)
-  << "\tlw\t$fp," << vars_size <<"($sp)" << std::endl
+  << "\tlw\t$fp," << total_size <<"($sp)" << std::endl
   // Unallocate the frame we were in
-  << "\taddiu\t$sp,$sp," << vars_size+8 << std::endl
+  << "\taddiu\t$sp,$sp," << total_size+8 << std::endl
   // Return
   << "\tj\t$31\n\tnop" << std::endl << std::endl;
   
   ctxt.ss() << "\t.set\tmacro\n\t.set\treorder\n\t.end\t" << fname << "\n\t.size\t" <<	fname << ", .-" << fname << std::endl;
   // ctxt.ss() << "### End of postamble" << std::endl;
-  return ctxt;
+  return s_ctxt;
 }
 
 /* PRINT XML */

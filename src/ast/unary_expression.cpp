@@ -16,10 +16,11 @@ std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 
 Context FunctionCall::print_asm(Context ctxt) const {
   // If there is an expression in the functioncall, evaluate and move to $4
+  int i = 4;
   for (auto it: args->getChildren()){
     it->print_asm(ctxt);
     // For now only consider functions of one variable
-    ctxt.ss() << "\tmove $4,$2" << std::endl;
+    ctxt.ss() << "\tmove $" << std::to_string(i++) << ",$2" << std::endl;
   }
   
   
