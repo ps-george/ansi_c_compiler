@@ -52,6 +52,10 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
     ctxt.ss() << "\txor\t $3,$3,$2" << " # xor left with right" << std::endl;
     ctxt.ss() << "\tsltu\t $" << d << ",$3,1" << " # check if it is less than 1" << std::endl;
     //ctxt.ss() << "\tandi $2,$2,0x00ff" << " # not sure this is necessary" << std::endl; 
+  } else if (op=="!="){
+    ctxt.ss() << "\txor\t $3,$3,$2" << " # xor left with right" << std::endl;
+    ctxt.ss() << "\tsltu\t $" << d << ",$0,$3" << " # check if it is less than 1" << std::endl;
+    //ctxt.ss() << "\tandi $2,$2,0x00ff" << " # not sure this is necessary" << std::endl; 
   } else {
     ctxt.ss() << "### BINARY OPERATOR\'" << op << "\' NOT IMPLEMENTED YET" << std::endl;
   }
@@ -83,7 +87,7 @@ Context AssignmentExpression::print_asm(Context ctxt, int d) const {
   } else if (op == "&=") {
 
   } else if (op == "|=") {
-
+    
   } else if (op == "^=") {
 
   } else if (op == "<<=") {

@@ -37,6 +37,7 @@ public:
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
   virtual std::vector<const Node *> getChildren() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 
@@ -51,6 +52,7 @@ public:
   virtual std::string getNodeType() const override;
   DoWhileStatement(const Statement *s, const Expression *c)
       : WhileStatement(c, s) {}
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 
@@ -65,6 +67,7 @@ public:
     return {(const Expression*)cond1};
   };
   virtual std::vector<const Node *> getChildren() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 class EEForStatement : public ForStatement {

@@ -5,6 +5,7 @@
  */
 
 #include "ast/iteration_statement.hpp"
+#include "codegen_helpers.hpp"
 
 std::string IterationStatement::getNodeType() const { 
   if (parser)
@@ -58,6 +59,44 @@ std::vector<const Node*> DEEForStatement::getChildren() const {
 /*
  * PRINTERS
  */
+
+Context print_while(Context ctxt, const Expression * cond, const Statement * stat1, std::string type){
+  // Create labels
+  std::string uq_num = getUnq();
+  std::string condlabel = "$cond" + uq_num;
+  std::string whilestart = "$whilestart" + uq_num;
+  std::string whilend = "$whilend" + uq_num;
+  
+  if (type=="DoWhile"){
+    // Go through while loop once first
+    ctxt.ss() << "\tb\t" << whilestart << std::endl;
+  }
+  
+  // label for condition
+  ctxt.ss() << condlabel << ":" << std::endl;
+  cond->print_asm(ctxt,2);
+  // If condition is 0, go to end
+  ctxt.ss() << "\tbeq\t$2,$0," << whilend << std::endl;
+  ctxt.ss() << "\tnop" << std::endl;
+  // Do the statment
+  ctxt.ss() << whilestart << ":" << std::endl;
+  ctxt = stat1->print_asm(ctxt);
+  ctxt.ss() << "\tb\t" << condlabel << std::endl;
+  ctxt.ss() << "\tnop" << std::endl;
+  ctxt.ss() << whilend << ":" << std::endl;
+  return ctxt;
+}
+
+Context WhileStatement::print_asm(Context ctxt, int d) const {
+  return print_while(ctxt, getConditions().at(0), stat1, "While");
+}
+
+Context DoWhileStatement::print_asm(Context ctxt, int d) const {
+  return print_while(ctxt, getConditions().at(0), stat1, "DoWhile");
+}
+
+
+
 /*
 void DEForStatement::print_xml(std::ostream& stream) const {
   tab(stream);
