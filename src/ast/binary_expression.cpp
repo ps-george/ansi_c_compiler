@@ -43,12 +43,52 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   getRight()->print_asm(ctxt,2);
   ctxt.pop(3);
   
+  // Arithmetic Operators
   if (op == "+"){
-    // Add the two results
     ctxt.ss() << "\tadd\t$" << d << ",$3,$2" << " # add $3 and $2" << std::endl;
   } else if (op=="-"){
-    ctxt.ss() << "\tsub\t$"<< d << ",$3,$2" << " # sub $3-$2" << std::endl;
-  } else if (op=="=="){
+    ctxt.ss() << "\tsub\t$" << d << ",$3,$2" << " # sub $3-$2" << std::endl;
+  } else if (op=="*"){
+    ctxt.ss() << "\tmul\t$" << d << ",$3,$2" << " # mul $3*$2" << std::endl;
+  } else if (op=="/"){
+    ctxt.ss() << "\tdiv\t$" << d << ",$3,$2" << " # div $3*$2" << std::endl;
+  }
+  // Binary Operators
+  else if (op=="^"){
+    ctxt.ss() << "\txor\t$" << d << ",$3,$2" << " # xor $3*$2" << std::endl;
+  }
+  else if (op=="&"){
+    ctxt.ss() << "\tand\t$" << d << ",$3,$2" << " # and $3*$2" << std::endl;
+  }
+  else if (op=="|"){
+    ctxt.ss() << "\tor\t$" << d << ",$3,$2" << " # or $3*$2" << std::endl;
+  }
+  else if (op=="||"){
+    // If either one is not equal to 0, set to 1
+    ctxt.ss() << "\tor\t$" << d << ",$3,$2" << " # logical or $3*$2" << std::endl;
+  }
+  else if (op=="&&"){
+    // If either one is equal to 0, set to 0
+    // \todo shortcircuiting!
+    ctxt.ss() << "\tland\t$" << d << ",$3,$2" << " # logical and $3*$2" << std::endl;
+  }
+  // Relational expressions
+  // \todo would need to check for signed/unsigned-ness in type of operands
+  // Assume all unsigned for now
+  else if (op=="<"){
+    ctxt.ss() << "\tsltu\t $" << d << ",$3,$2" << " # check if it is less than 1" << std::endl;
+  }
+  else if (op==">"){
+    ctxt.ss() << "\tsgtu\t $" << d << ",$3,$2" << " # check if it is less than 1" << std::endl;
+  }
+  else if (op=="<="){
+    ctxt.ss() << "\tsleu\t $" << d << ",$3,$2" << " # check if it is less than 1" << std::endl;
+  }
+  else if (op==">="){
+    ctxt.ss() << "\tsgeu\t $" << d << ",$3,$2" << " # check if it is less than 1" << std::endl;
+  }
+  // Equality expressions
+  else if (op=="=="){
     ctxt.ss() << "\txor\t $3,$3,$2" << " # xor left with right" << std::endl;
     ctxt.ss() << "\tsltu\t $" << d << ",$3,1" << " # check if it is less than 1" << std::endl;
     //ctxt.ss() << "\tandi $2,$2,0x00ff" << " # not sure this is necessary" << std::endl; 

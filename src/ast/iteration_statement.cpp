@@ -95,9 +95,9 @@ Context DoWhileStatement::print_asm(Context ctxt, int d) const {
   return print_while(ctxt, getConditions().at(0), stat1, "DoWhile");
 }
 
-Context EEForStatement::print_asm(Context ctxt, int d) const {
-  
-  return print_while(ctxt, getConditions().at(0), stat1, "For");
+Context ForStatement::print_asm(Context ctxt, int d) const {
+  return ctxt;
+  // return print_while(ctxt, getConditions().at(0), stat1, "For");
 }
 
 

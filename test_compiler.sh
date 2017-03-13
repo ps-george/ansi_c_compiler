@@ -11,8 +11,7 @@ PASSED=0
 CHECKED=0
 
 for i in test/compiler/in/*.c; do
-  echo "==========================="
-  echo "Input file : ${i}"
+  
   BASENAME=$(basename $i .c);
   mips-linux-gnu-gcc -S -o test/compiler/ref/$BASENAME.s $i
   
@@ -30,10 +29,13 @@ for i in test/compiler/in/*.c; do
   
   
   if [[ $REF -ne $RESULT ]]; then
+      echo "==========================="
+      echo "Input file : ${i}"
       echo -e "\nERROR, expecting $REF but got $RESULT."
+      #echo "==========================="
   else
       PASSED=$(( ${PASSED}+1 ));
-      echo -e "\nPASS, expecting $REF and got $RESULT."
+      #echo -e "\nPASS, expecting $REF and got $RESULT."
   fi
   CHECKED=$(( ${CHECKED}+1 ));
   
