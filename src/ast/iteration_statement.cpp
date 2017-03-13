@@ -96,7 +96,13 @@ Context DoWhileStatement::print_asm(Context ctxt, int d) const {
 }
 
 Context ForStatement::print_asm(Context ctxt, int d) const {
-  ctxt.ss() << "\tsyscall" << std::endl;
+  ctxt.ss() << "### BREAK\n\tsw\t$2,1000($sp)" << std::endl;
+  return ctxt;
+  // return print_while(ctxt, getConditions().at(0), stat1, "For");
+}
+
+Context DEEForStatement::print_asm(Context ctxt, int d) const {
+  ctxt.ss() << "### BREAK\n\tsw\t$2,1000($sp)" << std::endl;
   return ctxt;
   // return print_while(ctxt, getConditions().at(0), stat1, "For");
 }

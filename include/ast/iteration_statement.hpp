@@ -125,6 +125,7 @@ public:
     return {(const Expression*)cond1,cond2};
   };
   virtual std::vector<const Node *> getChildren() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 #endif

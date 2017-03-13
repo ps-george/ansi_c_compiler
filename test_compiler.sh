@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Make compiler
-make clean
-make -B bin/c_compiler
+#make clean
+make bin/c_compiler
 
 # make test results directory
 mkdir -p test/compiler/out

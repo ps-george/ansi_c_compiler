@@ -8,5 +8,6 @@ int f(){
 
 int main(){
   int a = 0x0;
-  return a&&f();
+  f();
+  return f();
 }
