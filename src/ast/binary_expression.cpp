@@ -34,6 +34,7 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 Context BinaryExpression::print_asm(Context ctxt, int d) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
   ctxt.ss() << "## Binary expression, dest =" << d << std::endl;
+  std::string endlabel = "bend" + getUnq();
   // Compile the left into a specific register, without changing anything else
   getLeft()->print_asm(ctxt,3);
   // Need to save and restore previous value of 3
@@ -65,12 +66,29 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   }
   else if (op=="||"){
     // If either one is not equal to 0, set to 1
-    ctxt.ss() << "\tor\t$" << d << ",$3,$2" << " # logical or $3*$2" << std::endl;
+    // If first argument is > 0, set to one, then 
+    // LHS
+    ctxt.ss() << "\tsgtu\t$" << d << ",$3,$0" << " # check if left is greater than zero" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is > zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
+    // RHS
+    ctxt.ss() << "\tsgtu\t$" << d << ",$2,$0" << " # check if right is greater than zero" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is != zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
   }
   else if (op=="&&"){
     // If either one is equal to 0, set to 0
     // \todo shortcircuiting!
-    ctxt.ss() << "\tland\t$" << d << ",$3,$2" << " # logical and $3*$2" << std::endl;
+    // LHS
+    ctxt.ss() << "\txor\t$" << d << ",$3,$0" << " # xor left with 0" << std::endl;
+    ctxt.ss() << "\tsltu\t $" << d << ",$0,$3" << " # check if it is less than 1" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
+    // RHS
+    ctxt.ss() << "\txor\t$" << d << ",$2,$0" << " # xor left with 0" << std::endl;
+    ctxt.ss() << "\tsltu\t $" << d << ",$0,$2" << " # check if it is less than 1" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
   }
   // Relational expressions
   // \todo would need to check for signed/unsigned-ness in type of operands
@@ -99,6 +117,8 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   } else {
     ctxt.ss() << "### BINARY OPERATOR\'" << op << "\' NOT IMPLEMENTED YET" << std::endl;
   }
+  ctxt.ss() << endlabel << ":" << std::endl;
+  //fprintf(ctxt.ss(), "%s:", endlabel);
   
   return ctxt;
 }

@@ -96,6 +96,7 @@ Context DoWhileStatement::print_asm(Context ctxt, int d) const {
 }
 
 Context ForStatement::print_asm(Context ctxt, int d) const {
+  ctxt.ss() << "\tsyscall" << std::endl;
   return ctxt;
   // return print_while(ctxt, getConditions().at(0), stat1, "For");
 }
