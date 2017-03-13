@@ -3,10 +3,14 @@ int f(){
     
   }
   
-  return 1;
+  return 13;
 }
 
 int main(){
   int a = 0x1;
-  return a||f();
+  if (a||f()){
+    return 53;
+  };
+  
+  return 21;
 }
