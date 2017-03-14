@@ -26,6 +26,7 @@ public:
   PostfixExpression(const Expression * c, std::string* _op) : UnaryExpression(c,_op) {};
   PostfixExpression(const Expression * c) : UnaryExpression(c) {};
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 
@@ -36,6 +37,7 @@ public:
   PrefixExpression(const Expression * c, std::string* _op) : UnaryExpression(c,_op) {};
   PrefixExpression(const Expression * c) : UnaryExpression(c) {};
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 

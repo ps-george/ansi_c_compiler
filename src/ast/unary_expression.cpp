@@ -37,7 +37,18 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
   return ctxt;
 }
 
+Context PrefixExpression::print_asm(Context ctxt, int d) const {
+  
+  
+  return ctxt;
+}
 
+Context PostfixExpression::print_asm(Context ctxt, int d) const {
+  
+  
+  
+  return ctxt;
+}
 
 
 /* PRINT C */

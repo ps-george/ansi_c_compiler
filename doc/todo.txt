@@ -1,4 +1,0 @@
-
-Function calls
-Scope (pass Context by value instead of by reference)
-Context contains offset values for each variable..

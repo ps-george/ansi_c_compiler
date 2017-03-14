@@ -1,0 +1,37 @@
+Tested features:
+// Adding the return values of two one input function calls
+// Function call with 4 int input parameters
+// Function call with no input paramters
+// Function call with expression as argument
+// Recursive Fibonacci program
+// Function call with two input parameters
+// Binary operator addition (basic)
+// Binary operator division
+// Binary operator multiplication (basic)
+// Binary operator subtraction
+// Binary operator subtraction, with bracketing
+// Declaration and then assignment of variables
+// Declaration with initialisation to constant or existing variable
+// Binary operator &
+// Binary operator ^ (XOR)
+// Main return constant
+// IfElse using == operator else branch
+// IfElse many times using == operator
+// DoWhile condition not met at the beginning
+// EEFor loop
+// While loop condition false to begin with
+// While loop initial condition is false
+// While loop implementing multiplication with addition and subtraction
+// Binary operator && two operands returns 1
+// Binary operator &&, false positive test. Trying to test short-circuit.
+// Binary operator || two operands returns 1
+// Binary operator ||, false positive test. Trying to test short-circuit.
+// Binary operator | two operands returns 3
+// Binary operator == returns 0 two operands
+// Binary operator == returns 1 two operands
+// Binary operator == returns 0 two operands
+// Binary operator >= two operands eq
+// Binary operator > two operands returns 1
+// Binary operator <= two operands eq
+// Binary operator < two operands returns true
+// Scope variable shadowing
