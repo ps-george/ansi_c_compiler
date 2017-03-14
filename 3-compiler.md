@@ -16,7 +16,7 @@ The output format should be MIPS1 assembly code.
 
 It should be possible to assemble and link this code
 against a C run-time, and have it execute correctly
-on a MIPS processor.
+on a MIPS processor as emulated by `qemu-mips`.
 
 Compilation
 -----------
@@ -36,10 +36,7 @@ There are actually three deliverables here:
 
 1 - The compiler itself
 
-2 - A test framework
+2 - A [test framework](3-compiler-test_deliverable.md)
 
-3 - Documentation
+3 - [Documentation](3-compiler-documentation.md)
 
-There are certain requirements on test and a format for the
-documentation, but we'll elaborate on those when they are
-encountered in the course.
