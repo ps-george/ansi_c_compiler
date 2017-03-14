@@ -1,3 +1,5 @@
+// Binary operator ^ (XOR)
+
 int main(){
   int a = 0x3;
   int b = 0x7;

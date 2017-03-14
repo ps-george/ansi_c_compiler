@@ -1,3 +1,5 @@
+// Binary operator ||, false positive test. Trying to test short-circuit.
+
 int f(){
   for (int i = 0 ; i < 5; i = i + 1){
     

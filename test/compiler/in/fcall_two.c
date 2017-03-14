@@ -1,3 +1,5 @@
+// Function call with two input parameters
+
 int test_add(int a, int b){
   return a+b;
 }

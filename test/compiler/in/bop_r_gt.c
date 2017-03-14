@@ -1,3 +1,5 @@
+// Binary operator > two operands returns 1
+
 int main(){
   int a = 47;
   int b = 13;

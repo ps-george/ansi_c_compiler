@@ -1,3 +1,5 @@
+// Scope variable shadowing
+
 int main(){
   int i;
   i = 13;

@@ -1,3 +1,5 @@
+// Adding the return values of two one input function calls
+
 int Basic(int n) {
   return n;
 }

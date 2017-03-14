@@ -1,3 +1,5 @@
+// While loop implementing multiplication with addition and subtraction
+
 int mult(int a, int b){
   int c = 0;
   while (a!=0){

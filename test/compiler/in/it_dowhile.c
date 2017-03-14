@@ -1,3 +1,5 @@
+// DoWhile condition not met at the beginning
+
 int main(){
   int i = 0;
   int j = 0;

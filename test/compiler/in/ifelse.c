@@ -1,3 +1,5 @@
+// IfElse using == operator else branch
+
 int main(){
   int i = 0;
   if (i == 5){
@@ -6,7 +8,7 @@ int main(){
     i = 15;
   }
   
-  if (i==15){
+  if (i==14){
     return 13;
   }
   else {

@@ -1,3 +1,5 @@
+// Function call with expression as argument
+
 int test(int a){
   return a;
 }

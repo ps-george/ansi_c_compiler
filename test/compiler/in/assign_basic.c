@@ -1,3 +1,5 @@
+// Declaration and then assignment of variables
+
 int main(){
   int i,j,k,l;
   i = 1;

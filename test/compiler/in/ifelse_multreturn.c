@@ -1,3 +1,5 @@
+// IfElse many times using == operator
+
 int main(){
   int i = 0;
   if (i == 5){
