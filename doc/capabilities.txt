@@ -1,37 +1,37 @@
 Tested features:
-// Adding the return values of two one input function calls
-// Function call with 4 int input parameters
-// Function call with no input paramters
-// Function call with expression as argument
-// Recursive Fibonacci program
-// Function call with two input parameters
-// Binary operator addition (basic)
-// Binary operator division
-// Binary operator multiplication (basic)
-// Binary operator subtraction
-// Binary operator subtraction, with bracketing
-// Declaration and then assignment of variables
-// Declaration with initialisation to constant or existing variable
-// Binary operator &
-// Binary operator ^ (XOR)
-// Main return constant
-// IfElse using == operator else branch
-// IfElse many times using == operator
-// DoWhile condition not met at the beginning
-// EEFor loop
-// While loop condition false to begin with
-// While loop initial condition is false
-// While loop implementing multiplication with addition and subtraction
-// Binary operator && two operands returns 1
-// Binary operator &&, false positive test. Trying to test short-circuit.
-// Binary operator || two operands returns 1
-// Binary operator ||, false positive test. Trying to test short-circuit.
-// Binary operator | two operands returns 3
-// Binary operator == returns 0 two operands
-// Binary operator == returns 1 two operands
-// Binary operator == returns 0 two operands
-// Binary operator >= two operands eq
-// Binary operator > two operands returns 1
-// Binary operator <= two operands eq
-// Binary operator < two operands returns true
-// Scope variable shadowing
+1.	 Declaration and then assignment of variables
+2.	 Declaration with initialisation to constant or existing variable
+3.	 Binary operator + addition (basic)
+4.	 Binary operator / division
+5.	 Binary operator * multiplication (basic)
+6.	 Binary operator - subtraction
+7.	 Binary operator - subtraction, with bracketing
+8.	 Binary operator &
+9.	 Binary operator | two operands returns 3
+10.	 Binary operator ^ (XOR)
+11.	 Binary operator && two operands returns 1
+12.	 Binary operator &&, false positive test. Trying to test short-circuit.
+13.	 Binary operator || two operands returns 1
+14.	 Binary operator ||, false positive test. Trying to test short-circuit.
+15.	 Binary operator == returns 0 two operands
+16.	 Binary operator == returns 1 two operands
+17.	 Binary operator == returns 0 two operands
+18.	 Binary operator >= two operands eq
+19.	 Binary operator > two operands returns 1
+20.	 Binary operator <= two operands eq
+21.	 Binary operator < two operands returns true
+22.	 Adding the return values of two one input function calls
+23.	 Function call with 4 int input parameters
+24.	 Function call with no input paramters
+25.	 Function call with expression as argument
+26.	 Recursive Fibonacci program
+27.	 Function call with two input parameters
+28.	 Main return constant
+29.	 Scope variable shadowing
+30.	 IfElse using == operator else branch
+31.	 IfElse many times using == operator
+32.	 DoWhile condition not met at the beginning
+33.	 EEFor loop
+34.	 While loop condition false to begin with
+35.	 While loop initial condition is false
+36.	 While loop implementing multiplication with addition and subtraction

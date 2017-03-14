@@ -1,4 +1,4 @@
-// Binary operator multiplication (basic)
+// Binary operator * multiplication (basic)
 
 int main(){
   int a = 7;

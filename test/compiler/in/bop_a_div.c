@@ -1,4 +1,4 @@
-// Binary operator division
+// Binary operator / division
 
 int main(){
   int a = 35;

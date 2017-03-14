@@ -1,4 +1,4 @@
-// Binary operator addition (basic)
+// Binary operator + addition (basic)
 
 int main(){
   int i;
