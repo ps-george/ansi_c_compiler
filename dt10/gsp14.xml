@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Quiz login="gsp14">
+This test contains 10 multiple choice questions. For each question
+you should fill in the attribute "answer". Each question is
+worth (nominally) 4 marks each, for a total of 40.
+
+The answer for multiple choice questions should be the index of the
+answer you are selecting (i.e. an integer from 0 to 3), just type over
+the '?' that is pre-filled in). Any missing or invalid answer indices
+(e.g. '?') will result in zero marks for that question.
+
+You should indicate your confidence using the 'confidence' key:
+
+  High:   5 marks for a correct answer,   -2 for an incorrect answer.
+  Medium: 4 marks for a correct answer,   -1 for an incorrect answer.
+  Low:    3 marks for a correct answer,    0 for an incorrect answer.
+  
+The confidence value is not case sensitive. A missing or invalid
+confidence value will be assumed to be 'Medium'.
+
+Marks are saturated below at 0 and above at 40.
+
+This test is 10% of your module marks. You should not collaborate with
+other students on the test, nor discuss the questions during the test
+period. It is open book in the sense that you can use the lecture notes,
+books, and other passive resources. Any active questions (posting to
+forums, asking questions on StackOverflow, etc.) is not allowed.
+
+Note that a confidence level of "High" implies that you could
+verbally defend your answer if necessary, or could produce (minimal)
+notes to support your reasoning. A confidence level of "Medium"
+implies that you can at least explain how you were able to discount
+some of the options. It is not expected that such a defence is
+necessary, but remember that standard rules on plagiarism and
+cheating apply to this test.
+
+
+Genuine errors in the questions or answers (not just typoes or grammar
+problem) can be highlighted by attaching an element called "Error" to the
+question, with text content describing the problem.
+A correct error string gets 6 marks for the question (regardless of
+what answer is given). An incorrect/invalid error string gets a penalty
+of -1, then the given answer is evaluated. Even if there is an error element,
+you must still choose an answer and a confidence.
+
+There is no expectation that there _are_ any errors, nor is it the case
+that an error for one person would mean that the same error exists for
+all. The questions and answers have been considered to try to anticipate
+all reasonable interpretations and eliminate any ambiguity, so every
+question should have exactly one clearly correct answer.
+
+Submit your completed XML file to blackboard. You can submit
+as many times as you like before the deadline.
+
+Your submission should be a plain XML document like this one.
+Any problems in XML formatting will be corrected for free,
+though there should be no problems if only answer attributes
+are changed. Please don't put this file through Word or something,
+treat it as XML.
+
+<Question answer="2" confidence="Low" qid="0">
+
+  Given an LL(1) grammar with k non-terminals, what is the worst-case space complexity
+  (i.e. memory or storage required) to parse n input terminals?
+
+  <Choice index="0">
+    O(1)
+  </Choice>
+  <Choice index="1">
+    O(k)
+  </Choice>
+  <Choice index="2">
+    O(n)
+  </Choice>
+  <Choice index="3">
+    O(log n)
+  </Choice>
+</Question>
+
+<Question answer="1" confidence="High" qid="1">
+  Which of the following is true?
+
+  <Choice index="0">
+    Regular and context-free grammars are equally powerfull
+  </Choice>
+  <Choice index="1">
+    Regular grammars are a sub-set of context-free grammars
+  </Choice>
+  <Choice index="2">
+    Context-free grammars are a sub-set of regular grammars
+  </Choice>
+  <Choice index="3">
+    It is impossible to prove whether a grammar is context-free or not
+  </Choice>
+</Question>
+
+<Question answer="0" confidence="High" qid="2">
+  Which of these bison-like grammar fragments is left-recursive?
+
+  <Choice index="0">
+    X : 'b' | X 'a'
+  </Choice>
+  <Choice index="1">
+    X : Y 'x' X
+  </Choice>
+  <Choice index="2">
+    X : Y | 'x' X
+  </Choice>
+  <Choice index="3">
+    X : 'x' X
+  </Choice>
+</Question>
+
+<Question answer="0" confidence="Medium" qid="3">
+
+  The following C fragment represents a left shift:
+  
+      x=x &lt;&lt; 10;
+      
+  If you look at this file in a text editor you will not see
+  the shift operator (instead you'll see something involving
+  ampersands and a semi-colon), but if you look at it in a web
+  browser you will see the normal shift operator.
+  
+  Why is this?
+
+  <Choice index="0">
+    If angle brackets can appear in text, you can't tell where elements start.
+  </Choice>
+  <Choice index="1">
+    Raw C code is a security risk, so cannot be represented directly in XML.
+  </Choice>
+  <Choice index="2">
+    It's mainly for web-browers and HTML; you can use a literal angle bracket in the middle of text in XML.
+  </Choice>
+  <Choice index="3">
+    You're not allowed to have two repeated characters in XML.
+  </Choice>
+</Question>
+
+<Question answer="0" confidence="High" qid="4">
+
+  
+  Given this bison pre-amble:
+  
+      %union{
+        int ival;
+        std::string *sval;
+      }
+      
+      %type &lt;ival&gt; IVAL
+      %type &lt;sval&gt; SVAL
+      
+  what would be a reasonable grammar rule and action?
+  
+  (Note that the pre-amble is edited for brevity, and is missing headers etc.)
+
+  <Choice index="0">
+    IVAL : SVAL           {  $$ = std::atoi( $1-&gt;c_str() );  delete $1; }
+  </Choice>
+  <Choice index="1">
+    SVAL : SVAL '+' SVAL  {  $$ = $1 + $2; } <!-- Can't use + operator on string pointers -->
+  </Choice>
+  <Choice index="2">
+    SVAL : IVAL '+' IVAL  {  $$ = $1 + $2; } <!-- Assigning integer to string -->
+  </Choice>
+  <Choice index="3">
+    SVAL : IVAL '+' SVAL  {  $$ = $1 + $2; } <!-- Adding integer to string pointer -->
+  </Choice>
+</Question>
+
+<Question answer="2" confidence="High" qid="5">
+  How is the First set used in parser construction?
+
+  <Choice index="0">
+    To check if a non-terminal X can begin with a non-terminal Y.
+  </Choice>
+  <Choice index="1">
+    To check if a terminal x can begin with a terminal y
+  </Choice>
+  <Choice index="2">
+    To check if a non-terminal X can begin with a terminal y.
+  </Choice>
+  <Choice index="3">
+    To check if a terminal x can begin with a non-terminal Y
+  </Choice>
+</Question>
+
+<Question answer="0" confidence="Medium" qid="6">
+  What does it mean if a parser is LR(k)?
+
+  <Choice index="0">
+    It is a bottom-up parser.
+  </Choice>
+  <Choice index="1">
+    It can handle productions with at most k components on the right-hand side.
+  </Choice>
+  <Choice index="2">
+    It is a top-down parser.
+  </Choice>
+  <Choice index="3">
+    Parsing n characters could take O(n^k) time.
+  </Choice>
+</Question>
+
+<Question answer="3" confidence="Low" qid="7">
+
+  Assume we need a grammar for describing un-ordered and un-balanced binary trees,
+  containing some token type N at the leaves. Which grammar is appropriate?
+
+  <Choice index="0">
+    BT : '(' BT BT ')'
+  </Choice>
+  <Choice index="1">
+    BT : N '(' BT BT ')'
+  </Choice>
+  <Choice index="2">
+    BT : '(' BT ',' BT ')'
+  </Choice>
+  <Choice index="3">
+    BT : N | '(' BT BT ')'
+  </Choice>
+</Question>
+
+<Question answer="3" confidence="High" qid="8">
+  What does it mean if you get a shift-reduce conflict in a bison grammar?
+
+  <Choice index="0">
+    The conflict could make the generated parser crash at run time.
+  </Choice>
+  <Choice index="1">
+    Bison won't know whether to shift or reduce at run-time.
+  </Choice>
+  <Choice index="2">
+    Your grammar must be incorrect.
+  </Choice>
+  <Choice index="3">
+    Your grammar is ambiguous.
+  </Choice>
+</Question>
+
+<Question answer="2" confidence="Low" qid="9">
+
+  When using bison grammars to build ASTs, what is the general
+  relationship between developing the grammar and the AST design?
+
+  <Choice index="0">
+    ASTs are always designed for a complete grammar that already exists.
+  </Choice>
+  <Choice index="1">
+    Grammar and AST design are two completely independent and unrelated tasks.
+  </Choice>
+  <Choice index="2">
+    Multiple grammars could be designed for the same type of AST.
+  </Choice>
+  <Choice index="3">
+    The complete AST must be defined before a grammar is created.
+  </Choice>
+</Question>
+
+</Quiz>
