@@ -33,17 +33,55 @@ std::vector<const Node *> BinaryExpression::getChildren() const {
 /* PRINT ASM */
 Context BinaryExpression::print_asm(Context ctxt, int d) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
-  ctxt.ss() << "## Binary expression, dest =" << d << std::endl;
-  std::string endlabel = "bend" + getUnq();
-  // Compile the left into a specific register, without changing anything else
-  getLeft()->print_asm(ctxt,3);
-  // Need to save and restore previous value of 3
-  // Store 3 on the stack
-  // reserve space
-  ctxt.push(3);
-  getRight()->print_asm(ctxt,2);
-  ctxt.pop(3);
   
+  ctxt.ss() << "## Binary expression, dest =" << d << std::endl;
+  
+  std::string endlabel = "bend" + getUnq();
+  if (!(op=="&&" || op=="||")){
+    // Compile the left into a specific register, without changing anything else
+    getLeft()->print_asm(ctxt,3);
+    // Need to save and restore previous value of 3
+    // Store 3 on the stack
+    // reserve space
+    ctxt.push(3);
+    getRight()->print_asm(ctxt,2);
+    ctxt.pop(3);
+  }
+  else if (op=="||"){
+    // If either one is not equal to 0, set to 1
+    // If first argument is > 0, set to one, then 
+    // LHS
+    getLeft()->print_asm(ctxt,3);
+    ctxt.ss() << "\tsltu\t$" << d << ",$0,$3" << " # check if left is greater than zero" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is > zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
+    // RHS
+    ctxt.push(3);
+    getRight()->print_asm(ctxt,2);
+    ctxt.pop(3);
+    ctxt.ss() << "\tsltu\t$" << d << ",$0,$2" << " # check if right is greater than zero" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is != zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
+    //ctxt.ss() << "\tor\t$" << d << ",$2,$3" << " # " << std::endl;
+  }
+  else if (op=="&&"){
+    // If either one is equal to 0, set to 0
+    // \todo shortcircuiting!
+    // LHS
+    getLeft()->print_asm(ctxt,3);
+    ctxt.ss() << "\txor\t$" << d << ",$3,$0" << " # xor left with 0" << std::endl;
+    ctxt.ss() << "\tsltu\t $" << d << ",$0,$3" << " # check if it is greater than zero" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
+    // RHS
+    ctxt.pop(3);
+    getRight()->print_asm(ctxt,2);
+    ctxt.pop(3);
+    ctxt.ss() << "\txor\t$" << d << ",$2,$0" << " # xor left with 0" << std::endl;
+    ctxt.ss() << "\tsltu\t $" << d << ",$0,$2" << " # check if it is less than 1" << std::endl;
+    ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
+    ctxt.ss() << "\tnop" << std::endl;
+  }
   // Arithmetic Operators
   if (op == "+"){
     ctxt.ss() << "\tadd\t$" << d << ",$3,$2" << " # add $3 and $2" << std::endl;
@@ -52,7 +90,10 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   } else if (op=="*"){
     ctxt.ss() << "\tmul\t$" << d << ",$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op=="/"){
-    ctxt.ss() << "\tdiv\t$" << d << ",$3,$2" << " # div $3*$2" << std::endl;
+    ctxt.ss() << "\tdiv\t$" << d << ",$3,$2" << " # div $3/$2" << std::endl;
+  } else if (op=="%"){
+    ctxt.ss() << "\tdiv\t$" << d << ",$3,$2" << " # div $3/$2" << std::endl;
+    ctxt.ss() << "\tmfhi\t$" << d << " # get modulo component $3%$2" << std::endl;
   }
   // Binary Operators
   else if (op=="^"){
@@ -64,32 +105,7 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   else if (op=="|"){
     ctxt.ss() << "\tor\t$" << d << ",$3,$2" << " # or $3*$2" << std::endl;
   }
-  else if (op=="||"){
-    // If either one is not equal to 0, set to 1
-    // If first argument is > 0, set to one, then 
-    // LHS
-    ctxt.ss() << "\tsgtu\t$" << d << ",$3,$0" << " # check if left is greater than zero" << std::endl;
-    ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is > zero, short circuit" << std::endl;
-    ctxt.ss() << "\tnop" << std::endl;
-    // RHS
-    ctxt.ss() << "\tsgtu\t$" << d << ",$2,$0" << " # check if right is greater than zero" << std::endl;
-    ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is != zero, short circuit" << std::endl;
-    ctxt.ss() << "\tnop" << std::endl;
-  }
-  else if (op=="&&"){
-    // If either one is equal to 0, set to 0
-    // \todo shortcircuiting!
-    // LHS
-    ctxt.ss() << "\txor\t$" << d << ",$3,$0" << " # xor left with 0" << std::endl;
-    ctxt.ss() << "\tsltu\t $" << d << ",$0,$3" << " # check if it is less than 1" << std::endl;
-    ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
-    ctxt.ss() << "\tnop" << std::endl;
-    // RHS
-    ctxt.ss() << "\txor\t$" << d << ",$2,$0" << " # xor left with 0" << std::endl;
-    ctxt.ss() << "\tsltu\t $" << d << ",$0,$2" << " # check if it is less than 1" << std::endl;
-    ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
-    ctxt.ss() << "\tnop" << std::endl;
-  }
+  
   // Relational expressions
   // \todo would need to check for signed/unsigned-ness in type of operands
   // Assume all unsigned for now
@@ -124,39 +140,58 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
 }
 
 Context AssignmentExpression::print_asm(Context ctxt, int d) const {
-  //ctxt.ss() << "# assignment expression with op: '"<<op<<"'"<<std::endl;
   if (op == "=") {
-    // Load the offset of the thing on the left.
-    //int offset = ctxt.getVariable(getLeft()->getId());
-    
-    // Compile the right hand side into the register that we'll be saving
     getRight()->print_asm(ctxt);
-    
-    // Store it back in the same place
     store(ctxt, getLeft()->getId());
-  } else if (op == "*=") {
-
+    return ctxt;
+  } else {
+    // Store left in $3
+    getLeft()->print_asm(ctxt,3);
+    ctxt.push(3);
+    // Store right in $2
+    getRight()->print_asm(ctxt,2);
+    ctxt.pop(3);
+  }
+  
+  if (op == "*=") {
+    // Left = Left * Right
+    ctxt.ss() << "\tmul\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    
   } else if (op == "/=") {
+    // Left = Left / Right
+    ctxt.ss() << "\tdiv\t$2,$3,$2" << " # mul $3*$2" << std::endl;
 
   } else if (op == "%=") {
-
+    // Left = Left % Right
+    ctxt.ss() << "\tmod\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == "+=") {
-
+    // Left = Left + Right
+    // If variable is unsigned do addu
+    ctxt.ss() << "\tadd\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == "-=") {
-
+    // Left = Left - Right
+    // // If variable is unsigned do subu
+    ctxt.ss() << "\tsub\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == "&=") {
-
+    // Left = Left & Right
+    ctxt.ss() << "\tand\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == "|=") {
-    
+    // Left = Left | Right
+    ctxt.ss() << "\tor\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == "^=") {
-
+    // Left = Left ^ Right
+    ctxt.ss() << "\txor\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == "<<=") {
-
+    // Left = Left ^ Right
+    ctxt.ss() << "\tlsl\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else if (op == ">>=") {
-
+    // Left = Left ^ Right
+    // If variable is unsigned, do lsr
+    ctxt.ss() << "\tasr\t$2,$3,$2" << " # mul $3*$2" << std::endl;
   } else {
     throw std::runtime_error("Unknown construct '" + op + "'");
   }
+  store(ctxt, getLeft()->getId());
   return ctxt;
 }
 

@@ -20,9 +20,9 @@ void Context::assignVariable(std::string id, std::string type){
   offset+=4;
 }
 
-int store(Context& ctxt, std::string id){
+int store(Context& ctxt, std::string id, int d){
   try{
-    ctxt.ss() << "\tsw\t$2," << ctxt.getVariable(id) << "($fp)" << " # store back in the same place" << std::endl;
+    ctxt.ss() << "\tsw\t$" << d <<"," << ctxt.getVariable(id) << "($fp)" << " # store back in the same place" << std::endl;
   }
   catch (std::exception& e){
     std::cerr << e.what();
@@ -30,6 +30,7 @@ int store(Context& ctxt, std::string id){
   }
   return 0;
 }
+
 
 std::string makeLabel(std::string base){
   base = base + std::to_string(UNIQ_GEN++);

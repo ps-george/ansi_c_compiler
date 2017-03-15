@@ -223,10 +223,10 @@ cast-expression
 
 prefix-expression
   : postfix-expression { $$ = $1; }
-  | INCR prefix-expression { $$ = new PostfixExpression($2, $1); }
-  | DECR prefix-expression { $$ = new PostfixExpression($2, $1); }
+  | INCR prefix-expression { $$ = new PrefixExpression($2, $1); }
+  | DECR prefix-expression { $$ = new PrefixExpression($2, $1); }
   // | unary-operator cast-expression { $$ = new PrefixExpression(); }
-  | SIZEOF prefix-expression { $$ = new PostfixExpression($2, $1); }
+  | SIZEOF prefix-expression { $$ = new PrefixExpression($2, $1); }
 
 postfix-expression
   : primary-expression { $$ = $1; }

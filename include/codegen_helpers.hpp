@@ -40,7 +40,8 @@ public:
 std::string makeLabel(std::string base);
 std::string getUnq();
 
-int store(Context& ctxt, std::string id);
+int store(Context& ctxt, std::string id, int d = 2);
+
 
 // For a scope:
 // 1. Set up a frame pointer for the function

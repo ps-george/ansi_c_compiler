@@ -38,14 +38,24 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
 }
 
 Context PrefixExpression::print_asm(Context ctxt, int d) const {
-  
+  if (op=="++"){
+    child->print_asm(ctxt); // Loads child into $2
+    ctxt.ss() << "\tadd\t$" << d << ", $2, 1" << " # preincrement" << std::endl;
+    // Store it back again
+    
+    store(ctxt,child->getId());
+  }
   
   return ctxt;
 }
 
 Context PostfixExpression::print_asm(Context ctxt, int d) const {
-  
-  
+  if (op=="++"){
+    child->print_asm(ctxt); // Loads child into $2
+    ctxt.ss() << "\tadd\t$4, $2, 1" << " # postincrement" << std::endl;
+    // Store it back again
+    store(ctxt,child->getId(),4);
+  }
   
   return ctxt;
 }
