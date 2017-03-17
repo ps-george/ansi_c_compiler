@@ -8,8 +8,9 @@
  *
  * Can be If, IfElse and Switch
  */
+
 class SelectionStatement : public ConditionalStatement {
-private:
+protected:
   const Expression *cond;
 public:
   SelectionStatement(const Expression *c, const Statement *s)
@@ -46,7 +47,7 @@ public:
   IfElseStatement(const Expression *c, const Statement *s1, const Statement *s2)
       : IfStatement(c, s1), stat2(s2) {}
   virtual std::string getNodeType() const override;
-  virtual Context print_asm(Context ctxt, int = 2) const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
   virtual void print_xml(std::ostream &stream) const;
 };
 
@@ -78,6 +79,12 @@ case label. Otherwise, if there is a default label, control jumps to the labeled
 statement. If no converted case constant expression matches and there is no
 default label, no part of the switch body is executed.
  */
-class SwitchStatement : public SelectionStatement {};
+class SwitchStatement : public SelectionStatement {
+public:
+  SwitchStatement(const Expression *c, const Statement *s)
+      : SelectionStatement(c,s) {}
+  virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
+};
 
 #endif

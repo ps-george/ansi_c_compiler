@@ -23,6 +23,10 @@ std::string IfElseStatement::getNodeType() const {
   return "IfElseStatement";
 }
 
+std::string SwitchStatement::getNodeType() const {
+  return "SwitchStatement";
+}
+
 
 const Expression *SelectionStatement::getCondition() const { return getConditions()[0]; };
 
@@ -37,6 +41,26 @@ std::vector<const Expression *>SelectionStatement::getConditions() const {
  /*
   * PRINT ASM
   */
+
+Context SwitchStatement::print_asm(Context ctxt, int d) const {
+  // Don't want to pass context laterally across scope
+  Context t_ctxt = ctxt;
+  
+  // Set the break to then end of this statement
+  std::string switchend = "switchend" + getUnq();
+  t_ctxt.setBreak(switchend);
+  
+  // Evaluate condition into register 2
+  cond->print_asm(t_ctxt);
+  
+  // Print out the statement
+  getBody()->print_asm(t_ctxt);
+  
+  // Go here if there is a break
+  ctxt.ss() << switchend << ":" << std::endl << "\tnop" << std::endl;
+  
+  return ctxt;
+};
 
 Context IfElseStatement::print_asm(Context ctxt, int d) const {
   ctxt.ss() << "## " << getNodeType() << std::endl;

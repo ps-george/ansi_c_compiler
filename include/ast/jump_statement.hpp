@@ -34,6 +34,7 @@ public:
   GotoStatement(const std::string l) : label(l){};
   virtual ~GotoStatement(){};
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 /*!
@@ -52,6 +53,7 @@ public:
   ContinueStatement(){};
   virtual ~ContinueStatement(){};
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 /*! \brief BreakStatement
@@ -67,6 +69,7 @@ public:
   BreakStatement(){};
   virtual ~BreakStatement(){};
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 /*!

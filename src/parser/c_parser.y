@@ -73,7 +73,7 @@
 
 %type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list  argument-expression-list
 
-%type <statement> statement compound-statement iteration-statement selection-statement jump-statement
+%type <statement> statement compound-statement iteration-statement selection-statement jump-statement labeled-statement 
 %type <expressionstatement> expression-statement
 %type <expression> expression primary-expression initializer
 
@@ -121,11 +121,17 @@ parameter-declaration
                
 // STATEMENT
 statement
-  : expression-statement { $$ = $1; }
+  : labeled-statement { $$ = $1; }
   | compound-statement { $$ = $1; }
-  | iteration-statement { $$ = $1; }
+  | expression-statement { $$ = $1; }
   | selection-statement { $$ = $1; }
+  | iteration-statement { $$ = $1; }
   | jump-statement { $$ = $1; }
+
+labeled-statement
+  : ID ':' statement { $$ = new LabeledStatement($1, $3); }
+	//| CASE constant-expression ':' statement { $$ = new CaseLabel($2, $4); }
+	//| DEFAULT ':' statement { $$ = new DefaultLabel($3); }
   
 jump-statement
   : GOTO ID ';' { $$ = new GotoStatement(*$2); } 
@@ -137,6 +143,7 @@ selection-statement
   : IF '(' expression ')' statement { $$ = new IfElseStatement($3, $5, new CompoundStatement()); }
   // SHIFT/REDUCE CONFLICT
   | IF '(' expression ')' statement ELSE statement { $$ = new IfElseStatement($3, $5, $7); } 
+  | SWITCH '(' expression ')' statement { $$ = new SwitchStatement($3, $5); }
 
 // COMPOUND STATEMENT
 compound-statement

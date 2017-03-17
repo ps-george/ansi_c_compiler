@@ -14,14 +14,16 @@ Any statement may be preceded by a prefix that declares an identifier as a label
 name. Labels in themselves do not alter the flow of control, which continues
 unimpeded across them.
  */
+
 class LabeledStatement : public Statement {
 private:
   std::string id;
-  const Node *stat;
-
+  const Statement *stat;
 public:
   virtual ~LabeledStatement(){};
-  LabeledStatement(std::string _id, const Node *_stat) : id(_id), stat(_stat){};
+  LabeledStatement(std::string *_id, const Statement *_stat) : id(*_id), stat(_stat){};
+  std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 class CaseLabel : public Statement {
@@ -31,11 +33,21 @@ private:
 
 public:
   virtual ~CaseLabel(){};
-
   CaseLabel(const Expression *_expr, const Statement *_stat)
       : expr(_expr), stat(_stat){};
+  std::string getNodeType() const override;    
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
-class DefaultLabel : public LabeledStatement {};
+
+class DefaultLabel : public Statement {
+private: 
+  const Statement *stat;
+public:
+  virtual ~DefaultLabel(){};
+  DefaultLabel(const Statement *_stat) : stat(_stat) {};
+  virtual std::string getNodeType() const override { return "DefaultLabel";};
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
+};
 
 #endif

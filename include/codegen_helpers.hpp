@@ -11,6 +11,9 @@ extern int UNIQ_GEN;
 #include <map>
 #include <stdio.h>
 
+std::string makeLabel(std::string base);
+std::string getUnq();
+
 struct Var {
   // A variable has an address, a register value if it's in a register, dirty flag if it shouldn't be spilled,
   int reg;
@@ -25,20 +28,35 @@ private:
   std::ostream *out;
   int offset = 0;
   //int unique = 0;
-  std::string f;
+  std::string f = "";
+  std::string b = "";
+  std::string c = "";
+  //std::string cs = "";
 public:
   Context(std::ostream *stream) { out = stream; };
   std::ostream& ss();
-  int getVariable(std::string id);
+  
   void assignVariable(std::string id, std::string type);
-  std::string getF(){ return f; }
+  int getVariable(std::string id);
+  
+  // Control flow statements - hacky but robust and quick solution
+  // Return
   void setF(std::string fname){ f = fname; }
+  std::string getF(){ return f; }
+  // Break
+  void setBreak(std::string exitlabel) { b = exitlabel; }
+  std::string getBreak() { return b; }
+  // Continue
+  void setContinue(std::string startlabel) { c = startlabel; }
+  std::string getContinue() { return c; }
+  // Set a 
+  //void setSwitch(std::string sw) {cs = sw; }
+  //std::string getSwitch() { return cs; }
+  
   void push(int reg);
   void pop(int reg);
 };
 
-std::string makeLabel(std::string base);
-std::string getUnq();
 
 int store(Context& ctxt, std::string id, int d = 2);
 

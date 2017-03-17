@@ -67,6 +67,11 @@ Context print_while(Context ctxt, const Expression * cond, const Statement * sta
   std::string whilestart = "$whilestart" + uq_num;
   std::string whilend = "$whilend" + uq_num;
   
+  // Don't want to pass context laterally
+  Context t_ctxt = ctxt;
+  t_ctxt.setBreak(whilend);
+  t_ctxt.setContinue(condlabel);
+  
   if (type=="DoWhile"){
     // Go through while loop once first
     ctxt.ss() << "\tb\t" << whilestart << std::endl;
@@ -74,13 +79,13 @@ Context print_while(Context ctxt, const Expression * cond, const Statement * sta
   
   // label for condition
   ctxt.ss() << condlabel << ":" << std::endl;
-  cond->print_asm(ctxt,2);
+  cond->print_asm(t_ctxt,2);
   // If condition is 0, go to end
   ctxt.ss() << "\tbeq\t$2,$0," << whilend << std::endl;
   ctxt.ss() << "\tnop" << std::endl;
   // Do the statment
   ctxt.ss() << whilestart << ":" << std::endl;
-  ctxt = stat1->print_asm(ctxt);
+  stat1->print_asm(t_ctxt);
   ctxt.ss() << "\tb\t" << condlabel << std::endl;
   ctxt.ss() << "\tnop" << std::endl;
   ctxt.ss() << whilend << ":" << std::endl;
@@ -88,11 +93,15 @@ Context print_while(Context ctxt, const Expression * cond, const Statement * sta
 }
 
 Context WhileStatement::print_asm(Context ctxt, int d) const {
-  return print_while(ctxt, getConditions().at(0), stat1, "While");
+  print_while(ctxt, getConditions().at(0), stat1, "While");
+  // Don't want to pass context laterally
+  return ctxt;
 }
 
 Context DoWhileStatement::print_asm(Context ctxt, int d) const {
-  return print_while(ctxt, getConditions().at(0), stat1, "DoWhile");
+  print_while(ctxt, getConditions().at(0), stat1, "DoWhile");
+    // Don't want to pass context laterally
+  return ctxt;
 }
 
 Context ForStatement::print_asm(Context ctxt, int d) const {
