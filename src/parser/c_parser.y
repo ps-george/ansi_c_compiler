@@ -121,7 +121,7 @@ parameter-declaration
                
 // STATEMENT
 statement
-  : labeled-statement { $$ = $1; }
+  : labeled-statement { $$ =$1; }
   | compound-statement { $$ = $1; }
   | expression-statement { $$ = $1; }
   | selection-statement { $$ = $1; }
@@ -130,8 +130,8 @@ statement
 
 labeled-statement
   : ID ':' statement { $$ = new LabeledStatement($1, $3); }
-	//| CASE constant-expression ':' statement { $$ = new CaseLabel($2, $4); }
-	//| DEFAULT ':' statement { $$ = new DefaultLabel($3); }
+	| CASE constant-expression ':' statement { $$ = new CaseLabel($2, $4); }
+	| DEFAULT ':' statement { $$ = new DefaultLabel($3); }
   
 jump-statement
   : GOTO ID ';' { $$ = new GotoStatement(*$2); } 
