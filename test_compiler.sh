@@ -34,11 +34,12 @@ for i in test/compiler/in/*.c; do
       echo -e "\nERROR, expecting $REF but got $RESULT."
       echo "==========================="
   else
-    #echo "==========================="
-    #echo "Input file : ${i}"
-    #echo -e "\nPASS, expecting $REF and got $RESULT."
-      PASSED=$(( ${PASSED}+1 ));
-      #echo -e "\nPASS, expecting $REF and got $RESULT."
+    if ! [ -z "$2" ]; then
+      echo "==========================="
+      echo "Input file : ${i}"
+      echo -e "\nPASS, expecting $REF and got $RESULT."
+    fi
+    PASSED=$(( ${PASSED}+1 ));
   fi
   CHECKED=$(( ${CHECKED}+1 ));
   
