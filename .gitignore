@@ -5,6 +5,8 @@
 *.yy.cpp
 *.got.txt
 
+
+working
 bin
 bin/*
 *.o
