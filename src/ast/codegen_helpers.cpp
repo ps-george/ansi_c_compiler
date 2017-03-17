@@ -4,6 +4,27 @@
 
 int UNIQ_GEN = 0;
 
+void Context::addString(std::string s){
+  if (bindings.count(s)){
+      std::cerr << s <<" is already in strbindings, do nothing" << std::endl;
+  }
+  else{
+    std::string str_loc = "$LC"+getUnq();
+    strbindings[s] = str_loc;
+  }
+}
+std::string Context::getString(std::string s){
+  return strbindings.at(s);
+}
+
+void Context::createStrings(){
+  for (auto const& s: strbindings){
+    ss() << s.second << ":" << std::endl;
+    ss() << "\t.ascii\t" << "\""+s.first+"\\000\"" << std::endl;
+    ss() << "\t.align\t2" << std::endl;
+  }
+}
+
 int Context::getVariable(std::string id){
   return bindings.at(id).offset;
 };
@@ -13,9 +34,6 @@ std::ostream& Context::ss(){
 };
 
 void Context::assignVariable(std::string id, std::string type){
-  if (bindings.count(id)){
-      //  std::cerr << "Already in bindings, shadow now." << std::endl;
-  }
   bindings[id] = Var{1,type,offset};
   offset+=4;
 }

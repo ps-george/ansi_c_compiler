@@ -25,6 +25,7 @@ struct Var {
 class Context {
 private:
   std::map<std::string, Var> bindings;
+  std::map<std::string, std::string> strbindings;
   std::ostream *out;
   int offset = 0;
   //int unique = 0;
@@ -38,6 +39,10 @@ public:
   
   void assignVariable(std::string id, std::string type);
   int getVariable(std::string id);
+  
+  void addString(std::string s);
+  std::string getString(std::string s);
+  void createStrings();
   
   // Control flow statements - hacky but robust and quick solution
   // Return

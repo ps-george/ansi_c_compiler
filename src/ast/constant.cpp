@@ -52,9 +52,9 @@ Context FloatConstant::print_asm(Context ctxt, int d) const {
 }
 
 Context StringLiteral::print_asm(Context ctxt, int d) const {
-  ctxt.ss() << "\tli $" << d <<"," << getValue() << " # Load constant into active register" << std::endl;
-  // lui	$2,%hi($LC0)
-	// addiu	$2,$2,%lo($LC0)
+  std::string strloc = ctxt.getString(getValue());
+  ctxt.ss() << "\tlui $" << d <<",%hi(" << strloc <<  ") # Load string into active register" << std::endl;
+  ctxt.ss() << "\taddiu\t$" << d << ",$" << d << ",%lo(" << strloc <<  ")" << std::endl;
   return ctxt;
 }
 
