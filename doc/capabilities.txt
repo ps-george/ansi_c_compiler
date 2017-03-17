@@ -1,37 +1,44 @@
 Tested features:
-1.	 Declaration and then assignment of variables
-2.	 Declaration with initialisation to constant or existing variable
-3.	 Binary operator + addition (basic)
-4.	 Binary operator / division
-5.	 Binary operator * multiplication (basic)
-6.	 Binary operator - subtraction
-7.	 Binary operator - subtraction, with bracketing
-8.	 Binary operator &
-9.	 Binary operator | two operands returns 3
-10.	 Binary operator ^ (XOR)
-11.	 Binary operator && two operands returns 1
-12.	 Binary operator &&, false positive test. Trying to test short-circuit.
-13.	 Binary operator || two operands returns 1
-14.	 Binary operator ||, false positive test. Trying to test short-circuit.
-15.	 Binary operator == returns 0 two operands
-16.	 Binary operator == returns 1 two operands
+1.	 Assign add '+=' op basic test
+2.	 Declaration and then assignment of variables
+3.	 Declaration with initialisation to constant or existing variable
+4.	 Binary operator + addition (basic)
+5.	 Binary operator / division
+6.	 Binary operator * multiplication (basic)
+7.	 Binary operator * multiplication (basic)
+8.	 Binary operator - subtraction
+9.	 Binary operator - subtraction, with bracketing
+10.	 Binary operator &
+11.	 Binary operator | two operands returns 3
+12.	 Binary operator ^ (XOR)
+13.	 Binary operator && two operands returns 1
+14.	 Binary operator &&, false positive test. Trying to test short-circuit.
+15.	 Binary operator || two operands returns 1
+16.	 Binary operator ||, false positive test. Trying to test short-circuit.
 17.	 Binary operator == returns 0 two operands
-18.	 Binary operator >= two operands eq
-19.	 Binary operator > two operands returns 1
-20.	 Binary operator <= two operands eq
-21.	 Binary operator < two operands returns true
-22.	 Adding the return values of two one input function calls
-23.	 Function call with 4 int input parameters
-24.	 Function call with no input paramters
-25.	 Function call with expression as argument
-26.	 Recursive Fibonacci program
-27.	 Function call with two input parameters
-28.	 Main return constant
-29.	 Scope variable shadowing
-30.	 IfElse using == operator else branch
-31.	 IfElse many times using == operator
-32.	 DoWhile condition not met at the beginning
-33.	 EEFor loop
-34.	 While loop condition false to begin with
-35.	 While loop initial condition is false
-36.	 While loop implementing multiplication with addition and subtraction
+18.	 Binary operator == returns 1 two operands
+19.	 Binary operator == returns 0 two operands
+20.	 Binary operator >= two operands eq
+21.	 Binary operator > two operands returns 1
+22.	 Binary operator <= two operands eq
+23.	 Binary operator < two operands returns true
+24.	 Adding the return values of two one input function calls
+25.	 Function call with 4 int input parameters
+26.	 Function call with no input paramters
+27.	 Function call with expression as argument
+28.	 Recursive Fibonacci program
+29.	 Function call with two input parameters
+30.	 Main return constant
+31.	int de;
+32.	 Scope variable shadowing
+33.	 IfElse using == operator else branch
+34.	 IfElse many times using == operator
+35.	 DoWhile condition not met at the beginning
+36.	 EEFor loop
+37.	 While loop condition false to begin with
+38.	 While loop initial condition is false
+39.	 While loop implementing multiplication with addition and subtraction
+40.	 Post simple
+41.	 Post-increment simple
+42.	 Pre-decrement simple
+43.	 Preincrement simple
