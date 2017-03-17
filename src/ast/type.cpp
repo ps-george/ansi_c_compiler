@@ -26,3 +26,7 @@ std::string Type::getTypename() const {
 }
 
 /* END OF GETTERS */
+
+void Type::setPtr() const {
+  ptr = true;
+}

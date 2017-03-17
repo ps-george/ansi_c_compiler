@@ -21,15 +21,15 @@ public:
   
   virtual std::vector<const Node *> getChildren() const override {return {};}
   // virtual void print_c() const override;
-  virtual Context print_asm(Context ctxt, int d = 2) const override; 
   virtual void print_xml(std::ostream &stream) const override;
 };
 
 class StringLiteral : public Constant {
 public:
   virtual ~StringLiteral(){};
-  using Constant::Constant;
+  StringLiteral(const std::string &_valstr);
   std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override; 
 };
 
 class IntConstant : public Constant {
@@ -40,6 +40,7 @@ public:
   virtual ~IntConstant(){};
   IntConstant(const std::string &_valstr);
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override; 
 };
 
 class FloatConstant : public Constant {
@@ -48,8 +49,8 @@ private:
 public:
   virtual ~FloatConstant(){};
   FloatConstant(const std::string &_valstr);
-
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override; 
 };
 
 class DoubleConstant : public Constant {

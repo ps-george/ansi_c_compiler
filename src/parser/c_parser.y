@@ -82,7 +82,7 @@
 %type <expression> relational-expression shift-expression additive-expression multiplicative-expression 
 %type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
-%type <raw> INT FLOAT STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF
+%type <raw> INT FLOAT STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF CHAR
 %type <raw> assignment-op
 
 //%right ';'
@@ -293,6 +293,7 @@ declaration
 
 declaration-specifiers
   : type-specifier { $$ = $1;}
+  | type-specifier '*' {$1->setPtr(); $$ = $1; }
 
 init-declarator-list
 	: init-declarator { $$ = new DeclarationList({$1}); }
@@ -301,6 +302,7 @@ init-declarator-list
 type-specifier
   : INT { $$ = new Type({new TypeSpecifier($1)}); }
   | FLOAT { $$ = new Type({new TypeSpecifier($1)}); }
+  | CHAR { $$ = new Type({new TypeSpecifier($1)}); }
 
 init-declarator
 	: declarator { $$ = $1; }

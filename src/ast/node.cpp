@@ -48,9 +48,18 @@ std::string Node::getDeets() const {
   return "endline=\"" + std::to_string(sourceline) + "\" endcol=\"" + std::to_string(sourcecol) + "\"" + defs;
 }
 
+std::vector<std::string> Node::getStrings() const {
+  return strings;
+}
+
 /*
  * SETTERS
  */
+
+//!
+void Node::addString(std::string s) const {
+  strings.push_back(s);
+}
 
 //! Populate metadata vectors with the declarations held by the children
 void Node::setChildDefs() const {

@@ -58,10 +58,13 @@ class Type : public Node {
   // std::string storage_class_specifier;      //! One of: typedef, extern, static,
                                             //! auto, register
   // std::vector<std::string> type_qualifiers; //! const or volatile
+  
+  mutable bool ptr = false;
 public:
   Type(std::vector<TypeSpecifier *> tspecs) : type_specifiers(tspecs){};
   virtual std::string getTypename() const;
   virtual std::string getNodeType() const { return "Type"; };
+  void setPtr() const;
 };
 
 #endif

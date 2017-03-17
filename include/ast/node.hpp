@@ -12,13 +12,14 @@ class Node {
 private:
   static int tabcount;
   static int changed;
+  static std::vector<std::string> strings;
 protected:
   mutable int sourceline;
   mutable int sourcecol;
   static bool parser;
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs and
-  //mutable std::map<std::string, int> childUses; //! Child uses are more useful and easier to implement
+  //mutable std::map<std::string, int> childUses; //! Child uses easier to implement (??) (are they necessary?)
   // std::vector<std::string> parentDefs; -> need pointer to parent on each node, effort.
   
   // A list of:
@@ -37,6 +38,8 @@ public:
   virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
   virtual std::vector<std::string> getChildDefs() const; //! Child defs is the most useful, especially for functions
+  virtual void addString(std::string) const;
+  virtual std::vector<std::string> getStrings() const;
   //virtual std::map<std::string> childUses() const;
   // virtual void childUses() const;
   

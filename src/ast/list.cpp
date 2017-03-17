@@ -61,6 +61,11 @@ const Node *List::add(const Node *child) const {
 Context Program::print_asm(Context ctxt, int d) const {
   ctxt.ss() <<
   "\t.section .mdebug.abi32\n\t.previous\n\t.nan	legacy\n\t.module	fp=xx\n\t.module	nooddspreg\n\t.abicalls\n\t.text\n\t.align	2\n";
+  // Assign strings
+  for (auto &it: getStrings()){
+    ctxt.ss() << "# string " << it << std::endl;
+  }
+  
   ctxt = Node::print_asm(ctxt);
   return ctxt;
 }
