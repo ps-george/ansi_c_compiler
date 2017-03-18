@@ -27,45 +27,47 @@ unsigned Type::getType() const {
 
 std::string Type::getTypename() const {
   std::stringstream ss;  
-    switch((Type_specifier)t){
-      case None      :
-        ss << "None";
-        break; 
-      case Int       : 
-        ss << "Int";
-        break; 
-      case Void      : 
-        ss << "Void";
-        break; 
-      case Char      : 
-        ss << "Char";
-        break; 
-      case Float     : 
-        ss << "Float";
-        break; 
-      case Double    : 
-        ss << "Double";
-        break;
-      case LongDouble: 
-        ss << "LongDouble";
-        break;
-      case Signed    : 
-        ss << "Signed";
-        break; 
-      case Unsigned  : 
-        ss << "Unsigned";
-        break; 
-      case Short     : 
-        ss << "Short";
-        break; 
-      case Long      : 
-        ss << "Long";
-        break; 
-      case LongLong  : 
-        ss << "LongLong";
-        break; 
-    }
-    return ss.str();
+  switch((Type_specifier)t){
+    case None      :
+      ss << "None";
+      break; 
+    case Int       : 
+      ss << "Int";
+      break; 
+    case Void      : 
+      ss << "Void";
+      break; 
+    case Char      : 
+      ss << "Char";
+      break; 
+    case Float     : 
+      ss << "Float";
+      break; 
+    case Double    : 
+      ss << "Double";
+      break;
+    case LongDouble: 
+      ss << "LongDouble";
+      break;
+    case Signed    : 
+      ss << "Signed";
+      break; 
+    case Unsigned  : 
+      ss << "Unsigned";
+      break; 
+    case Short     : 
+      ss << "Short";
+      break; 
+    case Long      : 
+      ss << "Long";
+      break; 
+    case LongLong  : 
+      ss << "LongLong";
+      break; 
+  }
+  
+  ss << std::hex << " 0x"  << s << " 0x" << q << std::dec;
+  return ss.str();
 }
 
 /* END OF GETTERS */
@@ -101,7 +103,7 @@ void Type::add(const Type* in) const {
     }
     else if (t==Long){
       if (tin==Long){
-        t==LongLong;
+        t=LongLong;
       }
     }
   }

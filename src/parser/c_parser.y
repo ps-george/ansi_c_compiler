@@ -293,11 +293,11 @@ declaration
 
 declaration-specifiers
   : storage-class-specifier { $$ = $1; }
-	| storage-class-specifier declaration-specifiers { $2->add($1); $$ = $2; }
+	| storage-class-specifier declaration-specifiers { $2->add($1); $$ = $2; delete $1; }
 	| type-specifier { $$ = $1; }
-	| type-specifier declaration-specifiers { $2->add($1); $$ = $2; }
+	| type-specifier declaration-specifiers { $2->add($1); $$ = $2; delete $1; }
 	| type-qualifier { $$ = $1; }
-	| type-qualifier declaration-specifiers { $2->add($1); $$ = $2; }
+	| type-qualifier declaration-specifiers { $2->add($1); $$ = $2; delete $1; }
 
 //  : type-specifier { $$ = $1;}
 //  | type-specifier '*' {$1->setPtr(); $$ = $1; }
@@ -323,10 +323,10 @@ type-qualifier
 
 storage-class-specifier
 	: TYPEDEF { $$ = new Type(Typedef); }
-//	| EXTERN
-//	| STATIC
-//	| AUTO
-//	| REGISTER
+	| EXTERN { $$ = new Type(Extern); }
+	| STATIC { $$ = new Type(Static); }
+	| AUTO { $$ = new Type(Auto); }
+	| REGISTER { $$ = new Type(Register); }
 
 init-declarator
 	: declarator { $$ = $1; }
