@@ -4,6 +4,7 @@
  *
  */
 
+#include <iostream>
 #include "ast/constant.hpp"
 
 /* CONSTRUCTORS */
@@ -14,8 +15,8 @@ IntConstant::IntConstant(const std::string &_valstr) : Constant(_valstr) {
   val = std::stoi(_valstr);
 };
 
-CharConstant::CharConstant(const std::string &_valstr) : Constant(_valstr) {
-  val = _valstr[0];
+CharConstant::CharConstant(const std::string &_valstr) : val(_valstr[1]), Constant(std::to_string((int)_valstr[1])) {
+  std::cerr << "Char value: "<< val  <<"," << valstr << "in: "<< _valstr<<std::endl;
 }
 
 FloatConstant::FloatConstant(const std::string &_valstr) : Constant(_valstr) {
@@ -42,6 +43,11 @@ std::string CharConstant::getNodeType() const { return "CharConstant"; }
 
 /* PRINT ASM */
 Context IntConstant::print_asm(Context ctxt, int d) const {
+  ctxt.ss() << "\tli $" << d <<"," << getValue() << " # Load constant into active register" << std::endl;
+  return ctxt;
+}
+
+Context CharConstant::print_asm(Context ctxt, int d) const {
   ctxt.ss() << "\tli $" << d <<"," << getValue() << " # Load constant into active register" << std::endl;
   return ctxt;
 }

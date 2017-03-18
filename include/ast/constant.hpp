@@ -5,7 +5,7 @@
 
 //! Abstract base class for constant
 class Constant : public Expression {
-private:
+protected:
   std::string valstr;
   // Constant will have a type as well`
 public:
@@ -71,11 +71,12 @@ class EnumConstant : public Constant {
 
 class CharConstant : public Constant {
 private:
-  char val;
+  int val;
 public:
   virtual ~CharConstant(){};
-  CharConstant(const std::string &_valstr);;
+  CharConstant(const std::string &_valstr);
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override; 
 };
 
 #endif
