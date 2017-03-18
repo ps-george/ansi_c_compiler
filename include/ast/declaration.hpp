@@ -4,13 +4,18 @@
 #include "list.hpp"
 #include "type.hpp"
 
+class DeclarBase : public Node {};
+
 //! A declarator is what we are declaring; it is essentially just an ID when it follows a specifier.
 class Declarator : public Node {
 const Node * child;
+mutable int ptr = 0;
 public:
   Declarator(const Node * _child) : child(_child) {};
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override { return child->getId(); };
+  virtual void setPtr() const { ptr++; }
+  virtual int getPtr() const { return ptr; }
   virtual void print_xml(std::ostream &stream) const override;
   // virtual void print_c() const override;
   virtual std::vector<const Node *> getChildren() const override { return {child}; }

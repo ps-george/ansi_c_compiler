@@ -58,7 +58,7 @@ public:
   static void tab(std::ostream &stream) { if (tabcount) stream << std::string(tabcount, '\t'); } //! Return   
   //! Return a vector containing all of the children of the node
   //virtual std::vector<const Node *> getChildren() const = 0;
-  
+  virtual void setPtr() const {};  
   //! For fixed point optimisation algos, probably won't use for coursework submission
   //static void change() { changed++; }
   //int getChanged() { return changed; }

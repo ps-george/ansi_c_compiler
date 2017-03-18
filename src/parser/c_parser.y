@@ -71,7 +71,7 @@
 
 %type <function> function-definition
 
-%type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list  argument-expression-list
+%type <list> identifier-list parameter-list statement-list program declaration-seq init-declarator-list argument-expression-list
 
 %type <statement> statement compound-statement iteration-statement selection-statement jump-statement labeled-statement 
 %type <expressionstatement> expression-statement
@@ -336,7 +336,8 @@ initializer
   : assignment-expression { $$ = $1; }
   
 declarator
-  : direct-declarator { $$ = $1; }
+  : '*' direct-declarator { $2->setPtr(); $$ = $2; }
+  | direct-declarator { $$ = $1; }
 
 direct-declarator 
   : 

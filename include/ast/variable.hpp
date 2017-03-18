@@ -10,7 +10,7 @@ class Variable : public Expression {
 private:
   std::string id;
   const Type * type;
-  bool ptr = false;
+  mutable int ptr = 0;
   // Variable will have a type
 public:
   virtual ~Variable(){};
@@ -24,7 +24,8 @@ public:
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override;
   virtual std::string getHeader() const override;
-  bool isPtr() const { return ptr; }
+  void setPtr() const { ptr++; }
+  int getPtr() const { return ptr; }
   virtual void print_xml(std::ostream &stream) const override;
   virtual Context print_asm(Context ctxt, int d = 2) const override;
   // virtual void print_c() const override;
