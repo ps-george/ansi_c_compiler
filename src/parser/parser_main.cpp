@@ -19,6 +19,7 @@ int yylsourcelino = 1;
 int Node::tabcount = 0;
 int Node::changed = 0;
 bool Node::parser = true;
+std::vector<std::string> Node::strings = {};
 
 int main(int argc, char * argv[]) {
   

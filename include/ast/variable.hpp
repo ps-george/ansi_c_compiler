@@ -10,17 +10,21 @@ class Variable : public Expression {
 private:
   std::string id;
   const Type * type;
+  bool ptr = false;
   // Variable will have a type
 public:
   virtual ~Variable(){};
 
   Variable(const std::string* _id, const Type * t) : id(*_id), type(t) {};
-  Variable(const std::string* _id) : id(*_id) { type = new Type({new TypeSpecifier("int")});};
+  Variable(const std::string* _id) : id(*_id) { type = new Type(Int);};
+  Variable(const std::string* _id, const Type * t, bool p) : id(*_id), type(t), ptr(p) {};
+  Variable(const std::string* _id, bool p) : id(*_id), ptr(p) { type = new Type(Int);};
   
   virtual std::string getType() const;
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override;
   virtual std::string getHeader() const override;
+  bool isPtr() const { return ptr; }
   virtual void print_xml(std::ostream &stream) const override;
   virtual Context print_asm(Context ctxt, int d = 2) const override;
   // virtual void print_c() const override;

@@ -66,7 +66,7 @@
 
 %type <node> root external-declaration 
 %type <node> declarator direct-declarator init-declarator parameter-declaration
-%type <type> declaration-specifiers type-specifier 
+%type <type> declaration-specifiers type-specifier storage-class-specifier type-qualifier
 %type <declaration> declaration 
 
 %type <function> function-definition
@@ -292,17 +292,41 @@ declaration
   | declaration-specifiers init-declarator-list ';' { $$ = new Declaration($1,$2); }
 
 declaration-specifiers
-  : type-specifier { $$ = $1;}
-  | type-specifier '*' {$1->setPtr(); $$ = $1; }
+  : storage-class-specifier { $$ = $1; }
+	| storage-class-specifier declaration-specifiers { $2->add($1); $$ = $2; }
+	| type-specifier { $$ = $1; }
+	| type-specifier declaration-specifiers { $2->add($1); $$ = $2; }
+	| type-qualifier { $$ = $1; }
+	| type-qualifier declaration-specifiers { $2->add($1); $$ = $2; }
+
+//  : type-specifier { $$ = $1;}
+//  | type-specifier '*' {$1->setPtr(); $$ = $1; }
 
 init-declarator-list
 	: init-declarator { $$ = new DeclarationList({$1}); }
 	| init-declarator-list ',' init-declarator { $$->add($3); }
 
 type-specifier
-  : INT { $$ = new Type({new TypeSpecifier($1)}); }
-  | FLOAT { $$ = new Type({new TypeSpecifier($1)}); }
-  | CHAR { $$ = new Type({new TypeSpecifier($1)}); }
+  : VOID { $$ = new Type(Void); }
+	| CHAR { $$ = new Type(Char); }
+	| INT { $$ = new Type(Int); }
+	| SHORT { $$ = new Type(Short); }
+	| LONG { $$ = new Type(Long); }
+	| FLOAT { $$ = new Type(Float); }
+	| DOUBLE { $$ = new Type(Double); }
+	| SIGNED { $$ = new Type(Signed); }
+	| UNSIGNED { $$ = new Type(Unsigned); }
+
+type-qualifier
+	: CONST { $$ = new Type(Const); }
+	| VOLATILE { $$ = new Type(Volatile); }
+
+storage-class-specifier
+	: TYPEDEF { $$ = new Type(Typedef); }
+//	| EXTERN
+//	| STATIC
+//	| AUTO
+//	| REGISTER
 
 init-declarator
 	: declarator { $$ = $1; }
