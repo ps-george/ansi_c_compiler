@@ -34,7 +34,7 @@ for i in test/compiler/in/*.c; do
       echo -e "\nERROR, expecting $REF but got $RESULT."
       echo "==========================="
   else
-    if ! [ -z "$2" ]; then
+    if ! [ -z "$1" ]; then
       echo "==========================="
       echo "Input file : ${i}"
       echo -e "\nPASS, expecting $REF and got $RESULT."

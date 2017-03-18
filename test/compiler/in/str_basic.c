@@ -1,6 +1,6 @@
 int main(){
-  char * c = "hello my friend";
-  if (c == "hi"){
+  char * c = "hi";
+  if (c=="hello"){
     return 1;
   }
   return 0;
