@@ -70,8 +70,6 @@ class EnumConstant : public Constant {
 };
 
 class CharConstant : public Constant {
-private:
-  int val;
 public:
   virtual ~CharConstant(){};
   CharConstant(const std::string &_valstr);

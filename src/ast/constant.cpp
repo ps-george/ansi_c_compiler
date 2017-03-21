@@ -15,8 +15,7 @@ IntConstant::IntConstant(const std::string &_valstr) : Constant(_valstr) {
   val = std::stoi(_valstr);
 };
 
-CharConstant::CharConstant(const std::string &_valstr) : val(_valstr[1]), Constant(std::to_string((int)_valstr[1])) {
-  std::cerr << "Char value: "<< val  <<"," << valstr << "in: "<< _valstr<<std::endl;
+CharConstant::CharConstant(const std::string &_valstr) : Constant(_valstr) {
 }
 
 FloatConstant::FloatConstant(const std::string &_valstr) : Constant(_valstr) {
@@ -28,7 +27,7 @@ DoubleConstant::DoubleConstant(const std::string &_valstr) : Constant(_valstr) {
 };
 
 StringLiteral::StringLiteral(const std::string &_valstr) : Constant(_valstr){
-  Node::addString(_valstr); 
+  Node::addString(_valstr);
 };
 
 /* GETTERS */
