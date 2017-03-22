@@ -21,6 +21,7 @@ public:
   Variable(const std::string* _id, bool p) : id(*_id), ptr(p) { type = new Type(Int);};
   
   virtual std::string getType() const;
+  virtual std::vector<std::string> getTypeVec() const;
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override;
   virtual std::string getHeader() const override;

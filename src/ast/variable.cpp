@@ -15,6 +15,8 @@ std::string Parameter::getNodeType() const { return "Parameter"; }
 
 std::string Variable::getType() const { return type->getTypename(); }
 
+std::vector<std::string> Variable::getTypeVec() const { return type->getTypeVec(); }
+
 std::string Variable::getId() const { return id; };
 
 std::string Variable::getHeader() const { 

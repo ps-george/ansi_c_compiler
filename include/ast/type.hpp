@@ -46,11 +46,9 @@ enum Type_specifier {
   Float    = 0x4,
   Double   = 0x5,
   LongDouble =0x6,
-  Signed   = 0x7,
-  Unsigned = 0x8,
-  Short    = 0x9,
-  Long     = 0xA,
-  LongLong = 0xB
+  Short    = 0x7,
+  Long     = 0x8,
+  LongLong = 0x9
   
 };
 
@@ -81,19 +79,22 @@ class Type : public Node {
   mutable unsigned t = 0x1; //! void, char, int, float, double defaults to int
   mutable unsigned q = 0; //! Default no qualifiers
   mutable unsigned s = 0; //! Default no specifiers
-  
+  mutable bool sign = true;
   mutable bool ptr = false;
 public:
   Type(int i);
+  Type(bool b);
   
   void add(const Type* in) const;
   
-  
   virtual unsigned getType() const;
   virtual std::string getTypename() const;
+  virtual std::vector<std::string> getTypeVec() const;
+  
   virtual std::string getNodeType() const { return "Type"; };
   unsigned getQ() const { return q; }
   unsigned getS() const { return s; }
+  bool getSign() const { return sign; }
   void setPtr() const;
 };
 

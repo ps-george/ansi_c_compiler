@@ -19,14 +19,64 @@ Type::Type(int i) {
   }
 };
 
+Type::Type(bool b) : sign(b) {};
+
 /* GETTERS */
 
 unsigned Type::getType() const {
   return t;
 }
 
+std::vector<std::string> Type::getTypeVec() const {
+  std::vector<std::string> v;
+  std::stringstream ss;
+  switch((Type_specifier)t){
+    case None      :
+      v.push_back("None");
+      break; 
+    case Int       : 
+      v.push_back("Int");
+      break; 
+    case Void      : 
+      v.push_back("Void");
+      break; 
+    case Char      : 
+      v.push_back("Char");
+      break; 
+    case Float     : 
+      v.push_back("Float");
+      break; 
+    case Double    : 
+      v.push_back("Double");
+      break;
+    case LongDouble: 
+      v.push_back("LongDouble");
+      break;
+    case Short     : 
+      v.push_back("Short");
+      break; 
+    case Long      : 
+      v.push_back("Long");
+      break; 
+    case LongLong  : 
+      v.push_back("LongLong");
+      break; 
+  }
+  ss << std::hex << "0x" << s;
+  ss.clear();
+  ss << std::hex << "0x" << q << std::dec; 
+  v.push_back(ss.str());
+  v.push_back(ss.str());
+  if (sign){
+    v.push_back("Signed");
+  } else {
+    v.push_back("Unsigned");
+  }
+  return v;
+}
+
 std::string Type::getTypename() const {
-  std::stringstream ss;  
+  std::stringstream ss;
   switch((Type_specifier)t){
     case None      :
       ss << "None";
@@ -49,12 +99,6 @@ std::string Type::getTypename() const {
     case LongDouble: 
       ss << "LongDouble";
       break;
-    case Signed    : 
-      ss << "Signed";
-      break; 
-    case Unsigned  : 
-      ss << "Unsigned";
-      break; 
     case Short     : 
       ss << "Short";
       break; 
@@ -65,8 +109,14 @@ std::string Type::getTypename() const {
       ss << "LongLong";
       break; 
   }
+  ss << std::hex << " 0x" << s;
+  ss << std::hex << " 0x" << q << std::dec;
   
-  ss << std::hex << " 0x"  << s << " 0x" << q << std::dec;
+  if (sign){
+    ss << " Signed";
+  } else {
+    ss << " Unsigned";
+  }
   return ss.str();
 }
 
@@ -76,6 +126,12 @@ void Type::add(const Type* in) const {
   unsigned tin = in->getType();
   unsigned qin = in->getQ();
   unsigned stin= in->getS();
+  bool signin = in->getSign();
+  
+  // If sign is true, can always overwrite
+  if (sign){
+    sign = signin;
+  }
   if (qin){
     // Should only have one qualifier
     assert(q==0);

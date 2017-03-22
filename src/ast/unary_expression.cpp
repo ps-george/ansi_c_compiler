@@ -10,6 +10,7 @@
 std::string UnaryExpression::getNodeType() const { return "UnaryExpression";}
 std::string PostfixExpression::getNodeType() const { return "PostfixExpression";}
 std::string PrefixExpression::getNodeType() const { return "PrefixExpression";}
+std::string CastExpression::getNodeType() const { return "CastExpression";}
 std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 
 /* END OF GETTERS */
@@ -54,6 +55,11 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
   return ctxt;
 }
 
+Context CastExpression::print_asm(Context ctxt, int d) const {
+  
+  return ctxt;
+}
+
 Context PostfixExpression::print_asm(Context ctxt, int d) const {
   if (op=="++"){
     child->print_asm(ctxt,d); // Loads child into $2
@@ -70,6 +76,8 @@ Context PostfixExpression::print_asm(Context ctxt, int d) const {
   
   return ctxt;
 }
+
+
 
 
 /* PRINT C */

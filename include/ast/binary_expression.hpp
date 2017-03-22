@@ -11,6 +11,7 @@ protected:
   std::string op;
 public:
   BinaryExpression(const Expression * l, const Expression * r, std::string * _op);
+  virtual std::vector<std::string> getTypeVec() const override;
   virtual std::string getNodeType() const override;
   virtual std::string getDeets() const override;
   std::string getOp() const;

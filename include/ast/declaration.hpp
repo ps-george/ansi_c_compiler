@@ -63,6 +63,8 @@ public:
   Declaration(const Type * t, const List * d) : type(t), dlist(d){};
   virtual std::string getNodeType() const override;
   virtual std::string getTypename() const;
+  virtual std::vector<std::string> getTypeVec() const;
+  
   virtual const Type * getType() const { return type; };
   virtual std::string getId() const;
   virtual std::vector<const Node *> getChildren() const override;

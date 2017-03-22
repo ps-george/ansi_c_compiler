@@ -82,8 +82,10 @@
 %type <expression> relational-expression shift-expression additive-expression multiplicative-expression 
 %type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
-%type <raw> INT FLOAT STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF CHAR
-%type <raw> assignment-op
+%type <raw> VOID INT CHAR SHORT LONG FLOAT DOUBLE SIGNED UNSIGNED
+%type <raw> STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF 
+
+%type <raw> assignment-op type-name
 
 //%right ';'
 
@@ -226,7 +228,18 @@ multiplicative-expression
 
 cast-expression
   : prefix-expression { $$ = $1; }
-//  | '(' type-name ')' cast-expression { $$ = new CastExpression($2,$4); }
+  | '(' type-name ')' cast-expression { $$ = new CastExpression($4,$2); }
+
+type-name
+  : VOID
+	| CHAR
+	| INT
+	| SHORT
+	| LONG
+	| FLOAT
+	| DOUBLE
+	| SIGNED
+	| UNSIGNED
 
 prefix-expression
   : postfix-expression { $$ = $1; }
@@ -314,8 +327,8 @@ type-specifier
 	| LONG { $$ = new Type(Long); }
 	| FLOAT { $$ = new Type(Float); }
 	| DOUBLE { $$ = new Type(Double); }
-	| SIGNED { $$ = new Type(Signed); }
-	| UNSIGNED { $$ = new Type(Unsigned); }
+	| SIGNED { $$ = new Type(true); }
+	| UNSIGNED { $$ = new Type(false); }
 
 type-qualifier
 	: CONST { $$ = new Type(Const); }

@@ -24,6 +24,10 @@ std::string Declaration::getTypename() const {
   return type->getTypename();
 };
 
+std::vector<std::string> Declaration::getTypeVec() const {
+  return type->getTypeVec();
+};
+
 //!
 std::vector<const Node *> InitDeclarator::getChildren() const {
   std::vector<const Node *> v = Declarator::getChildren();

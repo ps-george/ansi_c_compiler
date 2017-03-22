@@ -1,9 +1,8 @@
 /*
  * binary_expression.cpp
- *
- *
  */
 
+#include <assert.h>
 #include "codegen_helpers.hpp"
 #include "ast/binary_expression.hpp"
 
@@ -27,6 +26,17 @@ std::string BinaryExpression::getDeets() const {
 std::string BinaryExpression::getOp() const { return op; };
 std::vector<const Node *> BinaryExpression::getChildren() const {
   return {left, right};
+}
+
+std::vector<std::string> BinaryExpression::getTypeVec() const {
+  std::vector<std::string> v1,v2;
+  
+  v1 = left->getTypeVec();
+  v2 = right->getTypeVec();
+  for (int i = 0; i < 4; i++){
+    assert(v1[i]==v2[i]);
+  }
+  return v1;
 }
 
 
@@ -84,7 +94,12 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   }
   // Arithmetic Operators
   if (op == "+"){
-    ctxt.ss() << "\tadd\t$" << d << ",$3,$2" << " # add $3 and $2" << std::endl;
+    
+    //if (getType() == Int){
+      ctxt.ss() << "\tadd\t$" << d << ",$3,$2" << " # add $3 and $2" << std::endl;
+    //}
+    //else if (getType() == ){
+    //}
   } else if (op=="-"){
     ctxt.ss() << "\tsub\t$" << d << ",$3,$2" << " # sub $3-$2" << std::endl;
   } else if (op=="*"){
@@ -159,35 +174,35 @@ Context AssignmentExpression::print_asm(Context ctxt, int d) const {
     
   } else if (op == "/=") {
     // Left = Left / Right
-    ctxt.ss() << "\tdiv\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tdiv\t$2,$3,$2" << " # div $3/$2" << std::endl;
 
   } else if (op == "%=") {
     // Left = Left % Right
-    ctxt.ss() << "\tmod\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tmod\t$2,$3,$2" << " # mod $3%$2" << std::endl;
   } else if (op == "+=") {
     // Left = Left + Right
     // If variable is unsigned do addu
-    ctxt.ss() << "\tadd\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tadd\t$2,$3,$2" << " # add $3+$2" << std::endl;
   } else if (op == "-=") {
     // Left = Left - Right
     // // If variable is unsigned do subu
-    ctxt.ss() << "\tsub\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tsub\t$2,$3,$2" << " # sub $3-$2" << std::endl;
   } else if (op == "&=") {
     // Left = Left & Right
-    ctxt.ss() << "\tand\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tand\t$2,$3,$2" << " # and $3&$2" << std::endl;
   } else if (op == "|=") {
     // Left = Left | Right
-    ctxt.ss() << "\tor\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tor\t$2,$3,$2" << " # or $3|$2" << std::endl;
   } else if (op == "^=") {
     // Left = Left ^ Right
-    ctxt.ss() << "\txor\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\txor\t$2,$3,$2" << " # xor $3^$2" << std::endl;
   } else if (op == "<<=") {
     // Left = Left ^ Right
-    ctxt.ss() << "\tlsl\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tlsl\t$2,$3,$2" << " # << $3<<$2" << std::endl;
   } else if (op == ">>=") {
     // Left = Left ^ Right
     // If variable is unsigned, do lsr
-    ctxt.ss() << "\tasr\t$2,$3,$2" << " # mul $3*$2" << std::endl;
+    ctxt.ss() << "\tasr\t$2,$3,$2" << " # >> $3>>$2" << std::endl;
   } else {
     throw std::runtime_error("Unknown construct '" + op + "'");
   }

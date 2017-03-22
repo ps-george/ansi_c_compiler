@@ -40,6 +40,12 @@ public:
   virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
+class CastExpression : public PrefixExpression {
+public:
+  CastExpression(const Expression * c, std::string* _op) : PrefixExpression(c,_op) {};
+  virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
+};
 
 //! Function call
 class FunctionCall : public PostfixExpression {
