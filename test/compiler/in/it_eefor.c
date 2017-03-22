@@ -2,8 +2,9 @@
 
 int main(){
   int i = 0;
-  for (i=i+1;i!=5;) {
+  int j = 0;
+  for (j=j+1;i!=5;) {
     i = i + 1;
   }
-  return i;
+  return j;
 }

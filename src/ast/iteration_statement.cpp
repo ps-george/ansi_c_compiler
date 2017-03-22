@@ -23,6 +23,13 @@ std::string DoWhileStatement::getNodeType() const {
   if (parser)    
     return "Scope";
   return "DoWhileStatement"; }
+  
+std::string EEForStatement::getNodeType() const { return "EEForStatement"; }
+std::string DEForStatement::getNodeType() const { return "DEForStatement"; }
+std::string EEEForStatement::getNodeType() const { return "EEEForStatement"; }
+std::string DEEForStatement::getNodeType() const { return "DEEForStatement"; }
+
+
 
 /*
  * GETTERS
@@ -60,26 +67,38 @@ std::vector<const Node*> DEEForStatement::getChildren() const {
  * PRINTERS
  */
 
-Context print_while(Context ctxt, const Expression * cond, const Statement * stat1, std::string type){
+Context print_while(Context ctxt, const IterationStatement * in, const Statement * stat1){
   // Create labels
   std::string uq_num = getUnq();
   std::string condlabel = "$cond" + uq_num;
   std::string whilestart = "$whilestart" + uq_num;
   std::string whilend = "$whilend" + uq_num;
   
+  std::string type = in->getNodeType();
   // Don't want to pass context laterally
+  if (type=="EEForStatement" || type=="EEEForStatement"){
+    // Want to do j=j+1 and update j
+    ctxt = in->getChildren().at(0)->print_asm(ctxt,2);
+  }
   Context t_ctxt = ctxt;
+  if (type=="DEForStatement" || type=="DEEForStatement"){
+    t_ctxt = in->getChildren().at(0)->print_asm(t_ctxt,2);
+  }
+  
   t_ctxt.setBreak(whilend);
   t_ctxt.setContinue(condlabel);
   
-  if (type=="DoWhile"){
+  if (type=="DoWhileStatement"){
     // Go through while loop once first
     ctxt.ss() << "\tb\t" << whilestart << std::endl;
   }
   
   // label for condition
   ctxt.ss() << condlabel << ":" << std::endl;
-  cond->print_asm(t_ctxt,2);
+  if (type=="EEEForStatement" || type=="DEEForStatement"){
+    in->getConditions().at(1)->print_asm(t_ctxt,2);
+  }
+  in->getConditions().at(0)->print_asm(t_ctxt,2);
   // If condition is 0, go to end
   ctxt.ss() << "\tbeq\t$2,$0," << whilend << std::endl;
   ctxt.ss() << "\tnop" << std::endl;
@@ -92,30 +111,34 @@ Context print_while(Context ctxt, const Expression * cond, const Statement * sta
   return ctxt;
 }
 
+Context IterationStatement::print_asm(Context ctxt, int d) const {
+  print_while(ctxt, this, stat1);
+  // Don't want to pass context laterally
+  return ctxt;
+}
+
+/*
 Context WhileStatement::print_asm(Context ctxt, int d) const {
-  print_while(ctxt, getConditions().at(0), stat1, "While");
+  print_while(ctxt, this, stat1);
   // Don't want to pass context laterally
   return ctxt;
 }
 
 Context DoWhileStatement::print_asm(Context ctxt, int d) const {
-  print_while(ctxt, getConditions().at(0), stat1, "DoWhile");
+  print_while(ctxt, this, stat1);
     // Don't want to pass context laterally
   return ctxt;
 }
 
 Context ForStatement::print_asm(Context ctxt, int d) const {
-  
-  return ctxt;
-  // return print_while(ctxt, getConditions().at(0), stat1, "For");
+  return print_while(ctxt, this, stat1);
 }
 
 Context DEEForStatement::print_asm(Context ctxt, int d) const {
-  
-  return ctxt;
+  return print_while(ctxt, this, stat1);
   // return print_while(ctxt, getConditions().at(0), stat1, "For");
 }
-
+*/
 
 
 /*

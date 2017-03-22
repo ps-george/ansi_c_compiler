@@ -31,14 +31,24 @@ Tested features:
 30.	 Main return constant
 31.	int de;
 32.	 Scope variable shadowing
-33.	 IfElse using == operator else branch
-34.	 IfElse many times using == operator
-35.	 DoWhile condition not met at the beginning
-36.	 EEFor loop
-37.	 While loop condition false to begin with
-38.	 While loop initial condition is false
-39.	 While loop implementing multiplication with addition and subtraction
-40.	 Post simple
-41.	 Post-increment simple
-42.	 Pre-decrement simple
-43.	 Preincrement simple
+33.	 Break out of while statement, simple test
+34.	 Break out of while statement, nested
+35.	 DEEFor loop
+36.	 DEFor loop
+37.	 DoWhile condition not met at the beginning
+38.	 EEEFor loop
+39.	 EEFor loop
+40.	 While loop condition false to begin with
+41.	 While loop initial condition is false
+42.	 While loop implementing multiplication with addition and subtraction
+43.	 IfElse using == operator else branch
+44.	 IfElse many times using == operator
+45.	 Switch statement with char
+46.	 Switch statement with integer
+47.	int main(){
+48.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
+49.	! Char is dealt with correctly
+50.	 Post simple
+51.	 Post-increment simple
+52.	 Pre-decrement simple
+53.	 Preincrement simple

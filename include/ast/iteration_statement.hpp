@@ -18,6 +18,7 @@ public:
   IterationStatement(const Statement *s)
       : ConditionalStatement(s) {}
   virtual std::vector<const Node *> getChildren() const = 0;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 /*!
@@ -37,7 +38,7 @@ public:
   WhileStatement(const Expression *c, const Statement *s)
       : IterationStatement(s), cond(c) {}
   virtual std::vector<const Node *> getChildren() const override;
-  virtual Context print_asm(Context ctxt, int d = 2) const override;
+  // virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 
@@ -52,7 +53,7 @@ public:
   virtual std::string getNodeType() const override;
   DoWhileStatement(const Statement *s, const Expression *c)
       : WhileStatement(c, s) {}
-  virtual Context print_asm(Context ctxt, int d = 2) const override;
+  // virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 
@@ -67,19 +68,20 @@ public:
     return {(const Expression*)cond1};
   };
   virtual std::vector<const Node *> getChildren() const override;
-  virtual Context print_asm(Context ctxt, int d = 2) const override;
+  // virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 class EEForStatement : public ForStatement {
 protected:
   const ExpressionStatement *cond2;
 public:
+  virtual std::string getNodeType() const override;
   EEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                  const Statement *s1)
       : ForStatement(c1,s1), cond2(c2) {};
   
   virtual std::vector<const Expression*> getConditions() const override {
-    return {(const Expression*)cond1,(const Expression*)cond2};
+    return {(const Expression*)cond2,(const Expression*)cond1};
   };
   virtual std::vector<const Node *> getChildren() const override;
 };
@@ -88,12 +90,13 @@ class EEEForStatement : public EEForStatement {
 private:
   const Expression *cond3;
 public:
+  virtual std::string getNodeType() const override;
   EEEForStatement(const ExpressionStatement *c1, const ExpressionStatement *c2,
                   const Expression *c3, const Statement *s1)
       : EEForStatement(c1,c2,s1), cond3(c3)  {}
   ;
   virtual std::vector<const Expression*> getConditions() const override {
-    return {(const Expression*)cond1,(const Expression*)cond2, cond3};
+    return {(const Expression*)cond2,cond3,(const Expression*)cond1};
   };
   virtual std::vector<const Node *> getChildren() const override;
 };
@@ -102,6 +105,7 @@ class DEForStatement : public ForStatement {
 protected:
   const Declaration *dec;
 public:
+  virtual std::string getNodeType() const override;
   DEForStatement(const Declaration *d, const ExpressionStatement *c1,
                  const Statement *s1)
       :  ForStatement(c1,s1), dec(d)  {};
@@ -117,6 +121,7 @@ class DEEForStatement : public DEForStatement {
 private:
   const Expression *cond2;
 public:
+  virtual std::string getNodeType() const override;
   DEEForStatement(const Declaration *d, const ExpressionStatement *c1,
                   const Expression *c2, const Statement *s1)
       : DEForStatement(d, c1, s1), cond2(c2)  {};
@@ -125,7 +130,7 @@ public:
     return {(const Expression*)cond1,cond2};
   };
   virtual std::vector<const Node *> getChildren() const override;
-  virtual Context print_asm(Context ctxt, int d = 2) const override;
+  // virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 #endif
