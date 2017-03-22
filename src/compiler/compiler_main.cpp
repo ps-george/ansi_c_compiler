@@ -25,23 +25,28 @@ std::vector<std::string> Node::strings = {};
 //int Node::changed = 0;
 
 int main(int argc, char * argv[]) {
-  char* filename = argv[1];
-  FILE * myfile = fopen(filename, "r");
-  yyin = myfile;
+  std::ostream& out = std::cout;
+  std::ostream& err = std::cerr;
+  
+  if (argc>1){
+    char* filename = argv[1];
+    FILE * myfile = fopen(filename, "r");
+    yyin = myfile;
+    out << "\t.file\t1 \"" << basename(filename) << "\"" << std::endl;
+  }
+  
   // Parse the input into the AST
   const Node *ast=parseAST();
-  //ast->print_xml();
+  
   // Set metadata
   ast->setChildDefs();
-  // Print the output to cout
+  
+  // Print xml to cerr
   fprintf(stderr,"<?xml version=\"1.0\"?>\n");
-  std::ostream& err = std::cerr;
-  std::ostream& out = std::cout;
   ast->print_xml(err);
-  // Initialize context with cout as target
+  
+  // Print the output to cout
   Context ctxt(&out);
-  // Print assembly
-  out << "\t.file\t1 \"" << basename(filename) << "\"" << std::endl;
   ast->print_asm(ctxt);
   return 0;
 }
