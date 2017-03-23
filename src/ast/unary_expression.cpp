@@ -27,7 +27,8 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
   // If there is an expression in the functioncall, evaluate and move to $4
   // Want $3 to be preserved
   ctxt.ss() << "\tmove $16,$3" << " # want to preserve $3 across calls" << std::endl;
-  
+  // Before a function call, reserve space on the stack for something or other (gp?)
+  ctxt.ss() << "\taddiu $sp,$sp," << -8 << std::endl;
   int i = 0;
   int k = 16;
   for (auto it: args->getChildren()){
@@ -42,8 +43,7 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
     }
   }
   
-  // Before a function call, reserve space on the stack for something or other
-  ctxt.ss() << "\taddiu $sp,$sp," << -8 << std::endl;
+  
   
   ctxt.ss() << "\t.option\tpic0" << std::endl
   

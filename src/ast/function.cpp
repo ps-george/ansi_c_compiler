@@ -101,7 +101,8 @@ Context Function::print_asm(Context ctxt, int d) const{
     if(i==4) {
       // Otherwise we need to just update the context with the variables on the frame already
       // ctxt.assignVariable(it,"int");
-      ctxt.setOffset(ctxt.getOffset()+8);
+      // Not sure why? Previous two contain 0 and 64..
+      //ctxt.setOffset(ctxt.getOffset()+8);
     }
     ctxt.assignVariable(it,"int");
     i++;
