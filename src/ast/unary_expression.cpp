@@ -42,9 +42,8 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
     }
   }
   
-  // Before a function call, reserve space on the stack for something
-  
-  ctxt.ss() << "\taddiu $sp,$sp," << -k << std::endl;
+  // Before a function call, reserve space on the stack for something or other
+  ctxt.ss() << "\taddiu $sp,$sp," << -8 << std::endl;
   
   ctxt.ss() << "\t.option\tpic0" << std::endl
   
@@ -53,7 +52,7 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
   ctxt.ss() << "\tmove $3,$16" << " # want to preserve $3 across calls" << std::endl;
   ctxt.ss() << "\tmove $" << d << ",$2" <<std::endl;
   // After a function call, restore space on the stack
-  ctxt.ss() << "\taddiu $sp,$sp," << k << std::endl;
+  ctxt.ss() << "\taddiu $sp,$sp," << 8 << std::endl;
   return ctxt;
 }
 

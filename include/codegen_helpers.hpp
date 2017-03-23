@@ -57,6 +57,7 @@ public:
   std::string getContinue() { return c; }
   // Set offset
   void setOffset(int i){ offset = i;}
+  int getOffset() { return offset; }
   //void setSwitch(std::string sw) {cs = sw; }
   //std::string getSwitch() { return cs; }
   
