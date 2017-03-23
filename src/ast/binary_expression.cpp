@@ -44,7 +44,7 @@ std::vector<std::string> BinaryExpression::getTypeVec() const {
 Context BinaryExpression::print_asm(Context ctxt, int d) const {
   // ctxt.ss() << "# Binary expression, operator: '" << getOp() <<"' " << std::endl;
   
-  ctxt.ss() << "## Binary expression, dest =" << d << std::endl;
+  //ctxt.ss() << "## Binary expression, dest =" << d << std::endl;
   
   std::string endlabel = "bend" + getUnq();
   if (!(op=="&&" || op=="||")){
@@ -72,6 +72,7 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
     ctxt.ss() << "\tsltu\t$" << d << ",$0,$2" << " # check if right is greater than zero" << std::endl;
     ctxt.ss() << "\tbeq\t$"  << d << ",1," << endlabel << " # if it is != zero, short circuit" << std::endl;
     ctxt.ss() << "\tnop" << std::endl;
+    ctxt.ss() << endlabel << ":" << std::endl;
     //ctxt.ss() << "\tor\t$" << d << ",$2,$3" << " # " << std::endl;
   }
   else if (op=="&&"){
@@ -91,6 +92,7 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
     ctxt.ss() << "\tsltu\t $" << d << ",$0,$2" << " # check if it is less than 1" << std::endl;
     ctxt.ss() << "\tbeq\t$"  << d << ",$0," << endlabel << " # if it is == zero, short circuit" << std::endl;
     ctxt.ss() << "\tnop" << std::endl;
+    ctxt.ss() << endlabel << ":" << std::endl;
   }
   // Arithmetic Operators
   if (op == "+"){
@@ -148,7 +150,7 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
   } else {
     ctxt.ss() << "### BINARY OPERATOR\'" << op << "\' NOT IMPLEMENTED YET" << std::endl;
   }
-  ctxt.ss() << endlabel << ":" << std::endl;
+  
   //fprintf(ctxt.ss(), "%s:", endlabel);
   
   return ctxt;

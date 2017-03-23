@@ -83,24 +83,26 @@ Context Function::print_asm(Context ctxt, int d) const{
   
   // Deal with parameters
   // Add parameters to context
-  
+  int i = 0;
   for (auto &it : getParams()){
-    ctxt.assignVariable(it, "int");
+    // ctxt.setOffset(8);
+    ctxt.assignVariable(it,"int");
+    if(i>3) {
+      // Otherwise we need to just update the context with the variables on the frame already
+      ctxt.assignVariable(it,"int");
+    }
+    i++;
   }
-  
-  
   
   std::vector<std::string> args = getParams();
   int args_size = args.size()*4;
   int vars_size = vars.size()*4;
   
-  int total_size = (args_size+vars_size) + 4;
+  int total_size = (args_size+vars_size)+4;
   
   // std::cerr << total_size << std::endl;
   // Indicated that we're printing out a function
   std::string fname = id;
-  
-  
   
   //ctxt.ss() << "# Function " << fname << std::endl;
   //ctxt.ss() << "### Preamble" << std::endl;
@@ -113,7 +115,7 @@ Context Function::print_asm(Context ctxt, int d) const{
   ctxt.ss() << fname << ":" << std::endl
   // Print the frame: we need vars+8 as frame size because
   // we store the previous frame pointer and return address
-  << "\t.frame\t$fp,"<< total_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= " << args_size << ", gp= 0" << std::endl
+  << "\t.frame\t$fp,"<< total_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= notsure" << ", gp= 0" << std::endl
   
   // If there are function calls with the function, have to do preamble differently
   // .mask has something to do with int size
@@ -141,15 +143,14 @@ Context Function::print_asm(Context ctxt, int d) const{
   
   // Store parameters in the frame
   
-  int i = 4;
+  i = 4;
   for (auto &it : getParams()){
     if (i<8){
-      // For $4 and $5 we get from input
+      // First four parameters $4,$5,$6,$7
       ctxt.ss() << "\tmove $2,$" << std::to_string(i++) << std::endl;
       store(ctxt, it);
     }
-    // For the rest of the input parameters, they will be on the stack
-    // So we need to get them from the stack one by one and 
+    // For the rest of the input parameters, they will be on the stack already
   }
   
   // ctxt.ss() << "### End of preamble" << std::endl;

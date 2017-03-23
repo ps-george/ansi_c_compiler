@@ -26,6 +26,10 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
       // For now only consider functions of one variable
       ctxt.ss() << "\tmove $" << std::to_string(i++) << ",$2" << std::endl;
     }
+    else {
+      it->print_asm(ctxt);
+      ctxt.ss() << "\tsw\t$2," << ((i++)-4)*4 << "($sp)" << std::endl;
+    }
   }
   
   

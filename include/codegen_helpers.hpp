@@ -38,6 +38,7 @@ public:
   std::ostream& ss();
   
   void assignVariable(std::string id, std::string type);
+  void assignVariable(std::string id, std::string type, int offin);
   int getVariable(std::string id);
   
   void addString(std::string s);
@@ -54,7 +55,8 @@ public:
   // Continue
   void setContinue(std::string startlabel) { c = startlabel; }
   std::string getContinue() { return c; }
-  // Set a 
+  // Set offset
+  void setOffset(int i){ offset = i;}
   //void setSwitch(std::string sw) {cs = sw; }
   //std::string getSwitch() { return cs; }
   

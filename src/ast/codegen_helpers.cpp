@@ -38,6 +38,10 @@ void Context::assignVariable(std::string id, std::string type){
   offset+=4;
 }
 
+void Context::assignVariable(std::string id, std::string type, int offin){
+  bindings[id] = Var{1,type,offin};
+}
+
 int store(Context& ctxt, std::string id, int d){
   try{
     ctxt.ss() << "\tsw\t$" << d <<"," << ctxt.getVariable(id) << "($fp)" << " # store back in the same place" << std::endl;
