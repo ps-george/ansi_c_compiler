@@ -15,23 +15,36 @@ std::string FunctionCall::getNodeType() const { return "FunctionCall";}
 
 /* END OF GETTERS */
 
+void FunctionCall::setParamUses() const {
+  for (auto it: args->getChildren()){
+    childParams.push_back(it->getId());
+  }
+}
+
+
+
 Context FunctionCall::print_asm(Context ctxt, int d) const {
   // If there is an expression in the functioncall, evaluate and move to $4
   // Want $3 to be preserved
   ctxt.ss() << "\tmove $16,$3" << " # want to preserve $3 across calls" << std::endl;
-  int i = 4;
+  
+  int i = 0;
+  int k = 16;
   for (auto it: args->getChildren()){
-    if (i<8){
+    if (i<4){
       it->print_asm(ctxt);
-      // For now only consider functions of one variable
-      ctxt.ss() << "\tmove $" << std::to_string(i++) << ",$2" << std::endl;
+      ctxt.ss() << "\tmove $" << std::to_string((i++)+4) << ",$2" << std::endl;
     }
     else {
+      k+=4;
       it->print_asm(ctxt);
-      ctxt.ss() << "\tsw\t$2," << ((i++)-4)*4 << "($sp)" << std::endl;
+      ctxt.ss() << "\tsw\t$2," << (i++)*4 << "($sp)" << std::endl;
     }
   }
   
+  // Before a function call, reserve space on the stack for something
+  
+  ctxt.ss() << "\taddiu $sp,$sp," << -k << std::endl;
   
   ctxt.ss() << "\t.option\tpic0" << std::endl
   
@@ -39,6 +52,8 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
   << "\tnop" << std::endl << std::endl << "\t.option\tpic2" << std::endl;
   ctxt.ss() << "\tmove $3,$16" << " # want to preserve $3 across calls" << std::endl;
   ctxt.ss() << "\tmove $" << d << ",$2" <<std::endl;
+  // After a function call, restore space on the stack
+  ctxt.ss() << "\taddiu $sp,$sp," << k << std::endl;
   return ctxt;
 }
 

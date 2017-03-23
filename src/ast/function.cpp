@@ -70,9 +70,6 @@ std::string Function::getParamString() const {
 void Function::setChildDefs() const {
   Node::setChildDefs();
   //! Add params as child defs, could not do this and deal with parameters separately
-  for (auto it: getParams()){
-    childDefs.push_back(it);
-  }
 }
 
 /* PRINT ASM */
@@ -80,12 +77,27 @@ void Function::setChildDefs() const {
 Context Function::print_asm(Context ctxt, int d) const{
   Context s_ctxt = ctxt;
   std::vector<std::string> vars = getChildDefs();
+  int i = 0;
+  std::vector<std::string> args = getChildParams();
+  int args_size = 0;
+  if (args.size()>0){
+    args_size = 16;
+    for (auto &it: args){
+      if (i++>3){
+        args_size+=4;
+      }
+    }
+  }
+  
+  int vars_size = vars.size()*4;
+  
+  int total_size = (args_size+vars_size)+4;
   
   // Deal with parameters
   // Add parameters to context
-  int i = 0;
+  i = 0;
+  ctxt.setOffset(total_size+8);
   for (auto &it : getParams()){
-    // ctxt.setOffset(8);
     ctxt.assignVariable(it,"int");
     if(i>3) {
       // Otherwise we need to just update the context with the variables on the frame already
@@ -93,12 +105,6 @@ Context Function::print_asm(Context ctxt, int d) const{
     }
     i++;
   }
-  
-  std::vector<std::string> args = getParams();
-  int args_size = args.size()*4;
-  int vars_size = vars.size()*4;
-  
-  int total_size = (args_size+vars_size)+4;
   
   // std::cerr << total_size << std::endl;
   // Indicated that we're printing out a function
@@ -115,7 +121,7 @@ Context Function::print_asm(Context ctxt, int d) const{
   ctxt.ss() << fname << ":" << std::endl
   // Print the frame: we need vars+8 as frame size because
   // we store the previous frame pointer and return address
-  << "\t.frame\t$fp,"<< total_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= notsure" << ", gp= 0" << std::endl
+  << "\t.frame\t$fp,"<< total_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= " << args_size << ", gp= 0" << std::endl
   
   // If there are function calls with the function, have to do preamble differently
   // .mask has something to do with int size

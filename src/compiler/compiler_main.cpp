@@ -40,6 +40,7 @@ int main(int argc, char * argv[]) {
   
   // Set metadata
   ast->setChildDefs();
+  ast->setParamUses();
   
   // Print xml to cerr
   fprintf(stderr,"<?xml version=\"1.0\"?>\n");

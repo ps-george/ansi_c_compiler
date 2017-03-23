@@ -57,7 +57,7 @@ public:
   virtual std::string getNodeType() const override;
   virtual std::string getId() const { return child->getId(); };
   virtual Context print_asm(Context ctxt, int d = 2) const override;
-  
+  virtual void setParamUses() const override;
 };
 
 //! Array access

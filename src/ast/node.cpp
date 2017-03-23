@@ -32,6 +32,11 @@ std::vector<std::string> Node::getChildDefs() const {
   return childDefs;
 }
 
+//! Populate metadata vectors with the declarations held by the children
+std::vector<std::string> Node::getChildParams() const {
+  return childParams;
+}
+
 std::string Node::getDeets() const { 
   std::string defs = " childDefs=\"";
   if (childDefs.size()){
@@ -70,6 +75,18 @@ void Node::setChildDefs() const {
     childDefs.insert(childDefs.end(), tmp.begin(), tmp.end());
   }
 }
+
+//! Populate metadata vectors with the parameters held by the children
+
+void Node::setParamUses() const {
+  // Get all the children
+  for (auto &it : getChildren()){
+    it->setParamUses();
+    std::vector<std::string> tmp = it->getChildParams(); // Sets the metadata by getting the childDefs of it's children
+    childParams.insert(childParams.end(), tmp.begin(), tmp.end());
+  }
+}
+
 
 void Node::tab(std::ostream &stream, bool open){
  if (!open) {

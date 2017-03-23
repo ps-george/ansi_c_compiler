@@ -19,6 +19,7 @@ protected:
   static bool parser;
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs and
+  mutable std::vector<std::string> childParams; //! Child params
   //mutable std::map<std::string, int> childUses; //! Child uses easier to implement (??) (are they necessary?)
   // std::vector<std::string> parentDefs; -> need pointer to parent on each node, effort.
   
@@ -38,6 +39,7 @@ public:
   virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
   virtual std::vector<std::string> getChildDefs() const; //! Child defs is the most useful, especially for functions
+  virtual std::vector<std::string> getChildParams() const;
   virtual void addString(std::string) const;
   virtual std::vector<std::string> getStrings() const;
   //virtual std::map<std::string> childUses() const;
@@ -45,6 +47,8 @@ public:
   
   //! Recursive setter:
   virtual void setChildDefs() const;
+  virtual void setParamUses() const;
+  
   //! Printers
   virtual void print_xml(std::ostream &stream) const;    //! Print xml implicit recursive function
   // virtual void print_c() const;      //! Print cpp implicit recursive function

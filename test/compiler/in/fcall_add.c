@@ -7,7 +7,7 @@ int Basic(int n) {
 int main(){
   int f = 0;
   
-  f = Basic(4) + Basic(3);
+  f = Basic(5) + Basic(15);
   
   return f;
 }
