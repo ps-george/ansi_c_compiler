@@ -13,7 +13,7 @@ public:
   Constant(const std::string &_valstr);
 
   virtual std::string getNodeType() const override;
-
+  virtual std::string getId() const { return valstr; };
   virtual std::string getValue() const { return valstr; };
   virtual std::string getHeader() const override {
     return "<" + getNodeType() + " value=\"" + valstr + "\" " + getDeets() + " />";

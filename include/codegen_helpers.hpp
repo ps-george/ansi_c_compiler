@@ -20,6 +20,7 @@ struct Var {
   std::string type;
   int offset;
   bool glob;
+  int arr;
   // bool dirty
 };
 
@@ -41,8 +42,10 @@ public:
   void assignVariable(std::string id, std::string type);
   void assignVariable(std::string id, std::string type, int offin);
   void assignVariable(std::string id, std::string type, bool glob);
+  void assignVariable(std::string id, std::string type, bool glob, bool arr);
   Var getVariable(std::string id);
   void loadVariable(std::string id, int d);
+  void loadVariable(std::string id, int d, bool array);
   void storeVariable(std::string id, int d = 2);
   int getVarOffset(std::string id);
   

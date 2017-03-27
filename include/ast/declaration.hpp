@@ -39,6 +39,8 @@ const Expression * e;
 public:
   ArrayDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {};
   virtual std::string getNodeType() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
+  std::vector<const Node *> getChildren() const;
 };
 
 //! Function declarator

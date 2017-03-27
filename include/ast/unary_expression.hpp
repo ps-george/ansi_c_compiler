@@ -67,6 +67,8 @@ private:
 public:
   SquareOperator(const Expression * _expr) : PostfixExpression(_expr) {};
   SquareOperator(const Expression * _expr, const Expression * _arg) : PostfixExpression(_expr), arg(_arg) {};
+  std::string getId() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };  
 
 //! Dot and arrow operators

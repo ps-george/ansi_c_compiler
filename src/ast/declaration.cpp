@@ -35,6 +35,12 @@ std::vector<const Node *> InitDeclarator::getChildren() const {
   return v;
 }
 
+std::vector<const Node *> ArrayDeclarator::getChildren() const {
+  std::vector<const Node *> v = Declarator::getChildren();
+  v.push_back(e);
+  return v;
+}
+
 //! Cut out the middle man
 std::vector<const Node *> Declaration::getChildren () const {
   // for each item in dlist
@@ -60,10 +66,15 @@ void Declaration::setChildDefs() const {
   for (auto &it : getChildren()){
     // Get the name of the thing being declared
     // std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
-    childDefs.push_back(it->getId());
+    if (it->getNodeType()=="ArrayDeclarator"){
+      childDefs.push_back(it->getId());
+      std::string size = it->getChildren().back().getId();
+    }
+    else {
+      childDefs.push_back(it->getId());
+   }
   }
 }
-
 
 
 /*
@@ -77,12 +88,17 @@ Context Declaration::print_asm(Context ctxt, int d) const{
   if (dlist->getChildren().size()){
     for (auto &it : dlist->getChildren()){
       // ctxt.ss() << "## " << it->getNodeType() << std::endl;
+      if (it->getNodeType()=="ArrayDeclarator") {
+        ctxt = it->print_asm(ctxt);
+        continue; 
+      }
       ctxt.assignVariable(it->getId(), type->getTypename());
       
       //! \todo this is a hack to get InitDeclarator to work, could be more graceful
       if (it->getNodeType()=="InitDeclarator"){
         it->print_asm(ctxt);
       }
+      
     }
   }
   return ctxt;
@@ -96,6 +112,14 @@ Context Declarator::print_asm(Context ctxt, int d) const{
 Context InitDeclarator::print_asm(Context ctxt, int d) const{
   e->print_asm(ctxt);
   ctxt.storeVariable(getId());
+  return ctxt;
+}
+
+Context ArrayDeclarator::print_asm(Context ctxt, int d) const{
+  e->print_asm(ctxt);
+  ctxt.ss() << "# Assigning array: " << getId() << ", size is in reg 2" << std::endl;
+  
+  ctxt.assignVariable(getId(), "array",false,true);
   return ctxt;
 }
 

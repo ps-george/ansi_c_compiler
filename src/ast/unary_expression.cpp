@@ -5,6 +5,7 @@
  */
 
 #include "ast/unary_expression.hpp"
+#include "ast/variable.hpp"
 
 /* GETTERS */
 std::string UnaryExpression::getNodeType() const { return "UnaryExpression";}
@@ -20,8 +21,6 @@ void FunctionCall::setParamUses() const {
     childParams.push_back(it->getId());
   }
 }
-
-
 
 Context FunctionCall::print_asm(Context ctxt, int d) const {
   // If there is an expression in the functioncall, evaluate and move to $4
@@ -92,6 +91,15 @@ Context PostfixExpression::print_asm(Context ctxt, int d) const {
   return ctxt;
 }
 
+Context SquareOperator::print_asm(Context ctxt, int d) const {
+  ctxt = arg->print_asm(ctxt,8);
+  ctxt.loadVariable(child->getId(),2,1);
+  return ctxt;
+}
+
+std::string SquareOperator::getId() const {
+  return ((const Variable *)child)->getId();
+}
 
 
 
