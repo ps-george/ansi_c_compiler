@@ -95,7 +95,7 @@ Context Declarator::print_asm(Context ctxt, int d) const{
 
 Context InitDeclarator::print_asm(Context ctxt, int d) const{
   e->print_asm(ctxt);
-  store(ctxt, getId());
+  ctxt.storeVariable(getId());
   return ctxt;
 }
 

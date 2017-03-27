@@ -159,7 +159,7 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
 Context AssignmentExpression::print_asm(Context ctxt, int d) const {
   if (op == "=") {
     getRight()->print_asm(ctxt);
-    store(ctxt, getLeft()->getId());
+    ctxt.storeVariable(getLeft()->getId(), 2);
     return ctxt;
   } else {
     // Store left in $3
@@ -208,7 +208,7 @@ Context AssignmentExpression::print_asm(Context ctxt, int d) const {
   } else {
     throw std::runtime_error("Unknown construct '" + op + "'");
   }
-  store(ctxt, getLeft()->getId());
+  ctxt.storeVariable(getLeft()->getId(), 2);
   return ctxt;
 }
 

@@ -59,13 +59,13 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
     ctxt.ss() << "\tadd\t$" << d << ",$" << d << ",1" << " # preincrement" << std::endl;
     // Store it back again
     
-    store(ctxt,child->getId(),d);
+    ctxt.storeVariable(child->getId(),d);
   }
   else if (op=="--"){
     child->print_asm(ctxt,d); // Loads child into $2
     ctxt.ss() << "\tsub\t$" << d <<",$" << d << ",1" << " # predecrement" << std::endl;
     // Store it back again
-    store(ctxt,child->getId(),d);
+    ctxt.storeVariable(child->getId(),d);
   }
   return ctxt;
 }
@@ -80,13 +80,13 @@ Context PostfixExpression::print_asm(Context ctxt, int d) const {
     child->print_asm(ctxt,d); // Loads child into $2
     ctxt.ss() << "\tadd\t$4, $" << d << ",1" << " # postincrement" << std::endl;
     // Store it back again
-    store(ctxt,child->getId(),4);
+    ctxt.storeVariable(child->getId(),4);
   }
   else if (op=="--"){
     child->print_asm(ctxt,d); // Loads child into $2
     ctxt.ss() << "\tsub\t$4, $" << d << ",1" << " # postdecrement" << std::endl;
     // Store it back again
-    store(ctxt,child->getId(),4);
+    ctxt.storeVariable(child->getId(),4);
   }
   
   return ctxt;

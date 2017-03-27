@@ -19,6 +19,7 @@ struct Var {
   int reg;
   std::string type;
   int offset;
+  bool glob;
   // bool dirty
 };
 
@@ -39,7 +40,11 @@ public:
   
   void assignVariable(std::string id, std::string type);
   void assignVariable(std::string id, std::string type, int offin);
-  int getVariable(std::string id);
+  void assignVariable(std::string id, std::string type, bool glob);
+  Var getVariable(std::string id);
+  void loadVariable(std::string id, int d);
+  void storeVariable(std::string id, int d = 2);
+  int getVarOffset(std::string id);
   
   void addString(std::string s);
   std::string getString(std::string s);
@@ -64,9 +69,6 @@ public:
   void push(int reg);
   void pop(int reg);
 };
-
-
-int store(Context& ctxt, std::string id, int d = 2);
 
 
 // For a scope:

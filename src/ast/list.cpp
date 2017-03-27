@@ -6,6 +6,8 @@
 
 #include "tokens.hpp"
 #include "ast/list.hpp"
+#include "ast/declaration.hpp"
+#include "ast/constant.hpp"
 
 /*
  * GETTERS
@@ -69,8 +71,35 @@ Context Program::print_asm(Context ctxt, int d) const {
   
   ctxt.createStrings();
   
+  for (auto &it : getChildren()){
+    if (it->getNodeType()=="Declaration"){
+      for (auto &it1 : it->getChildren()){
+        // All function declarators are globl, don't want to do it for these
+        if (it1->getNodeType()!="FunctionDeclarator"){
+          ctxt.ss() << "# " << it1->getNodeType() << std::endl;
+          ctxt.ss() << "\t.globl\t" << it1->getId() << std::endl;
+          ctxt.ss() << "\t.data" << std::endl;
+          ctxt.ss() << "\t.align\t2" << std::endl;
+          ctxt.ss() << "\t.type\t" << it1->getId() << ",\t@object" <<std::endl;
+          ctxt.ss() << "\t.size\t" << it1->getId() << ",\t4" <<std::endl;
+          ctxt.ss() << it->getId() << ":" << std::endl;
+          // SO UGLY
+          if (it1->getNodeType()=="InitDeclarator")
+            ctxt.ss() << "\t.word\t" << ((const Constant *)(((const InitDeclarator *)it1)->getChildren().back()))->getValue() << std::endl;
+        }
+        //else {
+        ctxt.assignVariable(it->getId(), ((const Declaration * )it)->getTypename(),true);
+        //}
+      }
+    }
+  }
+  
   ctxt.ss() << "\t.text\n";
-  ctxt = Node::print_asm(ctxt);
+  for (auto &it : getChildren()){
+    if (it->getNodeType()!="Declaration"){
+      ctxt = it->print_asm(ctxt, d);
+    }
+  }
   return ctxt;
 }
 

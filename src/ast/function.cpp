@@ -167,7 +167,7 @@ Context Function::print_asm(Context ctxt, int d) const{
     if (i<8){
       // First four parameters $4,$5,$6,$7
       ctxt.ss() << "\tmove $2,$" << std::to_string(i++) << std::endl;
-      store(ctxt, it);
+      ctxt.storeVariable(it);
     }
     // For the rest of the input parameters, they will be on the stack already
   }
