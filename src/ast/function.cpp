@@ -90,7 +90,7 @@ Context Function::print_asm(Context ctxt, int d) const{
     }
   }
   
-  int vars_size = vars.size()*4;
+  int vars_size = vars.size()*4 + getParams().size()*4;
   int pad = 0;
   int total_size = args_size+vars_size + 8;
   if (total_size%8!=0){
@@ -102,17 +102,23 @@ Context Function::print_asm(Context ctxt, int d) const{
   // Add parameters to context
   i = 0;
   
+  // Set offset to local data area for local variables
+  int local_offset = total_size+8-vars_size;
+  ctxt.setOffset(local_offset);
+  
   for (auto &it : getParams()){
     if (i==4){
-      // Set the offset to after the frame to assign input arguments 
       ctxt.setOffset(total_size+8+pad+16);
     }
     ctxt.ss() << "# param " << i << ": " << it << " \n";
     ctxt.assignVariable(it,"int");
+    if (i<4){
+      // Set the offset to after the frame to assign input arguments
+      local_offset = ctxt.getOffset();
+    }
     i++;
   }
-  // Set offset back to local data area for local variables
-  ctxt.setOffset((total_size+8+pad)-vars_size);
+  ctxt.setOffset(local_offset);
   // std::cerr << total_size << std::endl;
   // Indicated that we're printing out a function
   std::string fname = id;
