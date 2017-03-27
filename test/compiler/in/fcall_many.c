@@ -1,4 +1,4 @@
-// Function call with six input parameters
+// Function call with loads of input parameters
 
 int test_add(int n, int a, int b, int c, int d, int e, int f, int g, int h, int y, int j, int k, int l){
   return a+b+c+d+e+f+g+h+y+j+k+l+n;

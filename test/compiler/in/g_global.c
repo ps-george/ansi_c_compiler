@@ -1,3 +1,5 @@
+// Unititialised global variable
+
 int de;
 
 int f(){

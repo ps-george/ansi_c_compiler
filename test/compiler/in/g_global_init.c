@@ -1,3 +1,5 @@
+// Initialised global variable
+
 int de = 1;
 
 int f(){

@@ -1,54 +1,66 @@
 Tested features:
-1.	 Assign add '+=' op basic test
-2.	 Declaration and then assignment of variables
-3.	 Declaration with initialisation to constant or existing variable
-4.	 Binary operator + addition (basic)
-5.	 Binary operator / division
-6.	 Binary operator * multiplication (basic)
-7.	 Binary operator * multiplication (basic)
-8.	 Binary operator - subtraction
-9.	 Binary operator - subtraction, with bracketing
-10.	 Binary operator &
-11.	 Binary operator | two operands returns 3
-12.	 Binary operator ^ (XOR)
-13.	 Binary operator && two operands returns 1
-14.	 Binary operator &&, false positive test. Trying to test short-circuit.
-15.	 Binary operator || two operands returns 1
-16.	 Binary operator ||, false positive test. Trying to test short-circuit.
-17.	 Binary operator == returns 0 two operands
-18.	 Binary operator == returns 1 two operands
+1.	int main(){
+2.	 Assign add '+=' op basic test
+3.	 Declaration and then assignment of variables
+4.	 Declaration and then assignment of variables inside a function
+5.	 Declaration with initialisation to constant or existing variable
+6.	 Binary operator + addition (basic)
+7.	 Binary operator / division
+8.	 Binary operator * multiplication (basic)
+9.	 Binary operator * multiplication (basic)
+10.	 Binary operator - subtraction
+11.	 Binary operator - subtraction, with bracketing
+12.	 Binary operator &
+13.	 Binary operator | two operands returns 3
+14.	 Binary operator ^ (XOR)
+15.	 Binary operator && two operands returns 1
+16.	 Binary operator &&, false positive test. Trying to test short-circuit.
+17.	 Binary operator || two operands returns 1
+18.	 Binary operator ||, false positive test. Trying to test short-circuit.
 19.	 Binary operator == returns 0 two operands
-20.	 Binary operator >= two operands eq
-21.	 Binary operator > two operands returns 1
-22.	 Binary operator <= two operands eq
-23.	 Binary operator < two operands returns true
-24.	 Adding the return values of two one input function calls
-25.	 Function call with 4 int input parameters
-26.	 Function call with no input paramters
-27.	 Function call with expression as argument
-28.	 Recursive Fibonacci program
-29.	 Function call with two input parameters
-30.	 Main return constant
-31.	int de;
-32.	 Scope variable shadowing
-33.	 Break out of while statement, simple test
-34.	 Break out of while statement, nested
-35.	 DEEFor loop
-36.	 DEFor loop
-37.	 DoWhile condition not met at the beginning
-38.	 EEEFor loop
-39.	 EEFor loop
-40.	 While loop condition false to begin with
-41.	 While loop initial condition is false
-42.	 While loop implementing multiplication with addition and subtraction
-43.	 IfElse using == operator else branch
-44.	 IfElse many times using == operator
-45.	 Switch statement with char
-46.	 Switch statement with integer
-47.	int main(){
-48.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
-49.	! Char is dealt with correctly
-50.	 Post simple
-51.	 Post-increment simple
-52.	 Pre-decrement simple
-53.	 Preincrement simple
+20.	 Binary operator == returns 1 two operands
+21.	 Binary operator == returns 0 two operands
+22.	 Binary operator >= two operands eq
+23.	 Binary operator > two operands returns 1
+24.	 Binary operator <= two operands eq
+25.	 Binary operator < two operands returns true
+26.	 Adding the return values of two one input function calls
+27.	 Function call with six input parameters
+28.	 Function call with 4 int input parameters
+29.	 Function call with loads of input parameters
+30.	 Function call with no input paramters
+31.	 Function call with expression as argument
+32.	 Recursive Fibonacci program with a silly amount of arguments
+33.	 Recursive Fibonacci program
+34.	 Function call with seven input parameters
+35.	 Function call with six input parameters
+36.	 Function call with two input parameters
+37.	 Main return constant
+38.	 Unititialised global variable
+39.	 Initialised global variable
+40.	 Scope variable shadowing
+41.	 Break out of while statement, simple test
+42.	 Break out of while statement, nested
+43.	 DEEFor loop with break
+44.	 DEEFor loop
+45.	 DEEFor loop with break
+46.	 DEFor loop
+47.	 DoWhile condition not met at the beginning
+48.	 EEEFor loop
+49.	 EEFor loop
+50.	 While loop condition false to begin with
+51.	 While loop initial condition is false
+52.	 While loop implementing multiplication with addition and subtraction
+53.	int main(){
+54.	int main(){
+55.	 IfElse using == operator else branch
+56.	 IfElse many times using == operator
+57.	 Switch statement with char
+58.	 Switch statement with integer
+59.	int main(){
+60.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
+61.	! Char is dealt with correctly
+62.	 Post simple
+63.	 Post-increment simple
+64.	 Pre-decrement simple
+65.	 Preincrement simple
