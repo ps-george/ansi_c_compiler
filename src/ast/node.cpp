@@ -76,6 +76,17 @@ void Node::setChildDefs() const {
   }
 }
 
+//
+//void Node::setP() const {
+//  // Get all the children
+//  for (auto &it : getChildren()){
+//    it->setP();
+//    if (it->getP()>p){
+//      p = it->getP()>p;
+//    }
+//  }
+//}
+
 //! Populate metadata vectors with the parameters held by the children
 
 void Node::setParamUses() const {
@@ -83,7 +94,11 @@ void Node::setParamUses() const {
   for (auto &it : getChildren()){
     it->setParamUses();
     std::vector<std::string> tmp = it->getChildParams(); // Sets the metadata by getting the childDefs of it's children
-    childParams.insert(childParams.end(), tmp.begin(), tmp.end());
+    if (tmp.size()>childParams.size()){
+      childParams = tmp;
+    }
+    
+    //childParams.insert(childParams.end(), tmp.begin(), tmp.end());
   }
 }
 

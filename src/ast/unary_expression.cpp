@@ -37,12 +37,11 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
       ctxt.ss() << "\tmove $" << std::to_string((i++)+4) << ",$2" << std::endl;
     }
     else {
-      k+=4;
       it->print_asm(ctxt);
       ctxt.ss() << "\tsw\t$2," << (i++)*4 << "($sp)" << std::endl;
+      k+=4;
     }
   }
-  
   
   
   ctxt.ss() << "\t.option\tpic0" << std::endl

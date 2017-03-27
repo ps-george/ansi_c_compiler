@@ -20,6 +20,7 @@ protected:
   // metadata;
   mutable std::vector<std::string> childDefs; //! Child defs and
   mutable std::vector<std::string> childParams; //! Child params
+  mutable int p;
   //mutable std::map<std::string, int> childUses; //! Child uses easier to implement (??) (are they necessary?)
   // std::vector<std::string> parentDefs; -> need pointer to parent on each node, effort.
   
@@ -48,6 +49,8 @@ public:
   //! Recursive setter:
   virtual void setChildDefs() const;
   virtual void setParamUses() const;
+  //virtual void setP() const;
+  //virtual int getP() const { return p; };
   
   //! Printers
   virtual void print_xml(std::ostream &stream) const;    //! Print xml implicit recursive function

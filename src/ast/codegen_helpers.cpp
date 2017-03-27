@@ -44,7 +44,7 @@ void Context::assignVariable(std::string id, std::string type, int offin){
 
 int store(Context& ctxt, std::string id, int d){
   try{
-    ctxt.ss() << "\tsw\t$" << d <<"," << ctxt.getVariable(id) << "($fp)" << " # store back in the same place" << std::endl;
+    ctxt.ss() << "\tsw\t$" << d <<"," << ctxt.getVariable(id) << "($fp)" << " # store var: " << id << std::endl;
   }
   catch (std::exception& e){
     std::cerr << e.what();
@@ -64,11 +64,11 @@ std::string getUnq() {
 }
 
 void Context::push(int reg){
-  ss() <<"### PUSH\n\taddi\t$sp,$sp,-4" << std::endl;
+  ss() <<"### PUSH\n\taddiu\t$sp,$sp,-4" << std::endl;
   ss() << "\tsw\t$" <<reg <<",0($sp)\n" << std::endl;
 }
 
 void Context::pop(int reg){
   ss() << "### POP\n\tlw\t$" <<reg<< ",0($sp)" << std::endl;
-  ss() <<"\taddi\t$sp,$sp,4\n" << std::endl;
+  ss() <<"\taddiu\t$sp,$sp,4\n" << std::endl;
 }

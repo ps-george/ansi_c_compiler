@@ -79,35 +79,40 @@ Context Function::print_asm(Context ctxt, int d) const{
   std::vector<std::string> vars = getChildDefs();
   int i = 0;
   std::vector<std::string> args = getChildParams();
-  int args_size = 0;
+  int args_size = 16;
   if (args.size()>0){
-    args_size = 16;
     for (auto &it: args){
-      if (i++>3){
+      // ctxt.ss() << "# " << it << std::endl;
+      if (i>3){
         args_size+=4;
       }
+      i++;
     }
   }
   
   int vars_size = vars.size()*4;
-  
-  int total_size = (args_size+vars_size)+4;
+  int pad = 0;
+  int total_size = args_size+vars_size + 8;
+  if (total_size%8!=0){
+    // add padding
+    pad = 4;
+  }
   
   // Deal with parameters
   // Add parameters to context
   i = 0;
-  ctxt.setOffset(total_size+8);
+  
   for (auto &it : getParams()){
-    if(i==4) {
-      // Otherwise we need to just update the context with the variables on the frame already
-      // ctxt.assignVariable(it,"int");
-      // Not sure why? Previous two contain 0 and 64..
-      //ctxt.setOffset(ctxt.getOffset()+8);
+    if (i==4){
+      // Set the offset to after the frame to assign input arguments 
+      ctxt.setOffset(total_size+8+pad+16);
     }
+    ctxt.ss() << "# param " << i << ": " << it << " \n";
     ctxt.assignVariable(it,"int");
     i++;
   }
-  
+  // Set offset back to local data area for local variables
+  ctxt.setOffset((total_size+8+pad)-vars_size);
   // std::cerr << total_size << std::endl;
   // Indicated that we're printing out a function
   std::string fname = id;
@@ -123,7 +128,7 @@ Context Function::print_asm(Context ctxt, int d) const{
   ctxt.ss() << fname << ":" << std::endl
   // Print the frame: we need vars+8 as frame size because
   // we store the previous frame pointer and return address
-  << "\t.frame\t$fp,"<< total_size+8 << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= " << args_size << ", gp= 0" << std::endl
+  << "\t.frame\t$fp,"<< total_size+8+pad << ",$31\t\t# vars= "<< vars_size <<", regs= 1/0, args= " << args_size << ", gp= 0" << std::endl
   
   // If there are function calls with the function, have to do preamble differently
   // .mask has something to do with int size
@@ -135,16 +140,16 @@ Context Function::print_asm(Context ctxt, int d) const{
   << "\t.set\tnomacro" << std::endl
   
   // Reserve space on the stack for the frame
-  << "\taddiu\t$sp,$sp,-" << total_size+8 << std::endl
+  << "\taddiu\t$sp,$sp,-" << total_size+8+pad << std::endl
   
   // Store the previous return address
-  << "\tsw\t$31,"<< total_size+4 << "($sp)" << std::endl
+  << "\tsw\t$31,"<< total_size+4-vars_size << "($sp)" << std::endl
   
   // Store the previous frame pointer
-  << "\tsw\t$fp,"<< total_size << "($sp)" << std::endl
+  << "\tsw\t$fp,"<< total_size-vars_size << "($sp)" << std::endl
   
   // Store the previous result
-  << "\tsw\t$16,"<< total_size-4 << "($sp)" << std::endl
+  << "\tsw\t$16,"<< total_size-4-vars_size << "($sp)" << std::endl
   
   // Write new frame pointer as current stack pointer
   << "\tmove\t$fp,$sp" << std::endl;
@@ -174,13 +179,13 @@ Context Function::print_asm(Context ctxt, int d) const{
   ctxt.ss() << "\tmove $sp,$fp" << std::endl
   
   // Load the previous return address
-  << "\tlw\t$31," << total_size+4 <<"($sp)" << std::endl
+  << "\tlw\t$31," << total_size+4-vars_size <<"($sp)" << std::endl
   // Load the previous frame pointer (unwind)
-  << "\tlw\t$fp," << total_size <<"($sp)" << std::endl
+  << "\tlw\t$fp," << total_size-vars_size <<"($sp)" << std::endl
   // Load the previous value in $16
-  << "\tlw\t$16," << total_size-4 <<"($sp)" << std::endl
+  << "\tlw\t$16," << total_size-4-vars_size <<"($sp)" << std::endl
   // Unallocate the frame we were in
-  << "\taddiu\t$sp,$sp," << total_size+8 << std::endl
+  << "\taddiu\t$sp,$sp," << total_size+8+pad << std::endl
   // Return
   << "\tj\t$31\n\tnop" << std::endl << std::endl;
   

@@ -48,6 +48,7 @@ public:
       : IfStatement(c, s1), stat2(s2) {}
   virtual std::string getNodeType() const override;
   virtual Context print_asm(Context ctxt, int d = 2) const override;
+  virtual std::vector<const Node *> getChildren() const override { return {stat1,stat2}; }
   virtual void print_xml(std::ostream &stream) const;
 };
 
