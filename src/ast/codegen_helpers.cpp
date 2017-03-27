@@ -47,7 +47,7 @@ Var Context::getVariable(std::string id){
     return bindings.at(id);
   else {
     // If can't find it, assume global
-    return Var{0,"Int",0,true};
+    return Var{0,"Int",0,true,0};
   }
 }
 
@@ -73,20 +73,25 @@ std::ostream& Context::ss(){
 };
 
 void Context::assignVariable(std::string id, std::string type){
-  bindings[id] = Var{1,type,offset,0};
+  bindings[id] = Var{1,type,offset,0,0};
+  offset+=4;
+}
+
+void Context::assignVariable(std::string id, std::string type, bool glob, bool ptr){
+  bindings[id] = Var{1,type,offset,glob,ptr};
   offset+=4;
 }
 
 void Context::assignVariable(std::string id, std::string type, int offin){
-  bindings[id] = Var{1,type,offin,0};
+  bindings[id] = Var{1,type,offin,0,0};
 }
 
 void Context::assignVariable(std::string id, std::string type, bool glob){
-  if (glob){
-    
-    //ss() << "\t.comm\t" << id << ",4,4" << std::endl;
-    bindings[id] = Var{1,type,0,true};
-  }
+  bindings[id] = Var{1,type,0,glob,0};
+}
+
+void Context::setVarPtr(std::string id){
+  bindings[id].ptr = true;
 }
 
 std::string makeLabel(std::string base){

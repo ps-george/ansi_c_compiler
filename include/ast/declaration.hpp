@@ -14,8 +14,8 @@ public:
   Declarator(const Node * _child) : child(_child) {};
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override { return child->getId(); };
-  virtual void setPtr() const { ptr++; }
-  virtual int getPtr() const { return ptr; }
+  virtual void setPtr() const { ptr = 1; }
+  virtual int getPtr() const override { return ptr; }
   virtual void print_xml(std::ostream &stream) const override;
   // virtual void print_c() const override;
   virtual std::vector<const Node *> getChildren() const override { return {child}; }

@@ -37,6 +37,7 @@ public:
   virtual std::string getDeets() const;
   virtual std::string getHeader() const;        //! Return the xml header for the node
   virtual std::string getFooter() const;        //! Return the xml footer for the node
+  virtual int getPtr() const {return 0; };
   virtual std::vector<const Node *> getChildren() const { return {};}; //! If not overridden, return empty.
   virtual std::string getId() const;            //! Return the id of a variable, ideally should be pure virtual
   virtual std::vector<std::string> getChildDefs() const; //! Child defs is the most useful, especially for functions

@@ -1,6 +1,5 @@
 int main(){
-  int b = 0;
-  int * a = &b;
-  *a = 5;
+  int b = 1;
+  int *a = &b;
   return *a;
 }

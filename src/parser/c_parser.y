@@ -3,6 +3,7 @@
   extern const Node *g_root; // A way of getting the AST out
   
   #include "tokens.hpp"
+  #include "iostream"
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -245,7 +246,8 @@ prefix-expression
   : postfix-expression { $$ = $1; }
   | INCR prefix-expression { $$ = new PrefixExpression($2, $1); }
   | DECR prefix-expression { $$ = new PrefixExpression($2, $1); }
-  // | unary-operator cast-expression { $$ = new PrefixExpression(); }
+  | '&' cast-expression { $$ = new PrefixExpression($2, $1); }
+  | '*' cast-expression { $$ = new PrefixExpression($2, $1); }
   | SIZEOF prefix-expression { $$ = new PrefixExpression($2, $1); }
 
 postfix-expression
@@ -311,9 +313,7 @@ declaration-specifiers
 	| type-specifier declaration-specifiers { $2->add($1); $$ = $2; delete $1; }
 	| type-qualifier { $$ = $1; }
 	| type-qualifier declaration-specifiers { $2->add($1); $$ = $2; delete $1; }
-
-//  : type-specifier { $$ = $1;}
-//  | type-specifier '*' {$1->setPtr(); $$ = $1; }
+  
 
 init-declarator-list
 	: init-declarator { $$ = new DeclarationList({$1}); }
@@ -349,7 +349,7 @@ initializer
   : assignment-expression { $$ = $1; }
   
 declarator
-  : '*' direct-declarator { $2->setPtr(); $$ = $2; }
+  : '*' direct-declarator { $$ = $2; ((const Declarator *)$$)->setPtr(); std::cerr << "<Setting ptr..." << $$->getPtr() << "/>" <<std::endl; }
   | direct-declarator { $$ = $1; }
 
 direct-declarator 

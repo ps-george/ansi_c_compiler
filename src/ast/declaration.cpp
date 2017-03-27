@@ -6,6 +6,7 @@
 
 #include "codegen_helpers.hpp"
 #include "ast/declaration.hpp"
+#include "ast/variable.hpp"
 
 /*
  * GETTERS
@@ -76,7 +77,9 @@ Context Declaration::print_asm(Context ctxt, int d) const{
   // ctxt.ss() << "## " << getNodeType() << std::endl;
   if (dlist->getChildren().size()){
     for (auto &it : dlist->getChildren()){
-      // ctxt.ss() << "## " << it->getNodeType() << std::endl;
+      ctxt.ss() << "## " << it->getNodeType() << ", " << it->getId() << ", " << it->getPtr() << std::endl;
+      
+      ctxt.ss() << "# assign variable " << it->getId() << std::endl;
       ctxt.assignVariable(it->getId(), type->getTypename());
       
       //! \todo this is a hack to get InitDeclarator to work, could be more graceful
@@ -95,6 +98,10 @@ Context Declarator::print_asm(Context ctxt, int d) const{
 
 Context InitDeclarator::print_asm(Context ctxt, int d) const{
   e->print_asm(ctxt);
+  if (getPtr()){
+    ctxt.ss() << "# hi " << std::endl;
+    ctxt.setVarPtr(getId());
+  }
   ctxt.storeVariable(getId());
   return ctxt;
 }

@@ -67,6 +67,13 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
     // Store it back again
     ctxt.storeVariable(child->getId(),d);
   }
+  else if (op=="&"){
+    ctxt.ss() << "\taddiu\t$" << d << ",$fp," << ctxt.getVarOffset(child->getId()) << std::endl;
+  }
+  else if (op=="*"){
+    ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
+    ctxt.ss() << "\tlw\t$" << d << ",0($" << d << ")" << std::endl;
+  }
   return ctxt;
 }
 
