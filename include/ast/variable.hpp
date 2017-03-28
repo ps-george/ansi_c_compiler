@@ -30,7 +30,6 @@ public:
 class Parameter : public Variable {
 public:
   virtual ~Parameter(){};
-  Parameter(const std::string* _id, const Type * t) : Variable(_id, t) {}
   Parameter(const std::string* _id) : Variable(_id) {}
   virtual std::string getNodeType() const override;
 };
