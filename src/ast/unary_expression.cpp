@@ -91,11 +91,24 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
   }
   else if (op=="~"){
     child->print_asm(ctxt,d);
-    ctxt.ss() << "\tnot\t $"<< d <<",$" << d  << std::endl;
+    ctxt.ss() << "\tnot\t$"<< d <<",$" << d  << std::endl;
   }
   else if (op=="!"){
     child->print_asm(ctxt,d);
-    ctxt.ss() << "\tsgeu\t $" << d << ",$0,$" << d << " # if 0 is less than " << std::endl;
+    ctxt.ss() << "\tsgeu\t$" << d << ",$0,$" << d << " # if 0 is less than " << std::endl;
+  }
+  else if (op=="sizeof"){
+    
+    std::string type = ctxt.getVarType(child->getId());
+    ctxt.ss() << "# sizeof(" << type << ")" << std::endl;
+    int size = 4;
+    if (type=="Double"){
+      size = 8;
+    }
+    else if (type=="Char"){
+      size = 1;
+    }
+    ctxt.ss() << "\tli\t$" << d << "," << size << std::endl;
   }
   else {
     ctxt.ss() << "# Prefix expression, op is \'" << op << "\'" << std::endl;

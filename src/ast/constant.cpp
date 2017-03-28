@@ -6,6 +6,8 @@
 
 #include <iostream>
 #include "ast/constant.hpp"
+#include <bitset>
+#include <sstream>
 
 /* CONSTRUCTORS */
 
@@ -19,7 +21,19 @@ CharConstant::CharConstant(const std::string &_valstr) : Constant(_valstr) {
 }
 
 FloatConstant::FloatConstant(const std::string &_valstr) : Constant(_valstr) {
-  val = std::stof(_valstr);
+  float val = std::stof(_valstr);
+  union FloatInt
+  {
+      float f;
+      int i;
+  };
+
+  FloatInt foo;
+  foo.f = val;
+  std::bitset<32> second(foo.i);
+  std::stringstream ss;
+  ss << std::hex << "0x" << foo.i;
+  valstr = ss.str();
 };
 
 DoubleConstant::DoubleConstant(const std::string &_valstr) : Constant(_valstr) {

@@ -247,7 +247,7 @@ prefix-expression
   | INCR prefix-expression { $$ = new PrefixExpression($2, $1); }
   | DECR prefix-expression { $$ = new PrefixExpression($2, $1); }
   | unary-operator cast-expression { $$ = new PrefixExpression($2, $1); }
-  | SIZEOF prefix-expression { $$ = new PrefixExpression($2, $1); }
+  | SIZEOF '(' prefix-expression ')' { $$ = new PrefixExpression($3, $1); }
 
 unary-operator
 : '&'

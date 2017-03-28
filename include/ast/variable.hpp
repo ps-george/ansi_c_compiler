@@ -9,7 +9,7 @@
 class Variable : public Expression {
 private:
   std::string id;
-  const Type * type;
+  mutable const Type * type;
   mutable int ptr = 0;
   // Variable will have a type
 public:

@@ -31,34 +31,34 @@ std::vector<std::string> Type::getTypeVec() const {
   std::vector<std::string> v;
   std::stringstream ss;
   switch((Type_specifier)t){
-    case None      :
+    case None:
       v.push_back("None");
       break; 
-    case Int       : 
+    case Int: 
       v.push_back("Int");
       break; 
-    case Void      : 
+    case Void: 
       v.push_back("Void");
       break; 
-    case Char      : 
+    case Char: 
       v.push_back("Char");
       break; 
-    case Float     : 
+    case Float: 
       v.push_back("Float");
       break; 
-    case Double    : 
+    case Double: 
       v.push_back("Double");
       break;
     case LongDouble: 
       v.push_back("LongDouble");
       break;
-    case Short     : 
+    case Short: 
       v.push_back("Short");
       break; 
-    case Long      : 
+    case Long: 
       v.push_back("Long");
       break; 
-    case LongLong  : 
+    case LongLong: 
       v.push_back("LongLong");
       break; 
   }
