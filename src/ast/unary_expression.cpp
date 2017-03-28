@@ -74,6 +74,21 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
     ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
     ctxt.ss() << "\tlw\t$" << d << ",0($" << d << ")" << std::endl;
   }
+  else if (op=="+"){
+    child->print_asm(ctxt,d);
+  }
+  else if (op=="-"){
+    child->print_asm(ctxt,d);
+    ctxt.ss() << "\tsubu\t$" << d << ",$0,$" << d << std::endl;
+  }
+  else if (op=="~"){
+    child->print_asm(ctxt,d);
+    ctxt.ss() << "\tnot\t $"<< d <<",$" << d  << std::endl;
+  }
+  else if (op=="!"){
+    child->print_asm(ctxt,d);
+    ctxt.ss() << "\tsgeu\t $" << d << ",$0,$" << d << " # if 0 is less than " << std::endl;
+  }
   return ctxt;
 }
 

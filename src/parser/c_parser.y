@@ -84,7 +84,7 @@
 %type <expression> cast-expression prefix-expression postfix-expression equality-expression constant-expression
 
 %type <raw> VOID INT CHAR SHORT LONG FLOAT DOUBLE SIGNED UNSIGNED
-%type <raw> STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF 
+%type <raw> STRING ID C_CONSTANT F_CONSTANT I_CONSTANT SIZEOF unary-operator
 
 %type <raw> assignment-op type-name
 
@@ -246,9 +246,16 @@ prefix-expression
   : postfix-expression { $$ = $1; }
   | INCR prefix-expression { $$ = new PrefixExpression($2, $1); }
   | DECR prefix-expression { $$ = new PrefixExpression($2, $1); }
-  | '&' cast-expression { $$ = new PrefixExpression($2, $1); }
-  | '*' cast-expression { $$ = new PrefixExpression($2, $1); }
+  | unary-operator cast-expression { $$ = new PrefixExpression($2, $1); }
   | SIZEOF prefix-expression { $$ = new PrefixExpression($2, $1); }
+
+unary-operator
+: '&'
+| '*'
+| '+'
+| '-'
+| '~'
+| '!'
 
 postfix-expression
   : primary-expression { $$ = $1; }
