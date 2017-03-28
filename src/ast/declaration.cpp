@@ -4,7 +4,6 @@
  *
  */
 
-#include "iostream"
 #include "codegen_helpers.hpp"
 #include "ast/declaration.hpp"
 #include "ast/variable.hpp"
@@ -74,7 +73,6 @@ void ArrayDeclarator::setChildDefs() const {
   std::string id = getId();
   childDefs.push_back(id);
   if (e->getNodeType()=="IntConstant"){
-    std::cerr << e->getId() << std::endl;
     int val = std::stoi(e->getId(),0,0);
     for (int i = 0; i<val;i++){
       childDefs.push_back(id+"["+std::to_string(i)+"]");

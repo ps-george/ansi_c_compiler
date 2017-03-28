@@ -49,5 +49,6 @@ int main(int argc, char * argv[]) {
   // Print the output to cout
   Context ctxt(&out);
   ast->print_asm(ctxt);
+  delete ast;
   return 0;
 }

@@ -3,7 +3,6 @@
   extern const Node *g_root; // A way of getting the AST out
   
   #include "tokens.hpp"
-  #include "iostream"
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so

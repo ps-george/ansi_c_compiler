@@ -32,7 +32,12 @@ protected:
   // variables defined by children
   // def-use analysis
 public:
-  virtual ~Node(){};
+  virtual ~Node(){
+    for (auto &it:getChildren()){
+      std::cerr << "Deleting " << it->getNodeType() << std::endl;
+      delete it;
+    }
+  };
   Node();
   //! Getters
   virtual std::string getNodeType() const;  //! Return the type of the node
