@@ -9,19 +9,14 @@
 class Variable : public Expression {
 private:
   std::string id;
-  mutable const Type * type;
   mutable int ptr = 0;
   // Variable will have a type
 public:
   virtual ~Variable(){};
 
-  Variable(const std::string* _id, const Type * t) : id(*_id), type(t) {};
-  Variable(const std::string* _id) : id(*_id) { type = new Type(Int);};
-  Variable(const std::string* _id, const Type * t, bool p) : id(*_id), type(t), ptr(p) {};
-  Variable(const std::string* _id, bool p) : id(*_id), ptr(p) { type = new Type(Int);};
+  Variable(const std::string* _id) : id(*_id) {};
+  Variable(const std::string* _id, bool p) : id(*_id), ptr(p) { };
   
-  virtual std::string getType() const;
-  virtual std::vector<std::string> getTypeVec() const;
   virtual std::string getNodeType() const override;
   virtual std::string getId() const override;
   virtual std::string getHeader() const override;

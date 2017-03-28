@@ -13,16 +13,11 @@
 std::string Variable::getNodeType() const { return "Variable"; }
 std::string Parameter::getNodeType() const { return "Parameter"; }
 
-std::string Variable::getType() const { return type->getTypename(); }
-
-std::vector<std::string> Variable::getTypeVec() const { return type->getTypeVec(); }
-
 std::string Variable::getId() const { return id; };
 
 std::string Variable::getHeader() const { 
   return "<" + getNodeType() 
-             + " id=\"" + getId() 
-             + "\" type=\"" + getType()
+             + " id=\"" + getId()
              + "\" " + Node::getDeets() + "/>";
 }
 
