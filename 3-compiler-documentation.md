@@ -16,7 +16,7 @@ Overview Diagram
 
 _Add a diagram of your AST, which is designed to *usefully* communicate
 the *important* properties of the AST._
-
+  
 ![my-ast.png](my-ast.png)
 
 Description
@@ -38,6 +38,8 @@ _Give two strengths or capabilites of your AST, using 50 words or less for each 
 
 ### Strength 1
 
+
+
 _50 words or less_
 
 ### Strength 2
@@ -51,7 +53,7 @@ _Give two limitations of your AST, using 50 words or less for each one_.
 
 ### Limitation 1
 
-Biggest limitation: my AST is too generic. I was unable to refer to specific classes and had to use const Node \*s for most class constructors/arguments, which meant later on either casting or using defining methods in Node was required in order to access the functionality I needed.
+Biggest limitation: my AST is too generic. I was unable to refer to specific classes and had to use const Node \*s for most class constructors/arguments, which meant later on either casting or defining methods in Node was required in order to access the functionality I needed.
 
 _50 words or less_
 
@@ -98,7 +100,7 @@ _Give two limitations of your binding approach, using 50 words or less for each 
 
 ### Limitation 1
 
-
+Every use of any variable involves loading them from the stack into a register, and then storing them back on the stack. This is probably the slowest possible way to manage variable binding, but the was very easy to implement.
 
 _50 words or less_
 
@@ -140,6 +142,8 @@ _50 words or fewer_
 
 ### Improvement 2
 
+Writing more helper functions for the different instructions or repeated actions that are used, to compartmentalise their complexity. For example, an `add(ctxt,left,right,dest)` function would help alleviate the issues I was having trying to figure out how to implement the different types of add (signed, unsigned, floating point).
+
 _50 words or fewer_
 
 
@@ -175,8 +179,12 @@ too general to answer._
 
 ### Feedback 1
 
+
+
 _20 words or fewer_
 
 ### Feedback 2
+
+
 
 _20 words or fewer_
