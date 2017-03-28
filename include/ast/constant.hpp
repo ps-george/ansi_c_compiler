@@ -18,7 +18,7 @@ public:
   virtual std::string getHeader() const override {
     return "<" + getNodeType() + " value=\"" + valstr + "\" " + getDeets() + " />";
   }
-  
+  virtual std::string getId() const override {return valstr;};
   virtual std::vector<const Node *> getChildren() const override {return {};}
   // virtual void print_c() const override;
   virtual void print_xml(std::ostream &stream) const override;

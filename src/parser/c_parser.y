@@ -349,12 +349,11 @@ initializer
   : assignment-expression { $$ = $1; }
   
 declarator
-  : '*' direct-declarator { $$ = $2; ((const Declarator *)$$)->setPtr(); std::cerr << "<Setting ptr..." << $$->getPtr() << "/>" <<std::endl; }
-  | direct-declarator { $$ = $1; }
+  : direct-declarator { $$ = $1; }
+  | '*' direct-declarator { $$ = $2; ((const Declarator *)$$)->setPtr(); std::cerr << "<Setting ptr..." << $$->getPtr() << "/>" <<std::endl; }
 
 direct-declarator 
-  : 
-   '(' declarator ')' { $$ = $2; } // declarator can be surrounded by any number of brackets 
+  : '(' declarator ')' { $$ = $2; } // declarator can be surrounded by any number of brackets 
   | direct-declarator '[' constant-expression ']' { $$ = new ArrayDeclarator($1, $3); } // Array with fixed size
   | direct-declarator '[' ']' { $$ = new ArrayDeclarator($1, new Constant("-1")); }   // Array without size specified
   | direct-declarator '(' ')' { $$ = new FunctionDeclarator($1, new List({})); }                // Function with no arguments

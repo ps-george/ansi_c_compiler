@@ -77,6 +77,27 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
   return ctxt;
 }
 
+Context SquareOperator::print_asm(Context ctxt, int d) const {
+  // Evaluate the expression into a REGISTER
+  //ctxt = arg->print_asm(ctxt,8);
+  int index = 0;
+  if (arg->getNodeType()=="IntConstant"){
+    index = std::stoi(arg->getId(),0,0);
+  }
+  else{
+    ctxt = arg->print_asm(ctxt,8);
+  }
+  // Load the value of offset from $fp
+  //int offset = ctxt.getVarOffset(child->getId());
+  // Load ptr value from a
+  ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
+  ctxt.ss() << "\tsll\t$8,$8,2" << std::endl;
+  ctxt.ss() << "\taddu\t$" << d << ",$8,$" << d << std::endl;
+  //ctxt.ss() << "\taddu\t$" << d << ",$fp,$" << d <<std::endl;
+  ctxt.ss() << "\tlw\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
+  return ctxt;
+}
+
 Context CastExpression::print_asm(Context ctxt, int d) const {
   
   return ctxt;

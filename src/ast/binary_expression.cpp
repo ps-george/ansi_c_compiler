@@ -159,7 +159,13 @@ Context BinaryExpression::print_asm(Context ctxt, int d) const {
 Context AssignmentExpression::print_asm(Context ctxt, int d) const {
   if (op == "=") {
     getRight()->print_asm(ctxt);
-    ctxt.storeVariable(getLeft()->getId(), 2);
+    if (getLeft()->getNodeType()=="SquareOperator"){
+      getLeft()->getChildren()[1]->print_asm(ctxt,8);
+      ctxt.storeVariable(getLeft()->getId(),8,2);
+    }
+    else {
+      ctxt.storeVariable(getLeft()->getId(), 2);
+    }
     return ctxt;
   } else {
     // Store left in $3

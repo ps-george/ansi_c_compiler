@@ -47,6 +47,7 @@ public:
   Var getVariable(std::string id);
   void loadVariable(std::string id, int d);
   void storeVariable(std::string id, int d = 2);
+  void storeVariable(std::string id, int s, int d);
   int getVarOffset(std::string id);
   
   void addString(std::string s);

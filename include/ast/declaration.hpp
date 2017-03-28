@@ -16,6 +16,7 @@ public:
   virtual std::string getId() const override { return child->getId(); };
   virtual void setPtr() const { ptr = 1; }
   virtual int getPtr() const override { return ptr; }
+  virtual void setChildDefs() const override;
   virtual void print_xml(std::ostream &stream) const override;
   // virtual void print_c() const override;
   virtual std::vector<const Node *> getChildren() const override { return {child}; }
@@ -37,8 +38,11 @@ public:
 class ArrayDeclarator : public Declarator {
 const Expression * e;
 public:
-  ArrayDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {};
+  ArrayDeclarator(const Node * _child, const Expression * _e) : Declarator(_child), e(_e) {
+    setPtr();
+  };
   virtual std::string getNodeType() const override;
+  virtual void setChildDefs() const override;
 };
 
 //! Function declarator

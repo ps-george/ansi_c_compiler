@@ -1,10 +1,12 @@
+// Basic array initialisation (static) and access using constants and variables and []
+
 int main(){
-  int a[5];
-  a[0] = 3;
-  a[1] = 4;
-  a[2] = 5;
-  a[3] = 6;
-  a[4] = 7;
+  int b = 1, c=2;
+  int a[6];
+  a[1] = 1;
+  a[b+c] = 3;
+  a[2] = 2;
+  a[4] = 4;
   
   return a[1];
 }

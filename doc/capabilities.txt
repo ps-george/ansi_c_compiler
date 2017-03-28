@@ -1,5 +1,5 @@
 Tested features:
-1.	int main(){
+1.	 Basic array initialisation (static) and access using constants and variables and []
 2.	 Assign add '+=' op basic test
 3.	 Declaration and then assignment of variables
 4.	 Declaration and then assignment of variables inside a function

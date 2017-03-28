@@ -62,10 +62,21 @@ void Context::storeVariable(std::string id, int d){
     ss() << "\tlw\t$2,%got(" << id <<")($28)" <<std::endl;
     // Store 17 into the thingy
     ss() << "\tsw\t$17,0($2)" << std::endl;
-  } else {
+  }
+  else {
     ss() << "\tsw\t$" << d <<"," << v.offset << "($fp)" << " # store var: " << id << std::endl;
   }
   return;
+}
+
+//! Storing a variable using array acccess operator
+//! s is source register (?)
+void Context::storeVariable(std::string id, int s, int d){
+  Var v = getVariable(id);
+  ss() << "\tsll\t$" << s << ",$" << s << ",2" << std::endl;
+  ss() << "\tlw\t$10" << "," << getVarOffset(id) << "($fp)" << std::endl;
+  ss() << "\taddu\t$10,$" << s << ",$10"<< std::endl;
+  ss() << "\tsw\t$" << d << ",0" << "($10)" << " # store var: " << id << std::endl;
 }
 
 std::ostream& Context::ss(){

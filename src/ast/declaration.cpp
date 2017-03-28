@@ -4,6 +4,7 @@
  *
  */
 
+#include "iostream"
 #include "codegen_helpers.hpp"
 #include "ast/declaration.hpp"
 #include "ast/variable.hpp"
@@ -43,6 +44,10 @@ std::vector<const Node *> Declaration::getChildren () const {
   return dlist->getChildren();
 }
 
+void Declarator::setChildDefs() const {
+  childDefs.push_back(getId());
+}
+
 std::vector<std::string> Declaration::getChildDefs() const {
  return childDefs;
 }
@@ -59,13 +64,23 @@ const List * FunctionDeclarator::getParams() const {
 void Declaration::setChildDefs() const {
   // For each of then declarators that are children of this
   for (auto &it : getChildren()){
-    // Get the name of the thing being declared
-    // std::cerr <<  "Found declaration of: " << it->getId() << std::endl;
-    childDefs.push_back(it->getId());
+    it->setChildDefs();
+    std::vector<std::string> tmp = it->getChildDefs(); // Sets the metadata by getting the childDefs of it's children
+    childDefs.insert(childDefs.end(), tmp.begin(), tmp.end());
   }
 }
 
-
+void ArrayDeclarator::setChildDefs() const {
+  std::string id = getId();
+  childDefs.push_back(id);
+  if (e->getNodeType()=="IntConstant"){
+    std::cerr << e->getId() << std::endl;
+    int val = std::stoi(e->getId(),0,0);
+    for (int i = 0; i<val;i++){
+      childDefs.push_back(id+"["+std::to_string(i)+"]");
+    }
+  }
+}
 
 /*
  * PRINT_ASM
@@ -77,11 +92,19 @@ Context Declaration::print_asm(Context ctxt, int d) const{
   // ctxt.ss() << "## " << getNodeType() << std::endl;
   if (dlist->getChildren().size()){
     for (auto &it : dlist->getChildren()){
-      ctxt.ss() << "## " << it->getNodeType() << ", " << it->getId() << ", " << it->getPtr() << std::endl;
+      std::string id = it->getId();
+      ctxt.ss() << "## " << it->getNodeType() << ", " << id << ", " << it->getPtr() << std::endl;
       
-      ctxt.ss() << "# assign variable " << it->getId() << std::endl;
-      ctxt.assignVariable(it->getId(), type->getTypename());
-      
+      ctxt.ss() << "# assign variable " << id << std::endl;
+      if (it->getPtr()){
+        ctxt.assignVariable(id, type->getTypename(),0,1);
+        int offset = ctxt.getVarOffset(id);
+        ctxt.ss() << "\taddiu\t$8,$fp," << offset + 4 << std::endl;
+        ctxt.ss() << "\tsw\t$8," << offset << "($fp)" << std::endl;
+      }
+      else{
+        ctxt.assignVariable(id, type->getTypename());
+      }
       //! \todo this is a hack to get InitDeclarator to work, could be more graceful
       if (it->getNodeType()=="InitDeclarator"){
         it->print_asm(ctxt);

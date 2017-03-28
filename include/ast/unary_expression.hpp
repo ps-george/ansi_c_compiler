@@ -16,6 +16,7 @@ public:
   UnaryExpression(const Expression * c) : child(c) {
     op = "";
   };
+  virtual std::vector<const Node *> getChildren() const override { return {child};}
   virtual std::string getNodeType() const override;
   // virtual void print_c() const;
 };
@@ -67,7 +68,11 @@ private:
 public:
   SquareOperator(const Expression * _expr) : PostfixExpression(_expr) {};
   SquareOperator(const Expression * _expr, const Expression * _arg) : PostfixExpression(_expr), arg(_arg) {};
-};  
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
+  virtual std::string getNodeType() const override { return "SquareOperator";} ;
+  virtual std::vector<const Node *> getChildren() const override { return {child,arg};}
+  virtual std::string getId() const override { return child->getId(); };
+};
 
 //! Dot and arrow operators
 class StructOperator : public PostfixExpression {
