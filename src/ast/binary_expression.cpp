@@ -160,8 +160,9 @@ Context AssignmentExpression::print_asm(Context ctxt, int d) const {
   if (op == "=") {
     getRight()->print_asm(ctxt);
     if (getLeft()->getNodeType()=="SquareOperator"){
+      ctxt.ss() << "\tmove\t$11,$" << 2 << std::endl;
       getLeft()->getChildren()[1]->print_asm(ctxt,8);
-      ctxt.storeVariable(getLeft()->getId(),8,2);
+      ctxt.storeVariable(getLeft()->getId(),8,11);
     }
     else {
       ctxt.storeVariable(getLeft()->getId(), 2);

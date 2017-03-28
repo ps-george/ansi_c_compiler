@@ -1,5 +1,5 @@
 int main(){
   char * a = "hi";
   
-  return a[0];
+  return a[1];
 }
