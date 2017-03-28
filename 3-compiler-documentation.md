@@ -17,17 +17,6 @@ Overview Diagram
 _Add a diagram of your AST, which is designed to *usefully* communicate
 the *important* properties of the AST._
 
-- _Use whatever level of detail you feel is appropriate_.
-
-- _You do not need to include every part of the AST, and you
-  don't need to include every class_.
-
-- _Zooming should not be necessary to understand it_.
-
-The file should be called `my-ast.png`. The software used
-to generate the png is up to you, or you can draw it by hand
-and scan it if you wish (though beware the eventual file-size).
-
 ![my-ast.png](my-ast.png)
 
 Description

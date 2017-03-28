@@ -7,7 +7,7 @@
 class DeclarBase : public Node {};
 
 //! A declarator is what we are declaring; it is essentially just an ID when it follows a specifier.
-class Declarator : public Node {
+class Declarator : public DeclarBase {
 const Node * child;
 mutable int ptr = 0;
 public:
@@ -60,7 +60,7 @@ public:
 //! \brief A declaration of a variable
 //! 
 //! A declaration has a type and a list of declared things
-class Declaration : public Node {
+class Declaration : public DeclarBase {
 private:
   const Type * type;
   const List * dlist;
