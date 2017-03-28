@@ -86,8 +86,6 @@ void ArrayDeclarator::setChildDefs() const {
 
 // Something has been declared
 Context Declaration::print_asm(Context ctxt, int d) const{
-  // This works for shadowing, but not for InitDeclarators
-  // ctxt.ss() << "## " << getNodeType() << std::endl;
   if (dlist->getChildren().size()){
     for (auto &it : dlist->getChildren()){
       std::string id = it->getId();
@@ -113,7 +111,6 @@ Context ArrayDeclarator::print_asm(Context ctxt, int d) const{
   int offset = ctxt.getVarOffset(getId());
   ctxt.ss() << "\taddiu\t$8,$fp," << offset + 4 << std::endl;
   ctxt.ss() << "\tsw\t$8," << offset << "($fp)" << std::endl;
-  ctxt = Declarator::print_asm(ctxt,d);
   int size = std::stoi(e->getId(),0,0);
   ctxt.setOffset(ctxt.getOffset() + 4*size);
   return ctxt;
@@ -124,7 +121,6 @@ Context Declarator::print_asm(Context ctxt, int d) const{
 }
 
 Context InitDeclarator::print_asm(Context ctxt, int d) const{
-  ctxt = Declarator::print_asm(ctxt,d);
   e->print_asm(ctxt);
   if (getPtr()){
     ctxt.setVarPtr(getId());
