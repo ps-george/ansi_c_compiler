@@ -32,34 +32,34 @@ std::vector<std::string> Type::getTypeVec() const {
   std::stringstream ss;
   switch((Type_specifier)t){
     case None:
-      v.push_back("None");
+      v.push_back("none");
       break; 
     case Int: 
-      v.push_back("Int");
+      v.push_back("int");
       break; 
     case Void: 
-      v.push_back("Void");
+      v.push_back("void");
       break; 
     case Char: 
-      v.push_back("Char");
+      v.push_back("char");
       break; 
     case Float: 
-      v.push_back("Float");
+      v.push_back("float");
       break; 
     case Double: 
-      v.push_back("Double");
+      v.push_back("double");
       break;
     case LongDouble: 
-      v.push_back("LongDouble");
+      v.push_back("longdouble");
       break;
     case Short: 
-      v.push_back("Short");
+      v.push_back("short");
       break; 
     case Long: 
-      v.push_back("Long");
+      v.push_back("long");
       break; 
     case LongLong: 
-      v.push_back("LongLong");
+      v.push_back("longlong");
       break; 
   }
   ss << std::hex << "0x" << s;
@@ -68,9 +68,9 @@ std::vector<std::string> Type::getTypeVec() const {
   v.push_back(ss.str());
   v.push_back(ss.str());
   if (sign){
-    v.push_back("Signed");
+    v.push_back("signed");
   } else {
-    v.push_back("Unsigned");
+    v.push_back("unsigned");
   }
   return v;
 }
@@ -79,43 +79,43 @@ std::string Type::getTypename() const {
   std::stringstream ss;
   switch((Type_specifier)t){
     case None      :
-      ss << "None";
+      ss << "none";
       break; 
     case Int       : 
-      ss << "Int";
+      ss << "int";
       break; 
     case Void      : 
-      ss << "Void";
+      ss << "void";
       break; 
     case Char      : 
-      ss << "Char";
+      ss << "char";
       break; 
     case Float     : 
-      ss << "Float";
+      ss << "float";
       break; 
     case Double    : 
-      ss << "Double";
+      ss << "double";
       break;
     case LongDouble: 
-      ss << "LongDouble";
+      ss << "longdouble";
       break;
     case Short     : 
-      ss << "Short";
+      ss << "short";
       break; 
     case Long      : 
-      ss << "Long";
+      ss << "long";
       break; 
     case LongLong  : 
-      ss << "LongLong";
+      ss << "longlong";
       break; 
   }
   ss << std::hex << " 0x" << s;
   ss << std::hex << " 0x" << q << std::dec;
   
   if (sign){
-    ss << " Signed";
+    ss << " signed";
   } else {
-    ss << " Unsigned";
+    ss << " unsigned";
   }
   return ss.str();
 }

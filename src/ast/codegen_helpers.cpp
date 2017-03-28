@@ -30,6 +30,10 @@ int Context::getVarOffset(std::string id){
   return bindings.at(id).offset;
 }
 
+int Context::isPtr(std::string id){ 
+  return (int)bindings.at(id).ptr; 
+}
+
 int Context::getAddress(const Node * in, int d){
   std::string id = in->getId();
   int s = 14;

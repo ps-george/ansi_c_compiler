@@ -16,6 +16,9 @@ public:
   UnaryExpression(const Expression * c) : child(c) {
     op = "";
   };
+  UnaryExpression(std::string* _op) : op(*_op) {
+    child = new EmptyExpression();
+  };
   virtual std::vector<const Node *> getChildren() const override { return {child};}
   virtual std::string getNodeType() const override;
   // virtual void print_c() const;
@@ -34,9 +37,19 @@ public:
 
 //! PostfixExpression
 class PrefixExpression : public UnaryExpression {
+std::string t;
 public:
-  PrefixExpression(const Expression * c, std::string* _op) : UnaryExpression(c,_op) {};
-  PrefixExpression(const Expression * c) : UnaryExpression(c) {};
+  PrefixExpression(const Expression * c, std::string* _op) : UnaryExpression(c,_op) {
+    t = "";
+  };
+  PrefixExpression(const Expression * c) : UnaryExpression(c) {
+    t = "";
+  };
+  PrefixExpression(std::string* _op) : UnaryExpression(_op) {
+    t = "";
+  };
+  PrefixExpression(std::string* _t, std::string* _op) : UnaryExpression(_op), t(*_t) {};
+  std::string getT() const {return t; }
   virtual std::string getNodeType() const override;
   virtual Context print_asm(Context ctxt, int d = 2) const override;
 };

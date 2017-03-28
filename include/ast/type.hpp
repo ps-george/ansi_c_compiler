@@ -96,6 +96,7 @@ public:
   unsigned getS() const { return s; }
   bool getSign() const { return sign; }
   void setPtr() const;
+  int getPtr() const { return ptr; };
 };
 
 #endif

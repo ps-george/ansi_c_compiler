@@ -47,6 +47,8 @@ public:
   void assignVariable(std::string id, std::string type, bool glob);
   void assignVariable(std::string id, std::string type, bool glob, bool ptr);
   void setVarPtr(std::string id);
+  int isPtr(std::string id);
+  
   Var getVariable(std::string id);
   void loadVariable(std::string id, int d);
   void storeVariable(std::string id, int d = 2);

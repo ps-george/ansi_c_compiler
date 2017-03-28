@@ -98,15 +98,30 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
     ctxt.ss() << "\tsgeu\t$" << d << ",$0,$" << d << " # if 0 is less than " << std::endl;
   }
   else if (op=="sizeof"){
+    std::string type = getT();
+    int ptr = 0;
+    if (type==""){
+      type = ctxt.getVarType(child->getId());
+      ptr = ctxt.isPtr(child->getId());
+    }
     
-    std::string type = ctxt.getVarType(child->getId());
     ctxt.ss() << "# sizeof(" << type << ")" << std::endl;
-    int size = 4;
-    if (type=="Double"){
+    size = 4;
+    
+    if (ptr){
+      size = 4;
+    }
+    else if (type=="double"){
       size = 8;
     }
-    else if (type=="Char"){
+    else if (type=="short"){
+      size = 2;
+    }
+    else if (type=="char" || type=="void"){
       size = 1;
+    }
+    else {
+      size = 4;
     }
     ctxt.ss() << "\tli\t$" << d << "," << size << std::endl;
   }
@@ -115,6 +130,7 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
   }
   return ctxt;
 }
+
 
 Context SquareOperator::print_asm(Context ctxt, int d) const {
   // Evaluate the expression into a REGISTER
@@ -133,7 +149,7 @@ Context SquareOperator::print_asm(Context ctxt, int d) const {
   std::string vartype = ctxt.getVarType(child->getId());
   ctxt.ss() << "\t# Square operator, vartype: " << vartype << std::endl;
   ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
-  if (vartype=="Char"){
+  if (vartype=="char"){
     ctxt.ss() << "\taddu\t$" << d << ",$8,$" << d << std::endl;
     ctxt.ss() << "\tlb\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
   }
