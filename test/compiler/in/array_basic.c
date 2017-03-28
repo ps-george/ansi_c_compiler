@@ -5,9 +5,9 @@ int main(){
   int a[6];
   a[0] = 7;
   a[1] = 1;
-  a[b+c] = 3;
+  a[b+c+1] = 3;
   a[2] = 2;
-  a[4] = 4;
+  a[3] = 4;
   
-  return a[b+c];
+  return a[4];
 }

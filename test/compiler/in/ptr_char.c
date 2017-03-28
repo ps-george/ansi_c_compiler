@@ -1,5 +1,7 @@
+// Access first character in cstr
+
 int main(){
   char * a = "hi";
   
-  return a[1];
+  return a[0];
 }

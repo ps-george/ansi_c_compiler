@@ -51,16 +51,17 @@ Tested features:
 50.	 While loop condition false to begin with
 51.	 While loop initial condition is false
 52.	 While loop implementing multiplication with addition and subtraction
-53.	int main(){
-54.	int main(){
-55.	 IfElse using == operator else branch
-56.	 IfElse many times using == operator
-57.	 Switch statement with char
-58.	 Switch statement with integer
-59.	int main(){
-60.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
-61.	! Char is dealt with correctly
-62.	 Post simple
-63.	 Post-increment simple
-64.	 Pre-decrement simple
-65.	 Preincrement simple
+53.	 Access second character in cstr
+54.	 Access first character in cstr
+55.	 Get address using &, dereference pointer but no offset thingy (*a +4 or a[]+4)
+56.	 IfElse using == operator else branch
+57.	 IfElse many times using == operator
+58.	 Switch statement with char
+59.	 Switch statement with integer
+60.	 Check if char *s are equal, should use strncomp
+61.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
+62.	! Char is dealt with correctly
+63.	 Post simple
+64.	 Post-increment simple
+65.	 Pre-decrement simple
+66.	 Preincrement simple

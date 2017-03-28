@@ -90,17 +90,18 @@ Context SquareOperator::print_asm(Context ctxt, int d) const {
   // Load the value of offset from $fp
   //int offset = ctxt.getVarOffset(child->getId());
   // Load ptr value from a
-  ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
-  ctxt.ss() << "\tsll\t$8,$8,2" << std::endl;
-  ctxt.ss() << "\taddu\t$" << d << ",$8,$" << d << std::endl;
   
-  //ctxt.ss() << "\taddu\t$" << d << ",$fp,$" << d <<std::endl;
-  ctxt.ss() << "\t# Vartype: " << ctxt.getVarType(child->getId()) << std::endl;
-  if (ctxt.getVarType(child->getId())=="Char"){
+  std::string vartype = ctxt.getVarType(child->getId());
+  ctxt.ss() << "\t# Square operator, vartype: " << vartype << std::endl;
+  ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
+  if (vartype=="Char"){
+    ctxt.ss() << "\taddu\t$" << d << ",$8,$" << d << std::endl;
     ctxt.ss() << "\tlb\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
   }
   else{
-    ctxt.ss() << "\tlw\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
+    ctxt.ss() << "\tsll\t$8,$8,2" << std::endl;
+    ctxt.ss() << "\taddu\t$" << d << ",$8,$" << d << std::endl;
+    ctxt.ss() << "\tlw\t$" << d << ",0" << "($"<<d<<")" << std::endl;
   }
   
   return ctxt;
