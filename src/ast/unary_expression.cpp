@@ -54,25 +54,33 @@ Context FunctionCall::print_asm(Context ctxt, int d) const {
 }
 
 Context PrefixExpression::print_asm(Context ctxt, int d) const {
+  
+  int size = 1;
   if (op=="++"){
+    ctxt.ss() << "#" << child->getId() << std::endl;
+    Var v = ctxt.getVariable(child->getId());
+    if (v.ptr){
+      size = 4;
+    }
     child->print_asm(ctxt,d); // Loads child into $2
-    ctxt.ss() << "\tadd\t$" << d << ",$" << d << ",1" << " # preincrement" << std::endl;
+    ctxt.ss() << "\taddu\t$" << d << ",$" << d << "," << size << " # preincrement" << std::endl;
     // Store it back again
     
     ctxt.storeVariable(child->getId(),d);
   }
   else if (op=="--"){
     child->print_asm(ctxt,d); // Loads child into $2
-    ctxt.ss() << "\tsub\t$" << d <<",$" << d << ",1" << " # predecrement" << std::endl;
+    ctxt.ss() << "\tsub\t$" << d <<",$" << d << "," << size << " # predecrement" << std::endl;
     // Store it back again
     ctxt.storeVariable(child->getId(),d);
   }
   else if (op=="&"){
-    ctxt.ss() << "\taddiu\t$" << d << ",$fp," << ctxt.getVarOffset(child->getId()) << std::endl;
+    ctxt.getAddress(child, d);
   }
   else if (op=="*"){
-    ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
-    ctxt.ss() << "\tlw\t$" << d << ",0($" << d << ")" << std::endl;
+    child->print_asm(ctxt,d);
+    // ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
+    ctxt.ss() << "\tlw\t$" << d << ",($" << d << ")" << std::endl;
   }
   else if (op=="+"){
     child->print_asm(ctxt,d);
@@ -88,6 +96,9 @@ Context PrefixExpression::print_asm(Context ctxt, int d) const {
   else if (op=="!"){
     child->print_asm(ctxt,d);
     ctxt.ss() << "\tsgeu\t $" << d << ",$0,$" << d << " # if 0 is less than " << std::endl;
+  }
+  else {
+    ctxt.ss() << "# Prefix expression, op is \'" << op << "\'" << std::endl;
   }
   return ctxt;
 }
@@ -128,15 +139,20 @@ Context CastExpression::print_asm(Context ctxt, int d) const {
 }
 
 Context PostfixExpression::print_asm(Context ctxt, int d) const {
+  int size = 1;
+  Var v = ctxt.getVariable(child->getId());
+  if (v.ptr){
+    size = 4;
+  }
   if (op=="++"){
     child->print_asm(ctxt,d); // Loads child into $2
-    ctxt.ss() << "\tadd\t$4, $" << d << ",1" << " # postincrement" << std::endl;
+    ctxt.ss() << "\tadd\t$4, $" << d << "," << size << " # postincrement" << std::endl;
     // Store it back again
     ctxt.storeVariable(child->getId(),4);
   }
   else if (op=="--"){
     child->print_asm(ctxt,d); // Loads child into $2
-    ctxt.ss() << "\tsub\t$4, $" << d << ",1" << " # postdecrement" << std::endl;
+    ctxt.ss() << "\tsub\t$4, $" << d << "," << size << " # postdecrement" << std::endl;
     // Store it back again
     ctxt.storeVariable(child->getId(),4);
   }

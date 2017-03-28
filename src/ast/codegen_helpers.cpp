@@ -1,6 +1,7 @@
 #include "codegen_helpers.hpp"
 #include "iostream"
 #include "stdexcept"
+#include "ast/unary_expression.hpp"
 
 int UNIQ_GEN = 0;
 
@@ -28,6 +29,22 @@ void Context::createStrings(){
 int Context::getVarOffset(std::string id){
   return bindings.at(id).offset;
 }
+
+int Context::getAddress(const Node * in, int d){
+  std::string id = in->getId();
+  int s = 14;
+  if (in->getNodeType() == "SquareOperator"){
+    // Evaluate the expression in the square operator into a certain register
+    ((const SquareOperator *)in)->getChildren()[1]->print_asm(*this, 14);
+    ss() << "\tsll\t$" << s << ",$" << s << ",2" << std::endl;
+    ss() << "\taddu\t$" << d <<",$" << s << ",$fp"<< std::endl;
+    ss() << "\taddi\t$" << d << ",$fp," << getVarOffset(id) + 4 << std::endl;
+  }
+  else{
+    ss() << "\taddiu\t$"<< d << ",$fp," << getVarOffset(id) << std::endl;
+  }
+  return getVarOffset(in->getId());
+};
 
 std::string Context::getVarType(std::string id){
   return bindings.at(id).type;

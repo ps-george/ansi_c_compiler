@@ -7,6 +7,8 @@
 #include <map>
 #include "codegen_helpers.hpp"
 
+class Context;
+
 //! Abstract base class for ast node
 class Node {
 private:

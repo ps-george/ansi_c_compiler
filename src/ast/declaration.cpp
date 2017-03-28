@@ -95,22 +95,34 @@ Context Declaration::print_asm(Context ctxt, int d) const{
       std::string id = it->getId();
       ctxt.ss() << "## " << it->getNodeType() << ", " << id << ", " << it->getPtr() << std::endl;
       
-      ctxt.ss() << "# assign variable " << id << std::endl;
-      if (it->getPtr()){
+      ctxt.ss() << "# assign variable " << id;
+      if (it->getPtr() || getPtr()){
+        ctxt.ss() << " is pointer" << std::endl;
         ctxt.assignVariable(id, type->getTypeVec()[0],0,1);
         int offset = ctxt.getVarOffset(id);
         ctxt.ss() << "\taddiu\t$8,$fp," << offset + 4 << std::endl;
         ctxt.ss() << "\tsw\t$8," << offset << "($fp)" << std::endl;
+        if (it->getNodeType()=="ArrayDeclarator"){
+          ctxt = it->print_asm(ctxt);
+        }
       }
       else{
+        ctxt.ss() << " is not pointer" << std::endl;
         ctxt.assignVariable(id, type->getTypeVec()[0]);
       }
       //! \todo this is a hack to get InitDeclarator to work, could be more graceful
       if (it->getNodeType()=="InitDeclarator"){
-        it->print_asm(ctxt);
+        ctxt = it->print_asm(ctxt);
       }
     }
   }
+  return ctxt;
+}
+
+Context ArrayDeclarator::print_asm(Context ctxt, int d) const{
+  // For each of the things in the brackets, add 4 to the offset
+  int size = std::stoi(e->getId(),0,0);
+  ctxt.setOffset(ctxt.getOffset() + 4*size);
   return ctxt;
 }
 
@@ -122,7 +134,6 @@ Context Declarator::print_asm(Context ctxt, int d) const{
 Context InitDeclarator::print_asm(Context ctxt, int d) const{
   e->print_asm(ctxt);
   if (getPtr()){
-    ctxt.ss() << "# hi " << std::endl;
     ctxt.setVarPtr(getId());
   }
   ctxt.storeVariable(getId());

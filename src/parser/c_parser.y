@@ -350,14 +350,14 @@ storage-class-specifier
 
 init-declarator
 	: declarator { $$ = $1; }
-	| declarator '=' initializer { $$ = new InitDeclarator($1,$3); }
+	| declarator '=' initializer { $$ = new InitDeclarator($1,$3); if ($1->getPtr()){$$->setPtr();} }
 
 initializer
   : assignment-expression { $$ = $1; }
   
 declarator
-  : direct-declarator { $$ = $1; }
-  | '*' direct-declarator { $$ = $2; ((const Declarator *)$$)->setPtr(); std::cerr << "<Setting ptr..." << $$->getPtr() << "/>" <<std::endl; }
+  :'*' direct-declarator { $$ = $2; ((const Declarator *)$$)->setPtr(); std::cerr << "<Setting ptr..." << $$->getPtr() << "/>" <<std::endl; }
+  | direct-declarator { $$ = $1; }
 
 direct-declarator 
   : '(' declarator ')' { $$ = $2; } // declarator can be surrounded by any number of brackets 

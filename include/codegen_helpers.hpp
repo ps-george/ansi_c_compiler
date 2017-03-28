@@ -8,8 +8,11 @@
 
 extern int UNIQ_GEN;
 
+class Node;
+
 #include <map>
 #include <stdio.h>
+#include "ast/node.hpp"
 
 std::string makeLabel(std::string base);
 std::string getUnq();
@@ -68,6 +71,7 @@ public:
   // Set offset
   void setOffset(int i){ offset = i;}
   int getOffset() { return offset; }
+  int getAddress(const Node * in, int d =2);
   //void setSwitch(std::string sw) {cs = sw; }
   //std::string getSwitch() { return cs; }
   
