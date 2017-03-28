@@ -29,6 +29,10 @@ int Context::getVarOffset(std::string id){
   return bindings.at(id).offset;
 }
 
+std::string Context::getVarType(std::string id){
+  return bindings.at(id).type;
+}
+
 void Context::loadVariable(std::string id, int d){
   Var v = getVariable(id);
   if (v.glob){

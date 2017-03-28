@@ -97,13 +97,13 @@ Context Declaration::print_asm(Context ctxt, int d) const{
       
       ctxt.ss() << "# assign variable " << id << std::endl;
       if (it->getPtr()){
-        ctxt.assignVariable(id, type->getTypename(),0,1);
+        ctxt.assignVariable(id, type->getTypeVec()[0],0,1);
         int offset = ctxt.getVarOffset(id);
         ctxt.ss() << "\taddiu\t$8,$fp," << offset + 4 << std::endl;
         ctxt.ss() << "\tsw\t$8," << offset << "($fp)" << std::endl;
       }
       else{
-        ctxt.assignVariable(id, type->getTypename());
+        ctxt.assignVariable(id, type->getTypeVec()[0]);
       }
       //! \todo this is a hack to get InitDeclarator to work, could be more graceful
       if (it->getNodeType()=="InitDeclarator"){

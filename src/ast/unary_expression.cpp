@@ -93,8 +93,16 @@ Context SquareOperator::print_asm(Context ctxt, int d) const {
   ctxt.ss() << "\tlw\t$" << d << "," << ctxt.getVarOffset(child->getId()) << "($fp)" << std::endl;
   ctxt.ss() << "\tsll\t$8,$8,2" << std::endl;
   ctxt.ss() << "\taddu\t$" << d << ",$8,$" << d << std::endl;
+  
   //ctxt.ss() << "\taddu\t$" << d << ",$fp,$" << d <<std::endl;
-  ctxt.ss() << "\tlw\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
+  ctxt.ss() << "\t# Vartype: " << ctxt.getVarType(child->getId()) << std::endl;
+  if (ctxt.getVarType(child->getId())=="Char"){
+    ctxt.ss() << "\tlb\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
+  }
+  else{
+    ctxt.ss() << "\tlw\t$" << d << ",0" << "($"<<d<<")" << std::endl;  
+  }
+  
   return ctxt;
 }
 
