@@ -4,64 +4,75 @@ Tested features:
 3.	 Declaration and then assignment of variables
 4.	 Declaration and then assignment of variables inside a function
 5.	 Declaration with initialisation to constant or existing variable
-6.	 Binary operator + addition (basic)
-7.	 Binary operator / division
-8.	 Binary operator * multiplication (basic)
+6.	 Sizeof operator for int, char, double
+7.	 Binary operator + addition (basic)
+8.	 Binary operator / division
 9.	 Binary operator * multiplication (basic)
-10.	 Binary operator - subtraction
-11.	 Binary operator - subtraction, with bracketing
-12.	 Binary operator &
-13.	 Binary operator | two operands returns 3
-14.	 Binary operator ^ (XOR)
-15.	 Binary operator && two operands returns 1
-16.	 Binary operator &&, false positive test. Trying to test short-circuit.
-17.	 Binary operator || two operands returns 1
-18.	 Binary operator ||, false positive test. Trying to test short-circuit.
-19.	 Binary operator == returns 0 two operands
-20.	 Binary operator == returns 1 two operands
-21.	 Binary operator == returns 0 two operands
-22.	 Binary operator >= two operands eq
-23.	 Binary operator > two operands returns 1
-24.	 Binary operator <= two operands eq
-25.	 Binary operator < two operands returns true
-26.	 Adding the return values of two one input function calls
-27.	 Function call with six input parameters
-28.	 Function call with 4 int input parameters
-29.	 Function call with loads of input parameters
-30.	 Function call with no input paramters
-31.	 Function call with expression as argument
-32.	 Recursive Fibonacci program with a silly amount of arguments
-33.	 Recursive Fibonacci program
-34.	 Function call with seven input parameters
-35.	 Function call with six input parameters
-36.	 Function call with two input parameters
-37.	 Main return constant
-38.	 Unititialised global variable
-39.	 Initialised global variable
-40.	 Scope variable shadowing
-41.	 Break out of while statement, simple test
-42.	 Break out of while statement, nested
-43.	 DEEFor loop with break
-44.	 DEEFor loop
+10.	 Binary operator * multiplication (basic)
+11.	 Binary operator - subtraction
+12.	 Binary operator - subtraction, with bracketing
+13.	 Binary operator &
+14.	 Binary operator | two operands returns 3
+15.	 Binary operator ^ (XOR)
+16.	 Binary operator && two operands returns 1
+17.	 Binary operator &&, false positive test. Trying to test short-circuit.
+18.	 Binary operator || two operands returns 1
+19.	 Binary operator ||, false positive test. Trying to test short-circuit.
+20.	 Binary operator == returns 0 two operands
+21.	 Binary operator == returns 1 two operands
+22.	 Binary operator == returns 0 two operands
+23.	 Binary operator >= two operands eq
+24.	 Binary operator > two operands returns 1
+25.	 Binary operator <= two operands eq
+26.	 Binary operator < two operands returns true
+27.	 Adding the return values of two one input function calls
+28.	 Function call with six input parameters
+29.	 Function call with 4 int input parameters
+30.	 Function call with loads of input parameters
+31.	 Function call with no input paramters
+32.	 Function call with expression as argument
+33.	 Recursive Fibonacci program with a silly amount of arguments
+34.	 Recursive Fibonacci program
+35.	 Function call with seven input parameters
+36.	 Function call with six input parameters
+37.	 Function call with two input parameters
+38.	 Return a float
+39.	 Main return constant
+40.	 Unititialised global variable
+41.	 Initialised global variable
+42.	 Scope variable shadowing
+43.	 Break out of while statement, simple test
+44.	 Break out of while statement, nested
 45.	 DEEFor loop with break
-46.	 DEFor loop
-47.	 DoWhile condition not met at the beginning
-48.	 EEEFor loop
-49.	 EEFor loop
-50.	 While loop condition false to begin with
-51.	 While loop initial condition is false
-52.	 While loop implementing multiplication with addition and subtraction
-53.	 Access second character in cstr
-54.	 Access first character in cstr
-55.	 Get address using &, dereference pointer but no offset thingy (*a +4 or a[]+4)
-56.	 IfElse using == operator else branch
-57.	 IfElse many times using == operator
-58.	 Switch statement with char
-59.	 Switch statement with integer
-60.	 Check if char *s are equal, should use strncomp
-61.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
-62.	! Char is dealt with correctly
-63.	 Post simple
-64.	 Post-increment simple
-65.	 Pre-decrement simple
-66.	 Preincrement simple
+46.	 DEEFor loop
+47.	 DEEFor loop with break
+48.	 DEFor loop
+49.	 DoWhile condition not met at the beginning
+50.	 EEEFor loop
+51.	 EEFor loop
+52.	 While loop condition false to begin with
+53.	 While loop initial condition is false
+54.	 While loop implementing multiplication with addition and subtraction
+55.	 Access second character in cstr
+56.	 Access first character in cstr
+57.	 Pointer arithmetic
+58.	 Get address using &, dereference pointer but no offset thingy (*a +4 or a[]+4)
+59.	 IfElse using == operator else branch
+60.	 IfElse many times using == operator
+61.	 Switch statement with char
+62.	 Switch statement with integer
+63.	 Check if char *s are equal, should use strncomp
+64.	 Trinary expression where the false condition is executed
+65.	 Trinary expression where the true condition is executed
+66.	 Functions and variables in ast created with correct types, not necessary dealt with but it's there
+67.	! Char is dealt with correctly
+68.	 Post simple
+69.	 Post-increment simple
+70.	 Prefix expression '~' (sign operator)
+71.	 Pre-decrement simple
+72.	 Preincrement simple
+73.	 Prefix expression '-' (sign operator)
+74.	 Prefix expression '!' (sign operator)
+75.	 Prefix expression '!' (sign operator)
+76.	 Prefix expression '!' (sign operator)
+77.	 Prefix expression '+' (sign operator)

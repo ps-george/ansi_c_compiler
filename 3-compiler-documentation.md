@@ -62,9 +62,13 @@ _Give two limitations of your AST, using 50 words or less for each one_.
 
 ### Limitation 1
 
+Biggest limitation: my AST is too generic. I was unable to refer to specific classes and had to use const Node \*s for most class constructors/arguments, which meant later on either casting or using defining methods in Node was required in order to access the functionality I needed.
+
 _50 words or less_
 
 ### Limitation 2
+
+
 
 _50 words or less_
 
@@ -105,6 +109,8 @@ _Give two limitations of your binding approach, using 50 words or less for each 
 
 ### Limitation 1
 
+
+
 _50 words or less_
 
 ### Limitation 2
@@ -139,6 +145,8 @@ _What parts of your compiler do you think could be improved?_
 
 ### Improvement 1
 
+
+
 _50 words or fewer_
 
 ### Improvement 2
@@ -152,15 +160,15 @@ Functionality (not assessed)
 Which of these features does your compiler support (insert
 an `x` to check a box):
 
-1 - [ ] Local variables
-2 - [ ] Integer arithmetic
-3 - [ ] While
-4 - [ ] IfElse
-5 - [ ] For
-6 - [ ] Function calls
-7 - [ ] Arrays
-8 - [ ] Pointers
-9 - [ ] Strings
+1 - [x] Local variables
+2 - [x] Integer arithmetic
+3 - [x] While
+4 - [x] IfElse
+5 - [x] For
+6 - [x] Function calls
+7 - [x] Arrays
+8 - [x] Pointers
+9 - [x] Strings
 10 - [ ] Structures
 11 - [ ] Floating-point
 
@@ -183,5 +191,3 @@ _20 words or fewer_
 ### Feedback 2
 
 _20 words or fewer_
-
-
