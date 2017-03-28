@@ -52,6 +52,7 @@ public:
   TrinaryExpression(const Expression * l, const Expression * m, const Expression * r)
     : left(l), middle(m), right(r) {}
   virtual std::vector<const Node *> getChildren() const override;
+  virtual Context print_asm(Context ctxt, int d = 2) const override;
 };
 
 //! Primary expression points to identifier, constant, StringLiteral or (expression)
