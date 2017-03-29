@@ -31,7 +31,7 @@ or fewer_.
 
 - _You can use code, but it is included in your budget_.
 
-Whilst constructing the AST I tried to make everything seem logical and adhering to the C89 spec. Everything inherits from Node, an abstract base class. The main offshoots as seen in the diagram are Lists, DeclarBase, Expressions, and Statements. Lists are simply wrappers around a `vector<const Node *>` and are necessary when a Node can contain any number of children. DeclarBase is a base class for Declarations and Declarators, which declare things. Function inherits directly from Node, but on reflection is more of a Declaration or Declarator, since it declares a function implementation. Expression and Statement are base classes for the number of different sub-classes that inherity from them. The Type primitive is a class which can encapsulte the various type specifiers of a declaration. I tried to keep the number of classes limited; initially I started with a class for each binary operator, but realised it was too difficult to manage so many classes. The AST I've ended up with is a blend of pure OOP, and generic programming, with OOP principles implemented up until a certain level, and generic programming from that point on.
+Whilst constructing the AST I tried to make everything seem logical and adhering to the C89 spec. Everything inherits from Node, an abstract base class. The main offshoots as seen in the diagram are Lists, DeclarBase, Expressions, and Statements. Lists are simply wrappers around a `vector<const Node *>` and are necessary when a Node can contain any number of children. DeclarBase is a base class for Declarations and Declarators, which declare things. Function inherits directly from Node, but on reflection is more of a Declaration or Declarator, since it declares a function implementation, but since it is quite a unique construct it does not matter much. Expression and Statement are base classes for the number of different sub-expression and sub-statement classes that inherit from them. The Type primitive is a class which can encapsulte the various type specifiers of a declaration. I've kept the number of classes limited; initially I started with a class for each binary operator, but realised it was too difficult to manage so many classes. The AST I've ended up with is a blend of pure OOP and generic programming, with OOP principles implemented up until a certain level, and generic programming from that point on.
 
 Strengths
 ---------
@@ -94,15 +94,15 @@ _Give two strengths or capabilites of your binding approach, using 50 words or l
 
 ### Strength 1
 
+It is extremely simple, I only keep track of offsets from the frame pointer and do not need to worry about any kind of register management since all variables will be stored on the stack and loaded from the stack when needed. Particularly useful for recursive function calls, albeit ineffecient.
 
-
-_50 words or less_
+_50 words_
 
 ### Strength 2
 
-It is easy to add or remove additional features to suit future needs. Additional member data can be added to Var, and new functions built into the API for `Context`.
+It is easy to add or remove additional features to suit future needs. Additional member data can be added to Var, and new functions built into the API for `Context`, without having to change anything else except where those features will be used.
 
-_50 words or less_
+_43 words_
 
 Limitations
 -----------
@@ -111,15 +111,15 @@ _Give two limitations of your binding approach, using 50 words or less for each 
 
 ### Limitation 1
 
-Every use of any variable involves loading them from the stack into a register, and then storing them back on the stack. This is probably the slowest possible way to manage variable binding, but the was very easy to implement.
+Every use of any variable involves loading them from the stack into a register, and then storing them back on the stack. This is probably the slowest and least memory efficient way of managing variable binding in terms of runtime speed and memory usage, but was very easy to implement.
 
-_50 words or less_
+_50 words_
 
 ### Limitation 2
 
-The strategy of using unused temporary registers when new, more complicated functionality requires more register usage will eventually lead to registers being quite randomly allocated for different uses. It would be better to plan out register usage from the beginning.
+The strategy of using unused temporary registers when new, more complicated functionality requires more register usage will eventually lead to registers being quite randomly 'reserved' for different uses, and eventually all used up. It would be better to plan out register usage from the beginning.
 
-_50 words or less_
+_45 words_
 
 
 Reflection
@@ -133,15 +133,15 @@ those identified in the AST and binding parts)?_
 
 ### Strength 1
 
-All the I/O can be easily customised. Support for input from filenames is already built in, as well as the ability to change the outwards destination by changing the initialization of `Context` to a different ostream pointer.
+All the I/O can be easily customised. Support for input from filenames is already built in, as well as the ability to change the outwards destination by changing the initialization of `Context` to a different ostream pointer. Hence it's just a couple of steps away from a real compiler's functionality.
 
-_50 words or fewer_
+_50 words_
 
 ### Strength 2
 
+The metadata built up whilst creating the tree, such as each node class having a getNodeType() function with its name, and a getDeets() function with more details allows for very useful information when debugging and pretty printing a representation of the AST that has been built.
 
-
-_50 words or fewer_
+_46 words_
 
 Scope for Improvment
 ---------------------
@@ -153,15 +153,15 @@ _What parts of your compiler do you think could be improved?_
 
 ### Improvement 1
 
+Too much 'brute force' implementation. It would be nice to be more elegant. An example of this is the creation of excess space on the stack for most functions in order to have one-size-fits-all code generation. Could check whether function is a leaf function etc. and adapt stack allocation more.
 
-
-_50 words or fewer_
+_50 words_
 
 ### Improvement 2
 
 Writing more helper functions for the different instructions or repeated actions that are used, to compartmentalise their complexity. For example, an `add(ctxt,left,right,dest)` function would help alleviate the issues I was having trying to figure out how to implement the different types of add (signed, unsigned, floating point).
 
-_50 words or fewer_
+_47 words_
 
 
 Functionality (not assessed)
