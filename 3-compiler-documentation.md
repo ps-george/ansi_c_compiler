@@ -31,7 +31,7 @@ or fewer_.
 
 - _You can use code, but it is included in your budget_.
 
-Whilst constructing the AST I tried to make everything seem logical and adhering to the C89 spec. Everything inherits from Node, an abstract base class. The main offshoots as seen in the diagram are Lists, DeclarBase, Expressions, and Statements. Lists are simply wrappers around a `vector<const Node *>` and are necessary when a Node can contain any number of children. DeclarBase is a base class for Declarations and Declarators, which declare things. Function inherits directly from Node, but on reflection is more of a Declaration or Declarator, since it declares a function implementation, but since it is quite a unique construct it does not matter much. Expression and Statement are base classes for the number of different sub-expression and sub-statement classes that inherit from them. The Type primitive is a class which can encapsulte the various type specifiers of a declaration. I've kept the number of classes limited; initially I started with a class for each binary operator, but realised it was too difficult to manage so many classes. The AST I've ended up with is a blend of pure OOP and generic programming, with OOP principles implemented up until a certain level, and generic programming from that point on.
+Whilst constructing the AST I tried to make everything seem logical and adhering to the C89 spec. Everything inherits from Node, an abstract base class. The main offshoots as seen in the diagram are Lists, DeclarBase, Expressions, and Statements. Lists are simply wrappers around a `vector<const Node *>` and are necessary when a Node can contain any number of children. DeclarBase is a base class for Declarations and Declarators, which declare things. Function inherits directly from Node, but on reflection is more of a Declaration or Declarator, since it declares a function implementation; since it is quite a unique construct it does not matter much. Expression and Statement are base classes for the number of different sub-expression and sub-statement classes that inherit from them. The Type primitive is a class which can encapsulte the various type specifiers of a declaration. I've kept the number of classes limited; initially I started with a class for each binary operator, but realised it was too difficult to manage so many classes. The AST I've ended up with is a blend of pure OOP and generic programming, with OOP principles implemented up until a certain level, and generic programming from that point on.
 
 Strengths
 ---------
@@ -46,9 +46,9 @@ _48 words_
 
 ### Strength 2
 
-A strength of the combined OOP and generic programming methods is that the OOP helps with debugging, and knowing inside which class bugs were occurring, whilst generic programming for example with `BinaryExpression` allowed me to very easily add new operators without the overhead of an entirely new class.
+A strength of the combined OOP and generic programming methods is that the OOP helps with debugging, and knowing inside which class bugs were occurring, whilst generic programming for example with `BinaryExpression` allowed me to very easily add new operators without the overhead of an entirely new class for each.
 
-_48 words_
+_50 words_
 
 Limitations
 -----------
