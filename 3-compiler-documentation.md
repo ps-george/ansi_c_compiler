@@ -31,9 +31,7 @@ or fewer_.
 
 - _You can use code, but it is included in your budget_.
 
-- Everything inherits from Node
-- 
-- 
+Whilst constructing the AST I tried to make everything seem logical and adhering to the C89 spec. Everything inherits from Node, an abstract base class. The main offshoots as seen in the diagram are Lists, DeclarBase, Expressions, and Statements. Lists are simply wrappers around a `vector<const Node *>` and are necessary when a Node can contain any number of children. DeclarBase is a base class for Declarations and Declarators, which declare things. Function inherits directly from Node, but on reflection is more of a Declaration or Declarator, since it declares a function implementation. Expression and Statement are base classes for the number of different sub-classes that inherity from them. The Type primitive is a class which can encapsulte the various type specifiers of a declaration. I tried to keep the number of classes limited; initially I started with a class for each binary operator, but realised it was too difficult to manage so many classes. The AST I've ended up with is a blend of pure OOP, and generic programming, with OOP principles implemented up until a certain level, and generic programming from that point on.
 
 Strengths
 ---------
@@ -44,13 +42,13 @@ _Give two strengths or capabilites of your AST, using 50 words or less for each 
 
 Metadata is extremely easy to add to each of the nodes in the tree. This is because of the `vector<const Node *> getChildren()` function, which adds some of the power of generic programming to my AST. Only need to write a couple functions to populate the whole tree.
 
-_50 words or less_
+_48 words_
 
 ### Strength 2
 
+A strength of the combined OOP and generic programming methods is that the OOP helps with debugging, and knowing inside which class bugs were occurring, whilst generic programming for example with `BinaryExpression` allowed me to very easily add new operators without the overhead of an entirely new class.
 
-
-_50 words or less_
+_48 words_
 
 Limitations
 -----------
@@ -59,15 +57,15 @@ _Give two limitations of your AST, using 50 words or less for each one_.
 
 ### Limitation 1
 
-Biggest limitation: my AST is too generic. I was unable to refer to specific classes and had to use const Node \*s for most class constructors/arguments, which meant later on either casting or defining methods in Node was required in order to access the functionality I needed.
+Biggest limitation: my AST is too generic. I was unable to refer to specific classes and had to use const Node \*s for most class constructors or arguments, which meant later on either casting or defining methods in Node was required in order to create the functionality I needed.
 
-_50 words or less_
+_49 words_
 
 ### Limitation 2
 
+The class hierarchy could be better thought out. Specifically, the list classes were intended to hold specific class pointers, but ended up all containing generic node pointers, and therefore were not used at all. For example, DeclarationList should also have inherited from DeclarBase and hold `vector<const Declaration *>`.
 
-
-_50 words or less_
+_48 words_
 
 
 Variable binding
