@@ -196,12 +196,12 @@ too general to answer._
 
 ### Feedback 1
 
-
+How can I balance incurring too much hacky implementation vs. not implementing anything in fear of not being future proof?
 
 _20 words or fewer_
 
 ### Feedback 2
 
-
+Is it bad practice to have `protected` class data? Is there a workaround to get the advantages without breaking encapsulation?
 
 _20 words or fewer_
