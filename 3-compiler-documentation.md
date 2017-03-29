@@ -83,9 +83,9 @@ or less_.
 - _is there a function or API for managing and looking up bindings?_
 
 For most functionalities I only used registers $2 and $3, and for example in a nested addition where $3 would get overwritten, I push and pop $3 onto the stack. In functions, $3 would get overwritten by recursive function calls, so I saved it in $16 ($s0), a _Saved Register_. Finally, for array and pointer access, since it involves a number of additional registers in order to load the correct address, I used some of the unused _Temporary Registers_ $8-$15 since they are not used elsewhere and there would be no risk of overwriting other important registers. 
-I created a class called `Context`, which is passed through to all of the `print_asm` functions. The class has an API for managing the bindings, and helper functions to help manage how the stack is used.
+I created a class called `Context` to keep track of the offset from the $fp of each variable, which is passed through to all of the `print_asm` functions by value, and only returned if it is necessary to pass `Context` laterally e.g. all children of a CompoundStatement share `Context`. This automatically implements variable shadowing since once the scope pops out of its `Context`, the previous `Context` is restored. `Context` contains a `Var` struct which has contains the offset, type, etc. of the variable. The class has an API for managing the bindings, and helper functions to help manage how the stack is used.
 
-_200 words or less_
+_200 words_
 
 Strengths
 ---------
@@ -94,9 +94,13 @@ _Give two strengths or capabilites of your binding approach, using 50 words or l
 
 ### Strength 1
 
+
+
 _50 words or less_
 
 ### Strength 2
+
+It is easy to add or remove additional features to suit future needs. Additional member data can be added to Var, and new functions built into the API for `Context`.
 
 _50 words or less_
 
@@ -129,7 +133,7 @@ those identified in the AST and binding parts)?_
 
 ### Strength 1
 
-
+All the I/O can be easily customised. Support for input from filenames is already built in, as well as the ability to change the outwards destination by changing the initialization of `Context` to a different ostream pointer.
 
 _50 words or fewer_
 
