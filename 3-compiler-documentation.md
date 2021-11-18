@@ -170,17 +170,17 @@ Functionality (not assessed)
 Which of these features does your compiler support (insert
 an `x` to check a box):
 
-1 - [x] Local variables
-2 - [x] Integer arithmetic
-3 - [x] While
-4 - [x] IfElse
-5 - [x] For
-6 - [x] Function calls
-7 - [x] Arrays
-8 - [x] Pointers
-9 - [x] Strings
-10 - [ ] Structures
-11 - [ ] Floating-point
+- [x] Local variables
+- [x] Integer arithmetic
+- [x] While
+- [x] IfElse
+- [x] For
+- [x] Function calls
+- [x] Arrays
+- [x] Pointers
+- [x] Strings
+- [ ] Structures
+- [ ] Floating-point
 
 Note that all features will be tested, regardless of what
 appears here. This is documentation of what you expect to work,
